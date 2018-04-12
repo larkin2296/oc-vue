@@ -85,3 +85,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#search_card{
+    padding:40px 5px
+}
+</style>
+
