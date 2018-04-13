@@ -1,35 +1,43 @@
 <template>
   <div class="login-container">
-    <el-form autoComplete="on" :model="register" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
+    <el-form autoComplete="on" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="left" label-width="0px"
       class="card-box login-form">
-      <h3 class="title">注册</h3>
-      <el-form-item prop="username">
+      <h3 class="title">注 册</h3>
+      <el-form-item prop="tel">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="register.username" autoComplete="on" placeholder="username" />
+        <el-input name='tel' placeholder="输入手机号" v-model='registerForm.tel' auto-complete="on"/>
       </el-form-item>
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password"></svg-icon>
+      <el-form-item prop='pass'>
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="password" />
         </span>
-        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="register.password" autoComplete="on"
-          placeholder="password"></el-input>
+        <el-input name='pass' type='password' placeholder="输入密码"  v-model='registerForm.pass' auto-complete="on"/>
       </el-form-item>
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password"></svg-icon>
+      <el-form-item prop='pass_again'>
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="password" />
         </span>
-        <el-input name="password_reset" :type="pwdType" @keyup.enter.native="handleLogin" v-model="register.password_reset" autoComplete="on"
-          placeholder="enter again"></el-input>
+        <el-input name='pass_again' type='password' placeholder="确认密码"  v-model='registerForm.pass_again' auto-complete="on"/>
       </el-form-item>
-      <el-radio-group v-model="register.idenity">
-          <el-radio label="供应商"></el-radio>
-          <el-radio label="采购商"></el-radio>
-        </el-radio-group>
       <el-form-item>
-        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-          注册
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="qq" />
+        </span>
+        <el-input placeholder="QQ号" v-model='registerForm.qq'/>
+      </el-form-item>
+
+
+      <el-form-item>
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="alipay" />
+        </span>
+        <el-input placeholder="支付宝账号" v-model='registerForm.alipay'/>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleRegister">
+          注 册
         </el-button>
       </el-form-item>
     </el-form>
@@ -37,55 +45,60 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+import { validatorTel } from '@/utils/validate'
+import { register } from '@/api/login'
 // import { login } from '@/api/login'
 
 export default {
-  name: 'login',
+  name: 'register',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+    var validateTel = (rule, value, callback) => {
+      if (!validatorTel(value)) {
+        callback(new Error('请输入正确的手机号'))
       } else {
         callback()
       }
     }
-    const validatePass = (rule, value, callback) => {
+    var validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
       } else {
         callback()
       }
     }
+    var validatePagain = (rule, value, callback) => {
+      if (value !== this.registerForm.pass) {
+        callback(new Error('两次密码不一样'))
+      } else {
+        callback()
+      }
+    }
     return {
-      register: {
-        username: '',
-        password: ''
+      registerForm: {
+        tel: '',
+        pass: '',
+        pass_again: '',
+        qq: '',
+        alipay: ''
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+      registerRules: {
+        tel: [{ required: true, trigger: 'blur', validator: validateTel }],
+        pass: [{ required: true, trigger: 'blur', validator: validatePass }],
+        pass_again: [{ required: true, trigger: 'blur', validator: validatePagain }]
       },
-      loading: false,
-      pwdType: 'password'
+      loading: false
     }
   },
   methods: {
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
-      }
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleRegister: function() {
+      this.$refs.regsiterForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          register(this.registerForm).then(response => {
             this.loading = false
             this.$router.push({ path: '/' })
-          }).catch(() => {
+          }).catch(error => {
+            console.log(error)
             this.loading = false
           })
         } else {
@@ -93,10 +106,6 @@ export default {
           return false
         }
       })
-      // if (login(this.username, this.password)) {
-      //   console.log('测试通了')
-      //   return true
-      // }
     }
   }
 }

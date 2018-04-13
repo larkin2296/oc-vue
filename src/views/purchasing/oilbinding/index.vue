@@ -24,30 +24,41 @@
     </el-form-item>
     </el-form>
     <el-collapse-transition>
-    <el-form id='add_card' :inline="true" :model="formInline" v-show='show3'>
-        <el-form-item label='编号'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='姓名'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='油卡号'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='身份证'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='官网账号'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='密码'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button type="danger" @click="onSubmit">导入</el-button>
-      </el-form-item>
-    </el-form>
+        <el-tabs type="border-card" v-show='show3'>
+            <el-tab-pane label="填写">
+                <el-form id='add_card' :inline="true" :model="formInline"  :label-position="right">
+                    <el-form-item label='编号'>
+                        <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item label='姓名'>
+                        <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item label='油卡号'>
+                        <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item label='身份证'>
+                        <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item label='官网账号'>
+                        <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item label='密码'>
+                        <el-input></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                    <el-button type="primary" @click="onSubmit">Create</el-button>
+                    <el-button type="danger" @click="onSubmit">导入</el-button>
+                </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="导入">
+                <el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+            </el-tab-pane>
+        </el-tabs>
     </el-collapse-transition>
     <div class="app-container">
     <el-table :data="tableData" stripe style="width: 100%" border fit highlight-current-row>
@@ -88,7 +99,13 @@ export default {
 
 <style scoped>
 #search_card{
+    width: 1200px;
+    margin: 0 auto;
     padding:40px 5px
+}
+#add_card{
+    width: 1200px;
+    margin: 0 auto;
 }
 </style>
 

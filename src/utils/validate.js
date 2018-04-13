@@ -31,3 +31,8 @@ export function validatAlphabets(str) {
   return reg.test(str)
 }
 
+/* 电话 */
+export function validatorTel(str) {
+  const reg = /^[1][3,4,5,7,8][0-9]{9}$/
+  return reg.test(str)
+}
