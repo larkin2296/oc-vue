@@ -9,6 +9,13 @@
         </span>
         <el-input name='tel' placeholder="输入手机号" v-model='registerForm.tel' auto-complete="on"/>
       </el-form-item>
+      <el-form-item>
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input name='verification' v-model='registerForm.verification' placeholder='输入验证码' style='width:40%;'/>
+        <el-button type='primary' v-on:click='countdown'>获取验证码</el-button><span class='ver_code'>{{ver_number}}</span>
+      </el-form-item>
       <el-form-item prop='pass'>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
@@ -27,8 +34,6 @@
         </span>
         <el-input placeholder="QQ号" v-model='registerForm.qq'/>
       </el-form-item>
-
-
       <el-form-item>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="alipay" />
@@ -79,33 +84,48 @@ export default {
         pass: '',
         pass_again: '',
         qq: '',
-        alipay: ''
+        alipay: '',
+        verification: ''
       },
+      ver_number: 60,
       registerRules: {
         tel: [{ required: true, trigger: 'blur', validator: validateTel }],
         pass: [{ required: true, trigger: 'blur', validator: validatePass }],
         pass_again: [{ required: true, trigger: 'blur', validator: validatePagain }]
       },
-      loading: false
+      loading: false,
+      active: 0,
+      registerid: {
+      }
     }
   },
   methods: {
     handleRegister: function() {
-      this.$refs.regsiterForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          register(this.registerForm).then(response => {
-            this.loading = false
-            this.$router.push({ path: '/' })
-          }).catch(error => {
-            console.log(error)
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+      this.loading = true
+      register(this.registerForm).then(response => {
+        console.log(response)
+        this.loading = false
+        // this.$router.push({ path: '/' })
+      }).catch(error => {
+        console.log(error)
+        this.loading = false
       })
+    },
+    countdown: function() {
+      const TIME_COUNT = 60
+      if (!this.timer) {
+        this.ver_number = TIME_COUNT
+        this.show = false
+        this.timer = setInterval(() => {
+          if (this.ver_number > 0 && this.ver_number <= TIME_COUNT) {
+            this.ver_number--
+          } else {
+            this.show = true
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      }
     }
   }
 }
@@ -168,7 +188,7 @@ export default {
       right: 0;
       width: 400px;
       padding: 35px 35px 15px 35px;
-      margin: 120px auto;
+      margin: 20px auto;
     }
     .el-form-item {
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -193,6 +213,11 @@ export default {
       position: absolute;
       right: 35px;
       bottom: 28px;
+    }
+    .ver_code{
+      color:white;
+      font-size: 20px;
+      margin-left:10px;
     }
   }
 </style>
