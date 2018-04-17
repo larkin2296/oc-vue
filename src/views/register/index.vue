@@ -13,8 +13,8 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name='verification' v-model='registerForm.verification' placeholder='输入验证码' style='width:40%;'/>
-        <el-button type='primary' v-on:click='countdown'>获取验证码</el-button><span class='ver_code'>{{ver_number}}</span>
+        <el-input name='verification' v-model='registerForm.verification' placeholder='输入验证码' style='width:35%;'/>
+        <el-button type='primary' :disabled="b_msg_state == '0'" v-on:click='countdown' :class="{ 'c_before':click_button === 1,'c_after':click_button === 0}">{{ b_msg }}</el-button><span class='ver_code' v-show="vn">{{ver_number}}</span>
       </el-form-item>
       <el-form-item prop='pass'>
         <span class="svg-container svg-container_login">
@@ -29,18 +29,6 @@
         <el-input name='pass_again' type='password' placeholder="确认密码"  v-model='registerForm.pass_again' auto-complete="on"/>
       </el-form-item>
       <el-form-item>
-        <span class="svg-container svg-container_login">
-          <svg-icon icon-class="qq" />
-        </span>
-        <el-input placeholder="QQ号" v-model='registerForm.qq'/>
-      </el-form-item>
-      <el-form-item>
-        <span class="svg-container svg-container_login">
-          <svg-icon icon-class="alipay" />
-        </span>
-        <el-input placeholder="支付宝账号" v-model='registerForm.alipay'/>
-      </el-form-item>
-      <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleRegister">
           注 册
         </el-button>
@@ -51,27 +39,29 @@
 
 <script>
 import { validatorTel } from '@/utils/validate'
-import { register } from '@/api/login'
+import { register, send_message, send_message_again } from '@/api/register'
 // import { login } from '@/api/login'
 
 export default {
   name: 'register',
   data() {
-    var validateTel = (rule, value, callback) => {
+    const validateTel = (rule, value, callback) => {
       if (!validatorTel(value)) {
+        this.b_msg_state = '0'
         callback(new Error('请输入正确的手机号'))
       } else {
+        this.b_msg_state = '1'
         callback()
       }
     }
-    var validatePass = (rule, value, callback) => {
+    const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
       } else {
         callback()
       }
     }
-    var validatePagain = (rule, value, callback) => {
+    const validatePagain = (rule, value, callback) => {
       if (value !== this.registerForm.pass) {
         callback(new Error('两次密码不一样'))
       } else {
@@ -83,8 +73,6 @@ export default {
         tel: '',
         pass: '',
         pass_again: '',
-        qq: '',
-        alipay: '',
         verification: ''
       },
       ver_number: 60,
@@ -96,7 +84,11 @@ export default {
       loading: false,
       active: 0,
       registerid: {
-      }
+      },
+      vn: false,
+      click_button: 1,
+      b_msg: '获取验证码',
+      b_msg_state: '0'
     }
   },
   methods: {
@@ -112,10 +104,27 @@ export default {
       })
     },
     countdown: function() {
+      this.b_msg_state = '0'
+      this.click_button = 0
+      this.vn = true
       const TIME_COUNT = 60
       if (!this.timer) {
         this.ver_number = TIME_COUNT
         this.show = false
+        if (this.b_msg === '获取验证码') {
+          send_message(this.registerForm.tel).then(response => {
+            console.log(response)
+          }).catch(error => {
+            console.log(error)
+          })
+        } else {
+          send_message_again(this.registerForm.tel).then(response => {
+            console.log(response)
+          }).catch(error => {
+            console.log(error)
+          })
+        }
+        this.b_msg = '已发送短信'
         this.timer = setInterval(() => {
           if (this.ver_number > 0 && this.ver_number <= TIME_COUNT) {
             this.ver_number--
@@ -123,6 +132,10 @@ export default {
             this.show = true
             clearInterval(this.timer)
             this.timer = null
+            this.vn = false
+            this.click_button = 1
+            this.b_msg = '重新发送短信'
+            this.b_msg_state = '1'
           }
         }, 1000)
       }
@@ -153,6 +166,14 @@ export default {
       padding: 12px 5px 12px 15px;
       color: $light_gray;
       height: 47px;
+    }
+    .c_before{
+      margin-left:40px;
+      margin-right:0px;
+    }
+    .c_after{
+      margin-left:0px;
+      margin-right:5px;
     }
     .el-input {
       display: inline-block;

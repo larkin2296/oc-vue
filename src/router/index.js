@@ -24,7 +24,6 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/register', component: () => import('@/views/register/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
     path: '/',
@@ -59,8 +58,14 @@ export const constantRouterMap = [
       {
         path: 'users',
         name: 'Users',
-        component: () => import('@/views/purchasing/message'),
-        meta: { title: '个人信息', icon: 'table' }
+        component: () => import('@/views/message/msgmodify'),
+        meta: { title: '信息修改', icon: 'table' }
+      },
+      {
+        path: 'ushow',
+        name: 'Ushow',
+        component: () => import('@/views/message/showmsg'),
+        meta: { title: '信息查看', icon: 'table' }
       },
       {
         path: 'binding',
@@ -69,51 +74,7 @@ export const constantRouterMap = [
         meta: { title: '油卡绑定', icon: 'tree' }
       }
     ]
-  },
-  {
-    path: '/order',
-    component: Layout,
-    redirect: '/order/camilo',
-    name: 'Order',
-    meta: { title: '订购', icon: 'example' },
-    children: [
-      {
-        path: 'camilo',
-        name: 'Camilo',
-        component: () => import('@/views/purchasing/recharge/camilo'),
-        meta: { title: '卡密订购', icon: 'table' }
-      },
-      {
-        path: 'direct',
-        name: 'Direct',
-        component: () => import('@/views/purchasing/recharge/direct'),
-        meta: { title: '直充订购', icon: 'tree' }
-      }
-    ]
-  },
-  {
-    path: '/recharge',
-    component: Layout,
-    redirect: '/recharge/camilo',
-    name: 'Recharge',
-    meta: { title: '供货', icon: 'example' },
-    children: [
-      {
-        path: 'camilo',
-        name: 'Camilo',
-        component: () => import('@/views/supplier/recharge/camilo'),
-        meta: { title: '卡密供货', icon: 'table' }
-      },
-      {
-        path: 'direct',
-        name: 'Direct',
-        component: () => import('@/views/supplier/recharge/direct'),
-        meta: { title: '直充供货', icon: 'tree' }
-      }
-    ]
-  },
-
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 export default new Router({
@@ -122,3 +83,48 @@ export default new Router({
   routes: constantRouterMap
 })
 
+export const asyncRouterMap = [
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/camilo',
+    name: 'Order',
+    meta: { title: '订购', icon: 'example', role: ['1'] },
+    children: [
+      {
+        path: 'camilo',
+        name: 'Camilo',
+        component: () => import('@/views/purchasing/recharge/camilo'),
+        meta: { role: ['1'], title: '卡密订购', icon: 'table' }
+      },
+      {
+        path: 'direct',
+        name: 'Direct',
+        component: () => import('@/views/purchasing/recharge/direct'),
+        meta: { role: ['1'], title: '直充订购', icon: 'tree' }
+      }
+    ]
+  },
+  {
+    path: '/recharge',
+    component: Layout,
+    redirect: '/recharge/camilo',
+    name: 'Recharge',
+    meta: { title: '供货', icon: 'example', role: ['2'] },
+    children: [
+      {
+        path: 'camilo',
+        name: 'Camilo',
+        component: () => import('@/views/supplier/recharge/camilo'),
+        meta: { title: '卡密供货', icon: 'table', role: ['2'] }
+      },
+      {
+        path: 'direct',
+        name: 'Direct',
+        component: () => import('@/views/supplier/recharge/direct'),
+        meta: { title: '直充供货', icon: 'tree', role: ['2'] }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+]
