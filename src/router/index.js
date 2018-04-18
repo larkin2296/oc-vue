@@ -35,33 +35,6 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
-  },
-  {
-    path: '/msg',
-    component: Layout,
-    redirect: '/msg/users',
-    name: 'Msg',
-    meta: { title: '信息管理', icon: 'example' },
-    children: [
-      {
-        path: 'users',
-        name: 'Users',
-        component: () => import('@/views/message/msgmodify'),
-        meta: { title: '信息修改', icon: 'table' }
-      },
-      {
-        path: 'ushow',
-        name: 'Ushow',
-        component: () => import('@/views/message/showmsg'),
-        meta: { title: '信息查看', icon: 'table' }
-      },
-      {
-        path: 'binding',
-        name: 'Binding',
-        component: () => import('@/views/purchasing/oilbinding'),
-        meta: { title: '油卡绑定', icon: 'tree' }
-      }
-    ]
   }
 ]
 
@@ -138,6 +111,33 @@ export const asyncRouterMap = [
         name: 's_search',
         component: () => import('@/views/supplier/search'),
         meta: { role: ['2'], title: '供应商查询', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/msg',
+    component: Layout,
+    redirect: '/msg/users',
+    name: 'Msg',
+    meta: { title: '信息管理', icon: 'example' },
+    children: [
+      {
+        path: 'users',
+        name: 'Users',
+        component: () => import('@/views/message/msgmodify'),
+        meta: { title: '信息修改', icon: 'table' }
+      },
+      {
+        path: 'ushow',
+        name: 'Ushow',
+        component: () => import('@/views/message/showmsg'),
+        meta: { title: '信息查看', icon: 'table' }
+      },
+      {
+        path: 'binding',
+        name: 'Binding',
+        component: () => import('@/views/purchasing/oilbinding'),
+        meta: { title: '油卡绑定', icon: 'tree' }
       }
     ]
   },

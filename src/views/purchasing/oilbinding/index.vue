@@ -77,8 +77,10 @@
           </el-radio-group>
         </template>
     </el-table-column>
-    <el-table-column prop="address" label="卡号" width="220">
+    <el-table-column prop="is_start" label="启用" width="220">
+        <template slot-scope="scope">
         <el-button type='danger'>启用此卡</el-button>
+        </template>
     </el-table-column>
       </el-table>
       </div>

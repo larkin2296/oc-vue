@@ -12,7 +12,7 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
-      if (store.getters.roles.length) {
+      if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           const roles = res.data.roles
           store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
