@@ -37,18 +37,6 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/search',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'search',
-        component: () => import('@/views/purchasing/search'),
-        meta: { title: '查询', icon: 'form' }
-      }
-    ]
-  },
-  {
     path: '/msg',
     component: Layout,
     redirect: '/msg/users',
@@ -123,6 +111,33 @@ export const asyncRouterMap = [
         name: 'Direct',
         component: () => import('@/views/supplier/recharge/direct'),
         meta: { title: '直充供货', icon: 'tree', role: ['2'] }
+      }
+    ]
+  },
+  {
+    path: '/search',
+    component: Layout,
+    redirect: '/search/camilo',
+    name: 'Search',
+    meta: { title: '查询', icon: 'form' },
+    children: [
+      {
+        path: 'camilo',
+        name: 'pc_search',
+        component: () => import('@/views/purchasing/search/camilo'),
+        meta: { role: ['1'], title: '卡密订单查询', icon: 'form' }
+      },
+      {
+        path: 'directly',
+        name: 'pd_search',
+        component: () => import('@/views/purchasing/search/directly'),
+        meta: { role: ['1'], title: '直充订单查询', icon: 'form' }
+      },
+      {
+        path: 'index',
+        name: 's_search',
+        component: () => import('@/views/supplier/search'),
+        meta: { role: ['2'], title: '供应商查询', icon: 'form' }
       }
     ]
   },
