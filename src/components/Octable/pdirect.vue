@@ -16,7 +16,12 @@
           <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改时间" width="110" align="center">
+      <el-table-column label="需求金额" width="110" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.author}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="最近充值时间" width="110" align="center">
         <template slot-scope="scope">
           {{scope.row.pageviews}}
         </template>
@@ -26,7 +31,13 @@
           <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="查看截图" width="200">
+      <el-table-column align="center" prop="created_at" label="充值金额" width="200">
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span>{{scope.row.display_time}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="created_at" label="已圈存金额" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{scope.row.display_time}}</span>
@@ -37,7 +48,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { get_directy_order } from '@/api/purchasing'
 
 export default {
   data() {
@@ -62,9 +73,9 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList(this.listQuery).then(response => {
-        console.log(response.data.items)
-        this.list = response.data.items
+      get_directy_order().then(response => {
+        // console.log(response.data.items)
+        // this.list = response.data.items
         this.listLoading = false
       })
     }

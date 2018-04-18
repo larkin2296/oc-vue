@@ -1,20 +1,9 @@
 <template>
 <div>
     <el-form :inline="true" ref="form" :model="form" label-width="120px" class='choose'>
-    <el-form-item label="商品类型" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
+    <el-form-item label="选择油卡" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
 
-        <el-select v-model="form.goods_type" placeholder="please select your zone">
-
-          <el-option label="Zone one" value="shanghai"></el-option>
-
-          <el-option label="Zone two" value="beijing"></el-option>
-
-        </el-select>
-    </el-form-item>
-
-    <el-form-item label="面额">
-
-        <el-select v-model="form.card_price" placeholder="please select your zone">
+        <el-select v-model="form.goods_type" placeholder="选择油卡">
 
           <el-option label="Zone one" value="shanghai"></el-option>
 
@@ -23,12 +12,19 @@
         </el-select>
     </el-form-item>
 
-    <el-form-item label="数量">
+    <el-form-item label="金额">
 
         <el-input v-model="form.card_num"></el-input>
 
     </el-form-item>
 
+    <el-form-item label='截止时间'>
+          <el-date-picker
+          v-model="form.cutoff_time"
+          type="date"
+          placeholder="选择日期" size='small'>
+        </el-date-picker>
+    </el-form-item>
     <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
       </el-form-item>
@@ -40,30 +36,30 @@
           {{scope.$index}}
         </template>
       </el-table-column>
-      <el-table-column label="商品" align="center">
+      <el-table-column label="油卡" align="center">
         <template slot-scope="scope">
-          {{scope.row.title}}
+          {{scope.row.card_code}}
         </template>
       </el-table-column>
-      <el-table-column label="面额" align="center">
+      <el-table-column align="center" prop="created_at" label="姓名" >
         <template slot-scope="scope">
-          <span>{{scope.row.author}}</span>
+          <i class="el-icon-time"></i>
+          <span>{{scope.row.card_name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="金额" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.price}}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center">
         <template slot-scope="scope">
-          {{scope.row.pageviews}}
+          {{scope.row.num}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="单价" align="center">
+      <el-table-column class-name="status-col" label="截止时间" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="总价" >
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span>{{scope.row.display_time}}</span>
+          {{scope.row.cutoff_time}}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">

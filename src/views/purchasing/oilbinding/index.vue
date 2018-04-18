@@ -1,5 +1,41 @@
 <template>
   <div>
+      <el-collapse-transition>
+        <el-tabs type="border-card" v-show='show3'>
+            <el-tab-pane label="填写">
+                <el-form id='add_card' :inline="true" :model="addform">
+                    <el-form-item  label='编号'>
+                        <el-input v-model='addform.serial_number'></el-input>
+                    </el-form-item>
+                    <el-form-item  label='姓名'>
+                        <el-input v-model='addform.ture_name'></el-input>
+                    </el-form-item>
+                    <el-form-item  label='油卡号'>
+                        <el-input v-model='addform.oil_card_code'></el-input>
+                    </el-form-item>
+                    <el-form-item  label='身份证'>
+                        <el-input v-model='addform.identity_card'></el-input>
+                    </el-form-item>
+                    <el-form-item  label='官网账号'>
+                        <el-input v-model='addform.web_account'></el-input>
+                    </el-form-item>
+                    <el-form-item  label='密码'>
+                        <el-input v-model='addform.web_password'></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                    <el-button type="primary" @click="addcard">Create</el-button>
+                </el-form-item>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="导入">
+                <el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
+            </el-tab-pane>
+        </el-tabs>
+    </el-collapse-transition>
     <el-form id='search_card' :inline="true" :model="formInline">
         <el-form-item label='编号'>
             <el-input></el-input>
@@ -23,43 +59,6 @@
         <el-button type="danger" @click="show3 = !show3">添加</el-button>
     </el-form-item>
     </el-form>
-    <el-collapse-transition>
-        <el-tabs type="border-card" v-show='show3'>
-            <el-tab-pane label="填写">
-                <el-form id='add_card' :inline="true" :model="formInline"  :label-position="right">
-                    <el-form-item label='编号'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item label='姓名'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item label='油卡号'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item label='身份证'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item label='官网账号'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item label='密码'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                    <el-button type="primary" @click="onSubmit">Create</el-button>
-                    <el-button type="danger" @click="onSubmit">导入</el-button>
-                </el-form-item>
-                </el-form>
-            </el-tab-pane>
-            <el-tab-pane label="导入">
-                <el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                </el-upload>
-            </el-tab-pane>
-        </el-tabs>
-    </el-collapse-transition>
     <div class="app-container">
     <el-table :data="tableData" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column prop="date" label="序号">
@@ -72,9 +71,14 @@
     </el-table-column>
     <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="value2" active-color="#13ce66" inactive-color="#ff4949" style="display:block">
-        </el-switch>
+          <el-radio-group v-model="addform.status" size="small">
+            <el-radio-button label="正常"></el-radio-button>
+            <el-radio-button label="停用"></el-radio-button>
+          </el-radio-group>
         </template>
+    </el-table-column>
+    <el-table-column prop="address" label="卡号" width="220">
+        <el-button type='danger'>启用此卡</el-button>
     </el-table-column>
       </el-table>
       </div>
@@ -82,6 +86,7 @@
 </template>
 
 <script>
+import { binding_card } from '@/api/purchasing'
 export default {
   data() {
     return {
@@ -90,8 +95,27 @@ export default {
         name: '张三',
         address: '上海市张杨路'
       }],
+      addform: {
+        serial_number: '',
+        ture_name: '',
+        oil_card_code: '',
+        identity_card: '',
+        web_account: '',
+        web_password: ''
+      },
       value2: true,
       show3: false
+    }
+  },
+  methods: {
+    addcard() {
+      console.log(this.addform)
+      this.loading = true
+      binding_card(this.addform).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

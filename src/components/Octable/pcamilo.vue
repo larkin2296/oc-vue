@@ -1,50 +1,39 @@
 <template>
   <div class="app-container">
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label='序号' width="95">
+      <el-table-column align="center" label='序号'>
         <template slot-scope="scope">
           {{scope.$index}}
         </template>
       </el-table-column>
       <el-table-column label="订单号">
         <template slot-scope="scope">
-          {{scope.row.title}}
+          {{scope.row.order_code}}
         </template>
       </el-table-column>
-      <el-table-column label="商品" width="110" align="center">
+      <el-table-column label="商品" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.author}}</span>
+          <span>{{scope.row.goods}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="面额" width="110" align="center">
+      <el-table-column label="面额" align="center">
         <template slot-scope="scope">
-          {{scope.row.pageviews}}
+          {{scope.row.price}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="交易时间" width="110" align="center">
+      <el-table-column class-name="status-col" label="交易时间" align="center">
+        <template slot-scope="scope">
+          {{scope.row.pay_time}}
+        </template>
+      </el-table-column>
+      <el-table-column label="订单状态" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="卡号" width="200">
+      <el-table-column label="查看卡密" align="center">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span>{{scope.row.display_time}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label='密码' align="center">
-        <template slot-scope="scope">
-          {{scope.row.pageviews}}
-        </template>
-      </el-table-column>
-      <el-table-column label='卡密状态' align="center">
-        <template slot-scope="scope">
-          {{scope.row.pageviews}}
-        </template>
-      </el-table-column>
-      <el-table-column label='价格' align="center">
-        <template slot-scope="scope">
-          {{scope.row.pageviews}}
+          <el-button type="warning">查看卡密</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +41,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { get_camilo_order } from '@/api/purchasing'
 
 export default {
   data() {
@@ -64,9 +53,9 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
+        '已完成': 'success',
+        '问题订单': 'gray',
+        '未完成': 'danger'
       }
       return statusMap[status]
     }
@@ -77,9 +66,9 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList(this.listQuery).then(response => {
-        console.log(response.data.items)
-        this.list = response.data.items
+      get_camilo_order().then(response => {
+        // console.log(response.data.items)
+        // this.list = response.data.items
         this.listLoading = false
       })
     }
