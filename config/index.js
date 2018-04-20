@@ -10,11 +10,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        target: 'http://localhost/oil_cord_system/public/index.php',
+      '/oc': {
+        target: 'http://47.98.199.243:80',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/oc': ''
         }
       }
     },
@@ -64,7 +64,7 @@ module.exports = {
     assetsSubDirectory: 'static',
 
     // you can set by youself according to actual condition
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps

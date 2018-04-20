@@ -14,9 +14,13 @@
   },
   "dependencies": {
     "axios": "0.17.1",
+<<<<<<< HEAD
+    "element-ui": "2.0.8",
+=======
     "dns": "^0.2.2",
     "element-ui": "2.3.4",
     "http-service": "^1.1.3",
+>>>>>>> fae35a7720caa485bf107cda9af8fa3694ff11dd
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
@@ -66,7 +70,7 @@
     "vue-template-compiler": "2.5.10",
     "webpack": "3.10.0",
     "webpack-bundle-analyzer": "2.9.1",
-    "webpack-dev-server": "2.9.7",
+    "webpack-dev-server": "^2.11.2",
     "webpack-merge": "4.1.1"
   },
   "engines": {
