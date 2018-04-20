@@ -25,3 +25,10 @@ export function binding_card(list) {
   }
   )
 }
+
+export function get_card_list(params) {
+  return request.post('api/purchasing/get_card', {
+    params
+  }
+  )
+}
