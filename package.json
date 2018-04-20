@@ -14,8 +14,7 @@
   },
   "dependencies": {
     "axios": "0.17.1",
-    "dns": "^0.2.2",
-    "element-ui": "2.3.4",
+    "element-ui": "2.0.8",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
@@ -65,7 +64,7 @@
     "vue-template-compiler": "2.5.10",
     "webpack": "3.10.0",
     "webpack-bundle-analyzer": "2.9.1",
-    "webpack-dev-server": "2.9.7",
+    "webpack-dev-server": "^2.11.2",
     "webpack-merge": "4.1.1"
   },
   "engines": {
