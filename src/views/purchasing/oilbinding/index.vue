@@ -93,7 +93,11 @@
     <el-table-column label="启用" width="220">
         <template slot-scope="scope">
         <el-button type='danger' v-show="scope.row.is_start">启用此卡</el-button>
+
         </template>
+    </el-table-column>
+    <el-table-column prop="address" label="卡号" width="220">
+        <el-button type='danger'>启用此卡</el-button>
     </el-table-column>
       </el-table>
       </div>
@@ -101,9 +105,11 @@
 </template>
 
 <script>
+
 import { binding_card, get_card_list } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
 import store from '@/store'
+
 export default {
   name: 'card',
   data() {
@@ -195,6 +201,17 @@ export default {
     },
     handlePreview(file) {
       console.log(file)
+    }
+  },
+  methods: {
+    addcard() {
+      console.log(this.addform)
+      this.loading = true
+      binding_card(this.addform).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
