@@ -32,3 +32,17 @@ export function get_card_list(params) {
   }
   )
 }
+
+export function card_start(card) {
+  return request.post('api/purchasing/card_start', {
+    card
+  }
+  )
+}
+
+export function set_longtrem(card) {
+  return request.post('api/purchasing/set_longtrem', {
+    card
+  }
+  )
+}

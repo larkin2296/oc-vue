@@ -64,7 +64,7 @@
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column label="序号">
       <template slot-scope="scope">
-          {{scope.row.$value}}
+          {{scope.row.id}}
         </template>
     </el-table-column>
     <el-table-column label="编号">
@@ -84,20 +84,18 @@
     </el-table-column>
     <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-radio-group v-model="scope.row.status" size="small">
+          <el-radio-group v-model="scope.row.status" size="small" @change="set_status">
             <el-radio-button label="正常"></el-radio-button>
             <el-radio-button label="停用"></el-radio-button>
           </el-radio-group>
         </template>
     </el-table-column>
-    <el-table-column label="启用" width="220">
+    <el-table-column label="操作" width="220">
         <template slot-scope="scope">
-        <el-button type='danger' v-show="scope.row.is_start">启用此卡</el-button>
-
+        <el-button type='danger' v-show="scope.row.is_start" @click="start_card(scope.$index)">启用此卡</el-button>
+        <el-button v-if="scope.row.is_longtrem === 0" type='primary' v-show="scope.row.longtrem" @click="longtrem_card(scope.$index)">设置为长期</el-button>
+        <el-button v-else-if="scope.row.is_longtrem === 1" type='success' v-show="scope.row.longtrem">长期卡</el-button>
         </template>
-    </el-table-column>
-    <el-table-column prop="address" label="卡号" width="220">
-        <el-button type='danger'>启用此卡</el-button>
     </el-table-column>
       </el-table>
       </div>
@@ -106,7 +104,7 @@
 
 <script>
 
-import { binding_card, get_card_list } from '@/api/purchasing'
+import { binding_card, get_card_list, card_start, set_longtrem } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
 import store from '@/store'
 
@@ -187,6 +185,46 @@ export default {
           })
         }
       })
+    },
+    start_card($index) {
+      this.$confirm('是否启动该油卡?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        card_start(this.tableData[$index].id).then(response => {
+          this.tableData[$index].is_start = response.is_start
+          this.tableData[$index].longtrem = response.longtrem
+          this.tableData[$index].status = response.status
+        }).catch(error => {
+          console.log(error)
+        })
+        this.$message({
+          type: 'success',
+          message: '启动成功!'
+        })
+      }).catch(() => {
+      })
+    },
+    longtrem_card($index) {
+      this.$confirm('设置为长期卡后不可更改，供应商会自动获取并进行充值，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        set_longtrem(this.tableData[$index].id).then(response => {
+          this.tableData[$index].is_longtrem = response.is_longtrem
+        }).catch(error => {
+          console.log(error)
+        })
+        this.$message({
+          type: 'success',
+          message: '设置成功!'
+        })
+      }).catch(() => {
+      })
+    },
+    set_status() {
     },
     onSubmit() {
     },

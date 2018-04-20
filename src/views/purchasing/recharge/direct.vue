@@ -2,14 +2,11 @@
 <div>
     <el-form :inline="true" ref="form" :model="form" label-width="120px" class='choose'>
     <el-form-item label="选择油卡" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
-
-        <el-select v-model="form.goods_type" placeholder="选择油卡">
-
-          <el-option label="Zone one" value="shanghai"></el-option>
-
-          <el-option label="Zone two" value="beijing"></el-option>
-
-        </el-select>
+      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+        </el-checkbox-group>
     </el-form-item>
 
     <el-form-item label="金额">
@@ -83,7 +80,11 @@ export default {
         card_price: '',
         card_num: ''
       },
-      list: []
+      list: [],
+      checkAll: false,
+      checkedCities: ['上海', '北京'],
+      cities: ['上海', '北京', '广州', '深圳'],
+      isIndeterminate: true
     }
   },
   methods: {
@@ -97,6 +98,15 @@ export default {
         message: 'cancel!',
         type: 'warning'
       })
+    },
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? ['上海', '北京', '广州', '深圳'] : []
+      this.isIndeterminate = false
+    },
+    handleCheckedCitiesChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.cities.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
     }
   }
 }
