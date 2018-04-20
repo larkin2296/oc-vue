@@ -202,17 +202,6 @@ export default {
     handlePreview(file) {
       console.log(file)
     }
-  },
-  methods: {
-    addcard() {
-      console.log(this.addform)
-      this.loading = true
-      binding_card(this.addform).then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
-    }
   }
 }
 </script>
@@ -228,4 +217,3 @@ export default {
     margin: 0 auto;
 }
 </style>
-
