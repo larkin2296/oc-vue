@@ -36,3 +36,13 @@ export function validatorTel(str) {
   const reg = /^[1][3,4,5,7,8][0-9]{9}$/
   return reg.test(str)
 }
+
+export function validatorName(str) {
+  const reg = /[^d]+/
+  return reg.test(str)
+}
+
+export function validatorID(str) {
+  const reg = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+  return reg.test(str)
+}

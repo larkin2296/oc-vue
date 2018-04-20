@@ -22,7 +22,10 @@
             <el-form-item label="qq号">
               <el-input></el-input>
             </el-form-item>
-            <el-form-item label="city">
+            <el-form-item label="城市">
+              <el-input></el-input>
+            </el-form-item>
+            <el-form-item label="身份证">
               <el-input></el-input>
             </el-form-item>
             <el-form-item label='状态'>
@@ -59,6 +62,23 @@
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
+        </el-tab-pane>
+        <el-tab-pane label="上传信息">
+          <el-form class='psd_modify'>
+            <el-form-item label='上传身份证'></el-form-item>
+            <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+            <el-form-item>
+              <el-button type='danger'>上传</el-button>
+            </el-form-item>
+          </el-form>
         </el-tab-pane>
       </el-tabs>
     </div>

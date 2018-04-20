@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form autoComplete="on" :model="registerForm" :rules="registerRules" ref="registerForm" label-position="left" label-width="0px"
+    <el-form autoComplete="on" :model="registerForm" :rules="registerRules" ref="registerForm" label-width="0px"
       class="card-box login-form">
       <h3 class="title">注 册</h3>
       <el-form-item prop="tel">
