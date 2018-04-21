@@ -18,7 +18,7 @@
           <el-date-picker
           v-model="form.cutoff_time"
           type="date"
-          placeholder="选择日期" size='small'>
+          placeholder="选择日期" size='small' format="yyyy 年 MM 月 dd 日">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -90,6 +90,7 @@ export default {
       console.log(this.checkedCard)
       // this.list = ({ author: 'name', display_time: '2010-06-12 16:32:23', id: '330000200103215497', pageviews: 797, status: 'draft', title: 'Stoxqx pygsyozdch yjqubbm drtyljfqng tqhcb mymxof hjwrxyej tjgw ubfalhb shfeeig snsatg lwidobvrjm nxlfkuhpi bsegvg ueiwn vcnd.' })
       // this.d_num = Number(this.d_num) + 1
+      console.log(this.form)
       this.list.push({ card_code: this.checkedCard, price: this.form.card_price, cutoff_time: this.form.cutoff_time })
     },
     onCancel() {

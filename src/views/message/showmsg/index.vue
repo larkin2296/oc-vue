@@ -23,13 +23,21 @@
               {{ msg.city }}
             </el-form-item>
             <el-form-item label='状态'>
-              {{ msg.status }}
+              <el-radio-group v-model='msg.status'>
+                <el-radio label="正常"></el-radio>
+                <el-radio label="锁定"></el-radio>
+              </el-radio-group>
             </el-form-item>
         </el-form>
         </el-tab-pane>
         <el-tab-pane label="邀请查看">
-            <el-table>
-
+          <el-button type='danger'>生成邀请链接</el-button>
+          {{ invitelink }}
+            <el-table  v-model="inviteform" border fit highlight-current-row>
+              <el-table-column label='被邀请人'>               
+              </el-table-column>
+              <el-table-column label='邀请时间'>               
+              </el-table-column>
             </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -44,7 +52,9 @@ export default {
     return {
       msg: [{
         sex: '男'
-      }]
+      }],
+      inviteform: [],
+      invitelink: ''
     }
   }
 }

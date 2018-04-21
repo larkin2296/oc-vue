@@ -28,12 +28,6 @@
             <el-form-item label="身份证">
               <el-input></el-input>
             </el-form-item>
-            <el-form-item label='状态'>
-              <el-radio-group v-model='msg.sex'>
-                <el-radio label="正常"></el-radio>
-                <el-radio label="锁定"></el-radio>
-              </el-radio-group>
-            </el-form-item>
         </el-form>
         </el-tab-pane>
         <el-tab-pane label="密码修改">
