@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/oc': {
-        target: 'http://47.98.199.243:80',
+        target: 'http://localhost/oil_cord_system/public/index.php',
         changeOrigin: true,
         pathRewrite: {
           '^/oc': ''

@@ -84,7 +84,7 @@
     </el-table-column>
     <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-radio-group v-model="scope.row.status" size="small" @change="set_status">
+          <el-radio-group v-model="scope.row.status" size="small" @change="set_status(scope.$index)" :disabled="scope.row.disabled">
             <el-radio-button label="正常"></el-radio-button>
             <el-radio-button label="停用"></el-radio-button>
           </el-radio-group>
@@ -170,20 +170,36 @@ export default {
     fetchData() {
       this.listLoading = true
       get_card_list(this.listQuery).then(response => {
+        console.log(response)
         this.tableData = response
         this.listLoading = false
       })
     },
     addcard() {
-      this.$refs.addform.validate(valid => {
-        if (valid) {
-          this.loading = true
-          binding_card(this.addform).then(response => {
-            console.log(response)
-          }).catch(error => {
-            console.log(error)
-          })
-        }
+      this.$confirm('是否添加该油卡?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$refs.addform.validate(valid => {
+          if (valid) {
+            this.loading = true
+            binding_card(this.addform).then(response => {
+              if (response.code === '200') {
+                this.$message({
+                  message: '恭喜你，油卡添加成功',
+                  type: 'success'
+                })
+                this.fetchData()
+              } else if (response.code === '500') {
+                this.$message.error(response.message)
+              }
+            }).catch(error => {
+              console.log(error)
+            })
+          }
+        })
+      }).catch(() => {
       })
     },
     start_card($index) {
@@ -193,9 +209,7 @@ export default {
         type: 'warning'
       }).then(() => {
         card_start(this.tableData[$index].id).then(response => {
-          this.tableData[$index].is_start = response.is_start
-          this.tableData[$index].longtrem = response.longtrem
-          this.tableData[$index].status = response.status
+          this.fetchData()
         }).catch(error => {
           console.log(error)
         })
@@ -224,7 +238,14 @@ export default {
       }).catch(() => {
       })
     },
-    set_status() {
+    set_status($index) {
+      this.$confirm('更改油卡状态需要平台审核通过后执行，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+      }).catch(() => {
+      })
     },
     onSubmit() {
     },

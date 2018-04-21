@@ -46,3 +46,10 @@ export function set_longtrem(card) {
   }
   )
 }
+
+export function get_short_card(card) {
+  return request.post('api/purchasing/get_short_card', {
+    card
+  }
+  )
+}
