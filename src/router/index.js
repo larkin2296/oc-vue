@@ -92,7 +92,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/search/camilo',
     name: 'Search',
-    meta: { title: '查询', icon: 'form' },
+    meta: { title: '查询', icon: 'form', role: ['1', '2'] },
     children: [
       {
         path: 'camilo',
@@ -107,7 +107,7 @@ export const asyncRouterMap = [
         meta: { role: ['1'], title: '直充订单查询', icon: 'form' }
       },
       {
-        path: 'index',
+        path: 'supplier',
         name: 's_search',
         component: () => import('@/views/supplier/search'),
         meta: { role: ['2'], title: '供应商查询', icon: 'form' }
@@ -137,7 +137,37 @@ export const asyncRouterMap = [
         path: 'binding',
         name: 'Binding',
         component: () => import('@/views/purchasing/oilbinding'),
-        meta: { title: '油卡绑定', icon: 'tree' }
+        meta: { title: '油卡绑定', icon: 'tree', role: ['1'] }
+      }
+    ]
+  },
+  {
+    path: '/recmanage',
+    component: Layout,
+    redirect: '/recmanage/reconcil',
+    name: 'Recmanage',
+    meta: { title: '账务管理', icon: 'example', role: ['1'] },
+    children: [
+      {
+        path: 'reconcil',
+        name: 'Reconcil',
+        component: () => import('@/views/purchasing/reconciliation'),
+        meta: { title: '对账', icon: 'table', role: ['1'] }
+      }
+    ]
+  },
+  {
+    path: '/deposit',
+    component: Layout,
+    redirect: '/deposit/index',
+    name: 'Deposit',
+    meta: { title: '提现', icon: 'example', role: ['2'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/supplier/deposit'),
+        meta: { title: '提现', icon: 'table', role: ['2'] }
       }
     ]
   },
