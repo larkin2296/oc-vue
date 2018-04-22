@@ -104,7 +104,7 @@ export const asyncRouterMap = [
         path: 'directly',
         name: 'pd_search',
         component: () => import('@/views/purchasing/search/directly'),
-        meta: { role: ['1'], title: '直充订单查询', icon: 'form' }
+        meta: { role: ['1'], title: '直充明细查询', icon: 'form' }
       },
       {
         path: 'supplier',
@@ -137,7 +137,7 @@ export const asyncRouterMap = [
         path: 'binding',
         name: 'Binding',
         component: () => import('@/views/purchasing/oilbinding'),
-        meta: { title: '油卡绑定', icon: 'tree', role: ['1'] }
+        meta: { title: '油卡管理', icon: 'tree', role: ['1'] }
       }
     ]
   },

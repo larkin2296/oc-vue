@@ -14,6 +14,12 @@
 
       </el-form-item>
 
+      <el-form-item label="折扣">
+
+        <el-input v-model="form.discount" style='width:200px;'></el-input>
+
+      </el-form-item>
+
       <el-form-item label='截止时间'>
           <el-date-picker
           v-model="form.cutoff_time"
@@ -43,6 +49,11 @@
           <span>{{scope.row.price}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="折扣" align="center">
+        <template slot-scope="scope">
+          <span>{{scope.row.discount}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="实际金额" align="center">
         <template slot-scope="scope">
           <span>{{scope.row.real_price}}</span>
@@ -59,7 +70,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button type="danger" plain @click='onsubmit'>付款</el-button>
+    <el-button type="danger" plain @click='onsubmit'>生成</el-button>
   </div>
 </div> 
 </template>
@@ -93,7 +104,7 @@ export default {
       })
     },
     add_trolly() {
-      this.list.push({ oil_card_code: this.checkedCard, price: this.form.price, real_price: Number(this.form.price) * Number(this.discount), cutoff_time: this.form.cutoff_time, user_id: store.getters.id, discount: this.discount, order_type: 2 })
+      this.list.push({ oil_card_code: this.checkedCard, price: this.form.price, real_price: Number(this.form.price) * Number(this.form.discount), cutoff_time: this.form.cutoff_time, discount: this.form.discount, user_id: store.getters.id, order_type: 2 })
     },
     del($index) {
       this.totalprice -= this.list[$index].price

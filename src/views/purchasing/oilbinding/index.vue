@@ -29,11 +29,10 @@
                 </el-form>
             </el-tab-pane>
             <el-tab-pane label="导入">
-                <el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传excel文件，且不超过500kb</div>
-                </el-upload>
+                <el-upload class='upload-demo'  action='' :before-upload="beforeUpload" multiple ref='newupload' :auto-upload="false" accept=".xls,.xlsx">
+                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                  <el-button style="margin-left: 10px;" size="small" type="success" @click="newSubmitForm()">上传到服务器</el-button>
+                </el-upload>                 
             </el-tab-pane>
         </el-tabs>
     </el-collapse-transition>
@@ -106,6 +105,7 @@
 
 import { binding_card, get_card_list, card_start, set_longtrem } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
+import { upload } from '@/api/message'
 import store from '@/store'
 
 export default {
@@ -157,10 +157,10 @@ export default {
       },
       value2: true,
       show3: false,
-      fileList: [
-        { name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-        { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }
-      ]
+      fileList: [],
+      token: {
+        accessToken: ''
+      }
     }
   },
   created() {
@@ -170,7 +170,6 @@ export default {
     fetchData() {
       this.listLoading = true
       get_card_list(this.listQuery).then(response => {
-        console.log(response)
         this.tableData = response
         this.listLoading = false
       })
@@ -252,14 +251,20 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event)
     },
-    submitUpload() {
-      this.$refs.upload.submit()
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview(file) {
+    beforeUpload(file) {
       console.log(file)
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('groupId', this.groupId)
+      console.log(fd)
+      upload(fd).then(response => {
+      }).catch(error => {
+        console.log(error)
+      })
+      return true
+    },
+    newSubmitForm() {
+      this.$refs.newupload.submit()
     }
   }
 }
