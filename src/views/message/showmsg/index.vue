@@ -3,7 +3,7 @@
     <div id='msg_tab'>
       <el-tabs type="border-card">
         <el-tab-pane label="个人信息查看">
-          <el-form class="msg" v-model='msg' :label-position="left" label-width="100px">
+          <el-form class="msg" :model='msg' :label-position="left" label-width="100px">
             <el-form-item label='真实姓名'>
               {{ msg.name }}
             </el-form-item>
@@ -11,27 +11,27 @@
               {{ msg.sex }}
             </el-form-item>
             <el-form-item label="手机">
-              {{ msg.phone }}
+              {{ msg.mobile }}
             </el-form-item>
             <el-form-item label="支付宝账号">
               {{ msg.alipay }}
             </el-form-item>
             <el-form-item label="qq号">
-              {{ msg.qq }}
+              {{ msg.qq_num }}
             </el-form-item>
             <el-form-item label="city">
               {{ msg.city }}
             </el-form-item>
             <el-form-item label='状态'>
               <el-radio-group v-model='msg.status'>
-                <el-radio label="正常"></el-radio>
-                <el-radio label="锁定"></el-radio>
+                <el-radio label="正常" value='0'></el-radio>
+                <el-radio label="锁定" value='1'></el-radio>
               </el-radio-group>
             </el-form-item>
         </el-form>
         </el-tab-pane>
         <el-tab-pane label="邀请查看">
-          <el-button type='danger'>生成邀请链接</el-button>
+          <el-button type='danger' @click='create_link'>生成邀请链接</el-button>
           {{ invitelink }}
             <el-table  v-model="inviteform" border fit highlight-current-row>
               <el-table-column label='被邀请人'>               
@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import { get_message, c_link } from '@/api/message'
+import store from '@/store'
 export default {
   name: 'msg',
   data() {
@@ -55,6 +57,24 @@ export default {
       }],
       inviteform: [],
       invitelink: ''
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      get_message(store.getters.token).then(response => {
+        this.msg = response.data
+      })
+    },
+    create_link() {
+      c_link(store.getters.token).then(response => {
+        console.log(response)
+        this.invitelink = response.data
+        this.listLoading = false
+      })
     }
   }
 }

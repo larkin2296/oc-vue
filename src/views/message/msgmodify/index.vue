@@ -9,8 +9,8 @@
             </el-form-item>
             <el-form-item label='性别'>
               <el-radio-group v-model='msg.sex'>
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
+                <el-radio label="男" value='1'></el-radio>
+                <el-radio label="女" value='2'></el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="手机">
@@ -27,6 +27,9 @@
             </el-form-item>
             <el-form-item label="身份证">
               <el-input></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type='danger'>提交</el-button>
             </el-form-item>
         </el-form>
         </el-tab-pane>

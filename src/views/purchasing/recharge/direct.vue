@@ -10,7 +10,7 @@
 
       <el-form-item label="金额">
 
-        <el-input v-model="form.card_price" style='width:200px;'></el-input>
+        <el-input v-model="form.price" style='width:200px;'></el-input>
 
       </el-form-item>
 
@@ -18,11 +18,11 @@
           <el-date-picker
           v-model="form.cutoff_time"
           type="date"
-          placeholder="选择日期" size='small' format="yyyy 年 MM 月 dd 日">
+          placeholder="选择日期" size='small' format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
+        <el-button type="primary" @click="add_trolly">Create</el-button>
       </el-form-item>
     
 </el-form>
@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column label="油卡" align="center">
         <template slot-scope="scope">
-          {{scope.row.card_code}}
+          {{scope.row.oil_card_code}}
         </template>
       </el-table-column>
       <el-table-column label="金额" align="center">
@@ -43,24 +43,30 @@
           <span>{{scope.row.price}}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="截止时间" align="center">
+      <el-table-column label="实际金额" align="center">
         <template slot-scope="scope">
+          <span>{{scope.row.real_price}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col" label="截止时间" align="center">
+        <template slot-scope="scope" format="yyyy 年 MM 月 dd 日">
           {{scope.row.cutoff_time}}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" plain>删除</el-button>
+          <el-button type="primary" @click='del(scope.$index)'>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-button type="danger" plain>付款</el-button>
+    <el-button type="danger" plain @click='onsubmit'>付款</el-button>
   </div>
 </div> 
 </template>
 
 <script>
-import { get_short_card } from '@/api/purchasing'
+import { get_short_card, directly_order } from '@/api/purchasing'
+import store from '@/store'
 export default {
   data() {
     return {
@@ -73,7 +79,8 @@ export default {
       checkAll: false,
       checkedCard: [],
       oil_card_code: [],
-      isIndeterminate: true
+      isIndeterminate: true,
+      discount: 0.98
     }
   },
   created() {
@@ -82,16 +89,33 @@ export default {
   methods: {
     fetchData() {
       get_short_card(this.listQuery).then(response => {
-        console.log(response)
         this.oil_card_code = response
       })
     },
-    onSubmit() {
-      console.log(this.checkedCard)
-      // this.list = ({ author: 'name', display_time: '2010-06-12 16:32:23', id: '330000200103215497', pageviews: 797, status: 'draft', title: 'Stoxqx pygsyozdch yjqubbm drtyljfqng tqhcb mymxof hjwrxyej tjgw ubfalhb shfeeig snsatg lwidobvrjm nxlfkuhpi bsegvg ueiwn vcnd.' })
-      // this.d_num = Number(this.d_num) + 1
-      console.log(this.form)
-      this.list.push({ card_code: this.checkedCard, price: this.form.card_price, cutoff_time: this.form.cutoff_time })
+    add_trolly() {
+      this.list.push({ oil_card_code: this.checkedCard, price: this.form.price, real_price: Number(this.form.price) * Number(this.discount), cutoff_time: this.form.cutoff_time, user_id: store.getters.id, discount: this.discount, order_type: 2 })
+    },
+    del($index) {
+      this.totalprice -= this.list[$index].price
+      this.list.splice($index, 1)
+    },
+    onsubmit() {
+      this.$confirm('是否付款创建订单?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        directly_order(this.list).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
+        this.$message({
+          type: 'success',
+          message: '订单创建成功!'
+        })
+      }).catch(() => {
+      })
     },
     onCancel() {
       this.$message({

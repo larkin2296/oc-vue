@@ -129,11 +129,21 @@ export default {
       this.list.splice($index, 1)
     },
     onsubmit() {
-      this.loading = true
-      camilo_order(this.list).then(response => {
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
+      this.$confirm('是否付款创建订单?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        camilo_order(this.list).then(response => {
+        }).catch(error => {
+          console.log(error)
+        })
+        this.$message({
+          type: 'success',
+          message: '订单创建成功!'
+        })
+      }).catch(() => {
       })
     }
   }

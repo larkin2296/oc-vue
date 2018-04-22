@@ -53,3 +53,10 @@ export function get_short_card(card) {
   }
   )
 }
+directly_order
+export function directly_order(list) {
+  return request.post('api/purchasing/directly_order', {
+    list
+  }
+  )
+}
