@@ -52,7 +52,7 @@
         <el-tab-pane label="头像修改">
           <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="123"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
@@ -65,7 +65,7 @@
             <el-form-item label='上传身份证'></el-form-item>
             <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="123"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">
@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'msg',
   data() {
@@ -107,7 +108,23 @@ export default {
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M
+      let param = new FormData()
+      param.append('file', file)
+      axios.post('http://localhost/oil_cord_system/public/index.php/api/upload/', param, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '上传成功!'
+          })
+        }
+      }, (res) => {
+        console.log(res)
+      })
+      return false
     }
   }
 }

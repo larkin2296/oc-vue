@@ -33,10 +33,19 @@
             </template>
         </el-tab-pane>
         <el-tab-pane label="导入" name="second">
-            <el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+            <el-upload class="upload-demo"
+                ref="upload"
+                :multiple="false"
+                action="123"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-change="handleChange"
+                :before-upload="beforeUpload"
+                :file-list="fileList"
+                :auto-upload="false" accept=".xls,.xlsx">
                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                <div slot="tip" class="el-upload__tip">只能上传xls,xlsx文件，且不超过500kb</div>
             </el-upload>
         </el-tab-pane>
         <el-tab-pane label="输入" name="third">角色管理</el-tab-pane>
@@ -45,27 +54,49 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
       radio: '1',
       radio3: '中石化',
       activeName: 'second',
-      fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }]
+      fileList: []
     }
   },
   method: {
-    handleClick(tab, event) {
-      console.log(tab, event)
-    },
     submitUpload() {
       this.$refs.upload.submit()
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
     },
     handlePreview(file) {
-      console.log(file)
+      // console.log(file)
+    },
+    handleChange(file, fileList) {
+      // console.log(file)
+      // console.log(fileList)
+    },
+    beforeUpload(file) {
+      // 这里是重点，将文件转化为formdata数据上传
+      let param = new FormData()
+      param.append('file', file)
+      axios.post('http://localhost/oil_cord_system/public/index.php/api/upload/', param, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '上传成功!'
+          })
+        }
+      }, (res) => {
+        console.log(res)
+      })
+      return false
     }
   }
 }

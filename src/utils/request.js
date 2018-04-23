@@ -7,6 +7,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: '/oc/', // api的base_url
   // baseURL: process.env.BASE_API,
+  method: 'post',
   timeout: 15000,
   headers: { 'X-Custom-Header': 'foobar', 'Access-Control-Allow-Credentials': 'false', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, X-Requested-With, Origin, Accept', 'X-Requested-With': 'XMLHttpRequest' },
   // headers: {

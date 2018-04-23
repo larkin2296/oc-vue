@@ -10,9 +10,9 @@ export function c_link(token) {
   return request.post('api/user/link', '', { headers: headers })
 }
 
-export function upload(data) {
+export function upload(param) {
   return request.post('api/upload/', {
-    data
+    param
   }, { headers: {
     'Content-Type': 'multipart/form-data'
   }}

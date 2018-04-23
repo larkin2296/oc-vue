@@ -57,7 +57,6 @@
       </el-table-column>
     </el-table>
       </div>
-    <el-button type="danger" plain>付款</el-button>
   </div>
 </template>
 

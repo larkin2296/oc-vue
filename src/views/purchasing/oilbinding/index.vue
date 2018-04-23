@@ -29,9 +29,18 @@
                 </el-form>
             </el-tab-pane>
             <el-tab-pane label="导入">
-                <el-upload class='upload-demo'  action='' :before-upload="beforeUpload" multiple ref='newupload' :auto-upload="false" accept=".xls,.xlsx">
+                <el-upload class="upload-demo"
+                ref="upload"
+                :multiple="false"
+                action="123"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-change="handleChange"
+                :before-upload="beforeUpload"
+                :file-list="fileList"
+                :auto-upload="false" accept=".xls,.xlsx">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                  <el-button style="margin-left: 10px;" size="small" type="success" @click="newSubmitForm()">上传到服务器</el-button>
+                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                 </el-upload>                 
             </el-tab-pane>
         </el-tabs>
@@ -105,8 +114,9 @@
 
 import { binding_card, get_card_list, card_start, set_longtrem } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
-import { upload } from '@/api/message'
+// import { upload } from '@/api/message'
 import store from '@/store'
+import axios from 'axios'
 
 export default {
   name: 'card',
@@ -248,23 +258,38 @@ export default {
     },
     onSubmit() {
     },
-    handleClick(tab, event) {
-      console.log(tab, event)
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      // console.log(file, fileList)
+    },
+    handlePreview(file) {
+      // console.log(file)
+    },
+    handleChange(file, fileList) {
+      // console.log(file)
+      // console.log(fileList)
     },
     beforeUpload(file) {
-      console.log(file)
-      const fd = new FormData()
-      fd.append('file', file)
-      fd.append('groupId', this.groupId)
-      console.log(fd)
-      upload(fd).then(response => {
-      }).catch(error => {
-        console.log(error)
+      // 这里是重点，将文件转化为formdata数据上传
+      let param = new FormData()
+      param.append('file', file)
+      axios.post('http://localhost/oil_cord_system/public/index.php/api/upload/', param, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+        if (res.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '上传成功!'
+          })
+        }
+      }, (res) => {
+        console.log(res)
       })
-      return true
-    },
-    newSubmitForm() {
-      this.$refs.newupload.submit()
+      return false
     }
   }
 }

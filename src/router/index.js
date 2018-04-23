@@ -104,7 +104,7 @@ export const asyncRouterMap = [
         path: 'directly',
         name: 'pd_search',
         component: () => import('@/views/purchasing/search/directly'),
-        meta: { role: ['1'], title: '直充明细查询', icon: 'form' }
+        meta: { role: ['1'], title: '直充记录查询', icon: 'form' }
       },
       {
         path: 'supplier',
@@ -148,6 +148,12 @@ export const asyncRouterMap = [
     name: 'Recmanage',
     meta: { title: '账务管理', icon: 'example', role: ['1'] },
     children: [
+      {
+        path: 'initialize',
+        name: 'Initialize',
+        component: () => import('@/views/purchasing/initialize'),
+        meta: { title: '圈存', icon: 'table', role: ['1'] }
+      },
       {
         path: 'reconcil',
         name: 'Reconcil',
