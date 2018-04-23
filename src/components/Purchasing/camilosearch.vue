@@ -37,6 +37,16 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label='卡密'>
+        <el-select v-model="form.camilo_status" placeholder="请选择">
+          <el-option
+            v-for="item in c_status"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='交易时间'>
         <el-date-picker
         v-model="form.time_start"
@@ -112,11 +122,11 @@ export default {
       },
       c_status: [{
         value: '0',
-        label: '未使用'
+        label: '未用完'
       },
       {
         value: '1',
-        label: '已使用'
+        label: '已用完'
       }],
       c_goods: [{
         value: '0',

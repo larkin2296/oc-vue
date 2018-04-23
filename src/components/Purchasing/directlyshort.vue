@@ -70,6 +70,11 @@
           <el-button type="warning" @click="showdetail(scope.row.order_code)">查看详情</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="删除订单" align="center">
+        <template slot-scope="scope">
+          <el-button type="danger" @click="del(scope.row.order_code)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
   </div>
