@@ -24,7 +24,6 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/register', component: () => import('@/views/register/index'), hidden: true },
-
   {
     path: '/',
     component: Layout,
@@ -101,16 +100,28 @@ export const asyncRouterMap = [
         meta: { role: ['1'], title: '卡密订单查询', icon: 'form' }
       },
       {
-        path: 'directly',
-        name: 'pd_search',
-        component: () => import('@/views/purchasing/search/directly'),
-        meta: { role: ['1'], title: '直充记录查询', icon: 'form' }
+        path: 'directly_short',
+        name: 'pds_search',
+        component: () => import('@/views/purchasing/search/directlyshort'),
+        meta: { role: ['1'], title: '直充短充查询', icon: 'form' }
       },
       {
-        path: 'supplier',
+        path: 'directly_long',
+        name: 'pdl_search',
+        component: () => import('@/views/purchasing/search/directlylong'),
+        meta: { role: ['1'], title: '直充长充查询', icon: 'form' }
+      },
+      {
+        path: 's_camilo',
         name: 's_search',
-        component: () => import('@/views/supplier/search'),
-        meta: { role: ['2'], title: '供应商查询', icon: 'form' }
+        component: () => import('@/views/supplier/search/camilo'),
+        meta: { role: ['2'], title: '卡密供货查询', icon: 'form' }
+      },
+      {
+        path: 's_directly',
+        name: 's_search',
+        component: () => import('@/views/supplier/search/directly'),
+        meta: { role: ['2'], title: '直充供货查询', icon: 'form' }
       }
     ]
   },

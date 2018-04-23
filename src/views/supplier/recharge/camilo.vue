@@ -16,8 +16,8 @@
             <el-radio v-model="radio" label="3" border>￥300</el-radio>
           </el-form-item>
       </el-form>
-      <el-tabs v-model="activeName" @tab-click="handleClick" type='border-card'>
-        <el-tab-pane label="单张" name="first">
+      <el-tabs type='border-card'>
+        <el-tab-pane label="单张">
             <template>
                 <el-form>
                     <el-form-item label='卡密字段一'>
@@ -32,8 +32,8 @@
                 </el-form>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="导入" name="second">
-            <el-upload class="upload-demo"
+        <el-tab-pane label="导入">
+                <el-upload class="upload-demo"
                 ref="upload"
                 :multiple="false"
                 action="123"
@@ -43,12 +43,11 @@
                 :before-upload="beforeUpload"
                 :file-list="fileList"
                 :auto-upload="false" accept=".xls,.xlsx">
-                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传xls,xlsx文件，且不超过500kb</div>
-            </el-upload>
-        </el-tab-pane>
-        <el-tab-pane label="输入" name="third">角色管理</el-tab-pane>
+                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                </el-upload>                 
+            </el-tab-pane>
+        <el-tab-pane label="输入">角色管理</el-tab-pane>
       </el-tabs>
   </div>
 </template>
@@ -60,11 +59,13 @@ export default {
     return {
       radio: '1',
       radio3: '中石化',
-      activeName: 'second',
       fileList: []
     }
   },
-  method: {
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab, event)
+    },
     submitUpload() {
       this.$refs.upload.submit()
     },

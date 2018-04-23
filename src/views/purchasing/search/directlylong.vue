@@ -8,40 +8,40 @@
       :name="item.name"
     >
       <component v-if="item.name === '1'" :is="item.component" @my-event='addTab'></component>
-      <component v-else :is="item.component" :order="order_code"></component>
+      <component v-else :is="item.component" :card="card_code"></component>
     </el-tab-pane>
   </el-tabs>
   </div>
 </template>
 
 <script>
-import CamSearch from '@/components/purchasing/camilosearch'
-import CamiloDetail from '@/components/detail/camilodetail'
+import DirectlyLong from '@/components/purchasing/directlylong'
+import DirectlylongDetail from '@/components/detail/directlylongdetail'
 export default {
   components: {
-    CamSearch,
-    CamiloDetail
+    DirectlyLong,
+    DirectlylongDetail
   },
   data() {
     return {
       editableTabsValue2: '1',
       editableTabs2: [{
-        title: '卡密查询',
+        title: '长充查询',
         name: '1',
-        component: CamSearch
+        component: DirectlyLong
       }],
       tabIndex: 1,
-      order_code: ''
+      card_code: ''
     }
   },
   methods: {
-    addTab(order) {
+    addTab(card) {
       let newTabName = ++this.tabIndex + ''
-      this.order_code = order
+      this.card_code = card
       this.editableTabs2.push({
         title: '订单详情',
         name: newTabName,
-        component: CamiloDetail
+        component: DirectlylongDetail
       })
       this.editableTabsValue2 = newTabName
     },

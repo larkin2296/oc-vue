@@ -13,8 +13,20 @@ export function get_camilo_order() {
   )
 }
 
-export function get_directy_order() {
-  return request.post('api/purchasing/get_directy_order', {
+export function set_sdirectly_order(list) {
+  return request.post('api/purchasing/set_sdirectly_order', {
+    list
+  }
+  )
+}
+export function get_sdirecty_order() {
+  return request.post('api/purchasing/get_sdirecty_order', {
+  }
+  )
+}
+
+export function get_ldirecty_order() {
+  return request.post('api/purchasing/get_ldirecty_order', {
   }
   )
 }
@@ -53,10 +65,30 @@ export function get_short_card(card) {
   }
   )
 }
-directly_order
 export function directly_order(list) {
   return request.post('api/purchasing/directly_order', {
     list
+  }
+  )
+}
+
+export function get_camilo_detail(order) {
+  return request.post('api/purchasing/get_camilo_order', {
+    order
+  }
+  )
+}
+
+export function get_ldirectly_detail(card) {
+  return request.post('api/purchasing/get_ldirectly_detail', {
+    card
+  }
+  )
+}
+
+export function get_sdirectly_detail(order) {
+  return request.post('api/purchasing/get_sdirectly_detail', {
+    order
   }
   )
 }

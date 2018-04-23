@@ -3,7 +3,7 @@
     <div id='msg_tab'>
       <el-tabs type="border-card">
         <el-tab-pane label="个人信息修改">
-          <el-form class="msg" v-model='msg' :label-position="left" label-width="100px">
+          <el-form class="msg" v-model='msg' label-width="100px">
             <el-form-item label='真实姓名'>
               <el-input />
             </el-form-item>

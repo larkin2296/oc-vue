@@ -3,7 +3,7 @@
     <div id='msg_tab'>
       <el-tabs type="border-card">
         <el-tab-pane label="个人信息查看">
-          <el-form class="msg" :model='msg' :label-position="left" label-width="100px">
+          <el-form class="msg" :model='msg' label-width="100px">
             <el-form-item label='真实姓名'>
               {{ msg.name }}
             </el-form-item>

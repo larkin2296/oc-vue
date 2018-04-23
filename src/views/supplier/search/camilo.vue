@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import CamSearch from '@/components/purchasing/camilosearch'
-import CamiloDetail from '@/components/detail/camilodetail'
+import Camilo from '@/components/supplier/camilo'
+import CamiloDetail from '@/components/detail/scamilodetail'
 export default {
   components: {
-    CamSearch,
+    Camilo,
     CamiloDetail
   },
   data() {
@@ -28,7 +28,7 @@ export default {
       editableTabs2: [{
         title: '卡密查询',
         name: '1',
-        component: CamSearch
+        component: Camilo
       }],
       tabIndex: 1,
       order_code: ''

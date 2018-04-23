@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { get_short_card, directly_order } from '@/api/purchasing'
+import { get_short_card, set_sdirectly_order } from '@/api/purchasing'
 import store from '@/store'
 export default {
   data() {
@@ -116,7 +116,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        directly_order(this.list).then(response => {
+        set_sdirectly_order(this.list).then(response => {
           console.log(response)
         }).catch(error => {
           console.log(error)

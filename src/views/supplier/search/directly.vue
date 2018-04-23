@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import CamSearch from '@/components/purchasing/camilosearch'
-import CamiloDetail from '@/components/detail/camilodetail'
+import Directly from '@/components/supplier/directly'
+import DirectlyDetail from '@/components/detail/sdirectlydetail'
 export default {
   components: {
-    CamSearch,
-    CamiloDetail
+    Directly,
+    DirectlyDetail
   },
   data() {
     return {
@@ -28,7 +28,7 @@ export default {
       editableTabs2: [{
         title: '卡密查询',
         name: '1',
-        component: CamSearch
+        component: Directly
       }],
       tabIndex: 1,
       order_code: ''
@@ -41,7 +41,7 @@ export default {
       this.editableTabs2.push({
         title: '订单详情',
         name: newTabName,
-        component: CamiloDetail
+        component: DirectlyDetail
       })
       this.editableTabsValue2 = newTabName
     },

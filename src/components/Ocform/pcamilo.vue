@@ -1,5 +1,5 @@
 <template>
-<el-form :inline="true" ref="form" :model="form" label-width="120px" :label-position="left">
+<el-form :inline="true" ref="form" :model="form" label-width="120px">
     <el-form-item label='卡密状态'>
       <el-select v-model="form.status" placeholder="请选择">
         <el-option
