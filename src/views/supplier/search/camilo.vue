@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Camilo from '@/components/supplier/camilo'
-import CamiloDetail from '@/components/detail/scamilodetail'
+import Camilo from '@/components/Supplier/camilo'
+import CamiloDetail from '@/components/Detail/scamilodetail'
 export default {
   components: {
     Camilo,

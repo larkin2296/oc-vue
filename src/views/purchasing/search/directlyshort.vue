@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import DirectlyShort from '@/components/purchasing/directlyshort'
-import DirectlyshortDetail from '@/components/detail/directlyshortdetail'
+import DirectlyShort from '@/components/Purchasing/directlyshort'
+import DirectlyshortDetail from '@/components/Detail/directlyshortdetail'
 export default {
   components: {
     DirectlyShort,

@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import CamSearch from '@/components/purchasing/camilosearch'
-import CamiloDetail from '@/components/detail/camilodetail'
+import CamSearch from '@/components/Purchasing/camilosearch'
+import CamiloDetail from '@/components/Detail/camilodetail'
 export default {
   components: {
     CamSearch,

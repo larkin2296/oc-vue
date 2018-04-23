@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Directly from '@/components/supplier/directly'
-import DirectlyDetail from '@/components/detail/sdirectlydetail'
+import Directly from '@/components/Supplier/directly'
+import DirectlyDetail from '@/components/Detail/sdirectlydetail'
 export default {
   components: {
     Directly,

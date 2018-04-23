@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import DirectlyLong from '@/components/purchasing/directlylong'
-import DirectlylongDetail from '@/components/detail/directlylongdetail'
+import DirectlyLong from '@/components/Purchasing/directlylong'
+import DirectlylongDetail from '@/components/Detail/directlylongdetail'
 export default {
   components: {
     DirectlyLong,
