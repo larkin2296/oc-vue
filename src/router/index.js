@@ -27,12 +27,18 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/dashboard'
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
     name: 'Dashboard',
-    hidden: true,
+    meta: { title: '首页', icon: 'example' },
     children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      path: 'index',
+      name: 'Dashboard',
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: '首页', icon: 'table' }
     }]
   }
 ]
@@ -136,13 +142,13 @@ export const asyncRouterMap = [
         path: 'users',
         name: 'Users',
         component: () => import('@/views/message/msgmodify'),
-        meta: { title: '信息修改', icon: 'table' }
+        meta: { title: '信息上传', icon: 'table' }
       },
       {
         path: 'ushow',
         name: 'Ushow',
         component: () => import('@/views/message/showmsg'),
-        meta: { title: '信息查看', icon: 'table' }
+        meta: { title: '个人管理', icon: 'table' }
       },
       {
         path: 'binding',

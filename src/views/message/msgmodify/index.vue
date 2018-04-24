@@ -1,83 +1,66 @@
 <template>
   <div>
+    <el-button type='success' style='margin:30px;width:150px;height:60px;' >提交信息</el-button>
     <div id='msg_tab'>
-      <el-tabs type="border-card">
-        <el-tab-pane label="个人信息修改">
-          <el-form class="msg" v-model='msg' label-width="100px">
-            <el-form-item label='真实姓名'>
-              <el-input />
+      <el-form class="msg" v-model='msg' label-width="100px">
+        <el-form-item label='真实姓名'>
+          <el-input />
+        </el-form-item>
+        <el-form-item label='性别'>
+          <el-radio-group v-model='msg.sex'>
+            <el-radio label="男" value='1'></el-radio>
+            <el-radio label="女" value='2'></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="手机">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item label="支付宝账号">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item label="qq号">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item label="城市">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item style='margin-left: -210px;'>
+          <el-form class='pic_modify' :inline="true">
+            <el-form-item label='上传身份证正面'>
+              <el-upload
+            class="avatar-uploader"
+            action="123"
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeAvatarUpload" list-type="picture-card"
+            :auto-upload="false">
+            <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
             </el-form-item>
-            <el-form-item label='性别'>
-              <el-radio-group v-model='msg.sex'>
-                <el-radio label="男" value='1'></el-radio>
-                <el-radio label="女" value='2'></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="手机">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label="支付宝账号">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label="qq号">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label="城市">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label="身份证">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type='danger'>提交</el-button>
-            </el-form-item>
-        </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="密码修改">
-          <el-form class='psd_modify'>
-            <el-form-item label='旧密码'>
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label='新密码'>
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label='确认密码'>
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type='danger'>修改</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="头像修改">
-          <el-upload
-          class="avatar-uploader"
-          action="123"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-        </el-tab-pane>
-        <el-tab-pane label="上传信息">
-          <el-form class='psd_modify'>
-            <el-form-item label='上传身份证'></el-form-item>
+            <el-form-item label='上传身份证背面'>
             <el-upload
             class="avatar-uploader"
             action="123"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeAvatarUpload" list-type="picture-card"
+            :auto-upload="false">
+            <i class="el-icon-plus"></i>
             </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+            </el-form-item>
             <el-form-item>
-              <el-button type='danger'>上传</el-button>
+              <el-button type='danger' @click="submitUpload">上传</el-button>
             </el-form-item>
           </el-form>
-        </el-tab-pane>
-      </el-tabs>
+        </el-form-item>
+    </el-form>
     </div>
   </div>
 </template>
@@ -91,12 +74,16 @@ export default {
       msg: [{
         sex: '男'
       }],
-      imageUrl: ''
+      dialogImageUrl: '',
+      dialogVisible: false
     }
   },
   methods: {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw)
+    },
+    submitUpload() {
+      this.$refs.upload.submit()
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
@@ -125,6 +112,10 @@ export default {
         console.log(res)
       })
       return false
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
   }
 }
@@ -134,7 +125,7 @@ export default {
 .el-form{
   width:300px;
   height:500px;
-  margin:5% auto;
+  margin:2% 10%;
 }
 .avatar-uploader{
     width: 190px;
@@ -159,6 +150,13 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .pic_modify{
+    width:800px;
+    height:200px;
+  }
+  .avatar-uploader{
+    border:none;
   }
 </style>
 
