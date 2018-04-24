@@ -38,6 +38,7 @@
             <el-button type='danger'>查询</el-button>
         </el-form-item>
         </el-form>
+        <div class="app-container">
         <el-table border fit highlight-current-row>
             <el-table-column label='供货时间'>
                 <template slot-scope="scope">
@@ -85,5 +86,6 @@
                 </template>
             </el-table-column>
         </el-table>
+        </div>
   </div>
 </template>

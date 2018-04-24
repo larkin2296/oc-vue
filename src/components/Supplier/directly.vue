@@ -1,6 +1,6 @@
 <template>
   <div>
-      <el-form :inline="true" label-width="120px">
+      <el-form :inline="true" label-width="80px">
         <el-form-item label='油卡'>
             <el-input></el-input>
         </el-form-item>
@@ -24,6 +24,7 @@
         <el-button type='danger'>查询</el-button>
     </el-form-item>
     </el-form>
+    <div class="app-container">
     <el-table border fit highlight-current-row>
         <el-table-column label='供应单号'>
             <template slot-scope="scope">
@@ -57,9 +58,10 @@
         </el-table-column>
         <el-table-column label='操作'>
             <template slot-scope="scope">
-            <el-button type='success'>查看详情</el-button>
+            <el-button type='success'>查看凭证</el-button>
             </template>
         </el-table-column>
     </el-table>
+    </div>
   </div>
 </template>

@@ -19,7 +19,7 @@
       <el-tabs type='border-card'>
         <el-tab-pane label="单张">
             <template>
-                <el-form>
+                <el-form label-width="200px" class='single_card'>
                     <el-form-item label='卡密字段一'>
                         <el-input></el-input>
                     </el-form-item>
@@ -47,7 +47,41 @@
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                 </el-upload>                 
             </el-tab-pane>
-        <el-tab-pane label="输入">角色管理</el-tab-pane>
+        <el-tab-pane label="输入">
+          <el-form :inline="true">
+            <el-form-item label='卡密'>
+              <el-input></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type='danger'>添加</el-button>
+            </el-form-item>
+          </el-form>
+          <div class="app-container">
+            <el-table border fit highlight-current-row>
+            <el-table-column label='平台名称'>
+                <template slot-scope="scope">
+                <span>{{scope.row.plaform}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='面额'>
+                <template slot-scope="scope">
+                <span>{{scope.row.price}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='卡密'>
+                <template slot-scope="scope">
+                <span>{{scope.row.cam_name}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='操作'>
+                <template slot-scope="scope">
+                <el-button type='danger'>删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+          </div>
+          <el-button type='danger'>提交</el-button>
+        </el-tab-pane>
       </el-tabs>
   </div>
 </template>
@@ -112,5 +146,8 @@ export default {
 }
 .el-tabs--border-card{
     height:400px;
+}
+.single_card .el-form-item{
+  width:400px;
 }
 </style>

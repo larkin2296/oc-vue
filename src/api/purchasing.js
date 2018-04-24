@@ -73,7 +73,7 @@ export function directly_order(list) {
 }
 
 export function get_camilo_detail(order) {
-  return request.post('api/purchasing/get_camilo_order', {
+  return request.post('api/purchasing/get_camilo_detail', {
     order
   }
   )
