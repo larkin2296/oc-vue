@@ -34,11 +34,6 @@
           {{scope.row.recharge_price}}
         </template>
     </el-table-column>
-    <el-table-column label="查看凭证">
-      <template slot-scope="scope">
-          <el-button type='warning'>查看</el-button>
-        </template>
-    </el-table-column>
       </el-table>
       </div>
   </el-main>
@@ -47,7 +42,7 @@
 </template>
 
 <script>
-import { get_sdirectly_detail } from '@/api/purchasing'
+import { get_ldirectly_detail } from '@/api/purchasing'
 export default {
   props: ['order'],
   data() {
@@ -61,7 +56,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      get_sdirectly_detail(this.order).then(response => {
+      get_ldirectly_detail(this.order).then(response => {
         this.tableData = response
         this.listLoading = false
       })

@@ -24,6 +24,32 @@
           {{ camilo_problem}} 张
         </el-form-item>
       </el-form>
+      <el-dialog
+        title="上报错误卡密"
+        :visible.sync="dialogVisible"
+        width="30%"
+        :before-close="handleClose">
+        <el-table :data='problem_table' border fit highlight-current-row>
+          <el-table-column label='错误卡密号'>
+            <template slot-scope="scope">
+            {{ scope.row.code }}
+            </template>
+          </el-table-column>
+          <el-table-column label='错误类型'>
+            <template slot-scope="scope">
+            <el-select v-model="scope.row.type" placeholder="请选择">
+              <el-option
+                v-for="item in mistake_type"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            </template>
+          </el-table-column>    
+        </el-table>
+        <el-button type='danger'>上报</el-button>
+      </el-dialog>
     </div>
   </el-header>
   <el-main>
@@ -54,8 +80,8 @@
   </el-main>
   <el-footer>
     <el-form>
-      <el-button type='primary'>上报已使用</el-button>
-      <el-button type='danger'>上报问题卡密</el-button>
+      <el-button type='primary' @click='sub_userd'>上报已使用</el-button>
+      <el-button type='danger' @click='dialogVisible = true'>上报问题卡密</el-button>
     </el-form>
   </el-footer>
 </el-container>
@@ -73,7 +99,23 @@ export default {
       camilo_num: 0,
       camilo_use: 0,
       camilo_unuse: 0,
-      camilo_problem: 0
+      camilo_problem: 0,
+      problem_table: [
+      ],
+      mistake_type: [{
+        label: '卡密重复',
+        value: 0
+      }, {
+        label: '卡密错误',
+        value: 1
+      }, {
+        label: '卡密失效',
+        value: 2
+      }, {
+        label: '面额不符',
+        value: 3
+      }],
+      dialogVisible: false
     }
   },
   created() {
@@ -86,6 +128,24 @@ export default {
         this.tableData = response
         this.listLoading = false
       })
+    },
+    sub_userd() {
+      this.$confirm('已确认后卡密出现问题概不负责', '确认卡密已使用？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '设置成功'
+        })
+      }).catch(() => {
+      })
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？').then(_ => {
+        done()
+      }).catch(_ => {})
     }
   }
 }

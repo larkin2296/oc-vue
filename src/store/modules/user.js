@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, refresh } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -40,6 +40,20 @@ const user = {
           resolve()
         }).catch(error => {
           console.log(error)
+          reject(error)
+        })
+      })
+    },
+
+    Refresh({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        refresh(state.token).then(response => {
+          console.log(response)
+          const data = response.data
+          setToken(data.token)
+          commit('SET_TOKEN', data.token)
+          resolve(response)
+        }).catch(error => {
           reject(error)
         })
       })

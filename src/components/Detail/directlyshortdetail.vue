@@ -44,11 +44,6 @@
           {{scope.row.recharge_price}}
         </template>
     </el-table-column>
-    <el-table-column label="查看凭证">
-      <template slot-scope="scope">
-          <el-button type='warning'>查看</el-button>
-        </template>
-    </el-table-column>
       </el-table>
       </div>
   </el-main>
