@@ -49,7 +49,10 @@
             </el-tab-pane>
         <el-tab-pane label="输入">
           <el-form :inline="true">
-            <el-form-item label='卡密'>
+            <el-form-item label='卡密字段一'>
+              <el-input></el-input>
+            </el-form-item>
+            <el-form-item label='卡密字段二'>
               <el-input></el-input>
             </el-form-item>
             <el-form-item>

@@ -67,7 +67,7 @@
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label='序号'>
         <template slot-scope="scope">
-          {{scope.$index}}
+          {{scope.$index + 1}}
         </template>
       </el-table-column>
       <el-table-column label="订单号">

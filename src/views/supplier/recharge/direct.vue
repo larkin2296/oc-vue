@@ -21,7 +21,7 @@
     <el-table :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="center" label='序号' width="95">
         <template slot-scope="scope">
-          {{scope.$index}}
+          {{scope.$index + 1}}
         </template>
       </el-table-column>
       <el-table-column label="油卡卡号" align="center"  width="400">
@@ -33,10 +33,10 @@
         <template slot-scope="scope">
           <el-popover ref="popover4" placement="left" width="600" trigger="click">
           <el-form label-width="150px">
-            <el-form-item label='充值面额' >
+            <el-form-item label='充值金额' >
               <el-input style='width:100px;'/>
             </el-form-item>
-            <el-form-item label='充值时间'>
+            <el-form-item label='到账时间'>
               <el-date-picker
                 v-model="recharge_time"
                 type="datetime"

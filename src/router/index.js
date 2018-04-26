@@ -51,6 +51,78 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/p_management',
+    component: Layout,
+    redirect: '/p_management/order',
+    name: 'Pmanagement',
+    meta: { title: '采购商管理', icon: 'example', role: ['3', '4'] },
+    children: [
+      {
+        path: 'order',
+        name: 'Order',
+        component: () => import('@/views/Administrator/purchasing/order'),
+        meta: { role: ['3', '4'], title: '订单管理', icon: 'table' }
+      },
+      {
+        path: 'card',
+        name: 'Card',
+        component: () => import('@/views/Administrator/purchasing/card'),
+        meta: { role: ['3', '4'], title: '油卡管理', icon: 'tree' }
+      },
+      {
+        path: 'permission',
+        name: 'Permission',
+        component: () => import('@/views/Administrator/purchasing/permission'),
+        meta: { role: ['3', '4'], title: '权限管理', icon: 'table' }
+      },
+      {
+        path: 'check',
+        name: 'Check',
+        component: () => import('@/views/Administrator/purchasing/check'),
+        meta: { role: ['3', '4'], title: '资质审核', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/s_management',
+    component: Layout,
+    redirect: '/s_management/order',
+    name: 'Smanagement',
+    meta: { title: '供应商管理', icon: 'example', role: ['3', '4'] },
+    children: [
+      {
+        path: 'order',
+        name: 'Order',
+        component: () => import('@/views/Administrator/supplier/order'),
+        meta: { role: ['3', '4'], title: '订单管理', icon: 'table' }
+      },
+      {
+        path: 'Card',
+        name: 'card',
+        component: () => import('@/views/Administrator/supplier/card'),
+        meta: { role: ['3', '4'], title: '油卡管理', icon: 'tree' }
+      },
+      {
+        path: 'deposit',
+        name: 'Deposit',
+        component: () => import('@/views/Administrator/supplier/deposit'),
+        meta: { role: ['3', '4'], title: '提现管理', icon: 'table' }
+      },
+      {
+        path: 'permission',
+        name: 'Permission',
+        component: () => import('@/views/Administrator/supplier/permission'),
+        meta: { role: ['3', '4'], title: '权限管理', icon: 'table' }
+      },
+      {
+        path: 'check',
+        name: 'Check',
+        component: () => import('@/views/Administrator/supplier/check'),
+        meta: { role: ['3', '4'], title: '资质审核管理', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/order',
     component: Layout,
     redirect: '/order/camilo',
@@ -136,7 +208,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/msg/users',
     name: 'Msg',
-    meta: { title: '信息管理', icon: 'example' },
+    meta: { title: '信息管理', icon: 'example', role: ['1', '2'] },
     children: [
       {
         path: 'users',

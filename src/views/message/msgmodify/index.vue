@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-button type='success' style='margin:30px;width:150px;height:60px;' >提交信息</el-button>
+    <el-button type='danger' @click="submitUpload">上传</el-button>
     <div id='msg_tab'>
       <el-form class="msg" v-model='msg' label-width="100px">
         <el-form-item label='真实姓名'>
@@ -15,7 +16,7 @@
         <el-form-item label="手机">
           <el-input></el-input>
         </el-form-item>
-        <el-form-item label="支付宝账号">
+        <el-form-item label="银行卡账号">
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="qq号">
@@ -55,8 +56,22 @@
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
             </el-form-item>
-            <el-form-item>
-              <el-button type='danger' @click="submitUpload">上传</el-button>
+          </el-form>
+        </el-form-item>
+        <el-form-item style='margin-left: -210px;'>
+          <el-form class='pic_modify' :inline="true">
+            <el-form-item label='上传银行卡正面'>
+              <el-upload
+            class="avatar-uploader"
+            action="123"
+            :on-preview="handlePictureCardPreview"
+            :before-upload="beforeAvatarUpload" list-type="picture-card"
+            :auto-upload="false">
+            <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
             </el-form-item>
           </el-form>
         </el-form-item>

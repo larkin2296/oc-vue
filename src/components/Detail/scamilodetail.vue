@@ -20,7 +20,7 @@
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column label="序号">
       <template slot-scope="scope">
-        {{ scope.$index }}
+        {{ scope.$index + 1 }}
         </template>
     </el-table-column>
     <el-table-column label="平台">
