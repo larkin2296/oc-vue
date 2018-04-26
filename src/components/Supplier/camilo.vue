@@ -45,9 +45,9 @@
                 <span>{{scope.row.supply_time}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label='供应单号'>
+            <el-table-column label='卡密'>
                 <template slot-scope="scope">
-                <span>{{scope.row.order_code}}</span>
+                <span>{{scope.row.camilo_code}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='商品名称'>
@@ -82,7 +82,6 @@
             </el-table-column>
             <el-table-column label='操作'>
                 <template slot-scope="scope">
-                <el-button type='danger'>查看卡密详情</el-button>
                 </template>
             </el-table-column>
         </el-table>

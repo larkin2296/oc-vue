@@ -184,13 +184,19 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/deposit/index',
     name: 'Deposit',
-    meta: { title: '提现', icon: 'example', role: ['2'] },
+    meta: { title: '提现管理', icon: 'example', role: ['2'] },
     children: [
       {
         path: 'index',
         name: 'Index',
         component: () => import('@/views/supplier/deposit'),
-        meta: { title: '提现', icon: 'table', role: ['2'] }
+        meta: { title: '发起提现', icon: 'table', role: ['2'] }
+      },
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/supplier/deposit/list'),
+        meta: { title: '提现记录', icon: 'table', role: ['2'] }
       }
     ]
   },
