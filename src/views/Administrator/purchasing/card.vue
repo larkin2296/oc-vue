@@ -13,6 +13,7 @@
         <el-form-item>
             <el-button type='danger'>查询</el-button>
         </el-form-item>
+        </el-form>
         <div class='app-container'>
         <el-table border fit highlight-current-row>
             <el-table-column label='姓名'>
@@ -42,6 +43,5 @@
             </el-table-column>
         </el-table>
         </div>
-    </el-form>
   </div>
 </template>

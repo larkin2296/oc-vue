@@ -92,3 +92,10 @@ export function get_sdirectly_detail(order) {
   }
   )
 }
+
+export function set_camilo_userd(order) {
+  return request.post('api/purchasing/set_camilo_userd', {
+    order
+  }
+  )
+}

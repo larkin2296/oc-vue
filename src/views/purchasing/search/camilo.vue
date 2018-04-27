@@ -8,7 +8,7 @@
       :name="item.name"
     >
       <component v-if="item.name === '1'" :is="item.component" @my-event='addTab'></component>
-      <component v-else :is="item.component" :order="order_code"></component>
+      <component v-else :is="item.component" :order="order_code" :time="created_at"></component>
     </el-tab-pane>
   </el-tabs>
   </div>
@@ -31,13 +31,15 @@ export default {
         component: CamSearch
       }],
       tabIndex: 1,
-      order_code: ''
+      order_code: '',
+      created_at: ''
     }
   },
   methods: {
-    addTab(order) {
+    addTab(order, time) {
       let newTabName = ++this.tabIndex + ''
       this.order_code = order
+      this.created_at = time
       this.editableTabs2.push({
         title: '订单详情',
         name: newTabName,

@@ -87,7 +87,7 @@
       </el-table-column>
       <el-table-column class-name="status-col" label="交易时间" align="center">
         <template slot-scope="scope">
-          {{scope.row.pay_time}}
+          {{scope.row.created_at}}
         </template>
       </el-table-column>
       <el-table-column label="订单状态" align="center">
@@ -97,7 +97,7 @@
       </el-table-column>
       <el-table-column label="查看卡密" align="center">
         <template slot-scope="scope">
-          <el-button type="warning" @click="showdetail(scope.row.order_code)">查看卡密</el-button>
+          <el-button type="warning" @click="showdetail(scope.row.order_code, scope.row.created_at)">查看卡密</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -170,8 +170,8 @@ export default {
         this.listLoading = false
       })
     },
-    showdetail(code) {
-      this.$emit('my-event', code)
+    showdetail(code, time) {
+      this.$emit('my-event', code, time)
     }
   }
 }

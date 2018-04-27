@@ -123,6 +123,21 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/configuraion',
+    component: Layout,
+    redirect: '/configuraion/index',
+    name: 'Configuraion',
+    meta: { title: '平台配置管理', icon: 'example', role: ['3', '4'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/Administrator/configuration/index'),
+        meta: { role: ['3', '4'], title: '配置', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/order',
     component: Layout,
     redirect: '/order/camilo',

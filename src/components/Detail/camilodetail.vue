@@ -55,24 +55,30 @@
   <el-main>
     <div class="app-container">
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
-    <el-table-column label="序号">
+    <el-table-column label="序号" width="100">
       <template slot-scope="scope">
-        <el-checkbox v-model="scope.row.cam_name"></el-checkbox>
+        <el-checkbox v-model="scope.row.choose"></el-checkbox>
         </template>
     </el-table-column>
     <el-table-column label="平台">
       <template slot-scope="scope">
-        {{ scope.row.platform }}
+        {{ scope.row.platform_name }}
         </template>
     </el-table-column>
     <el-table-column label="面额">
       <template slot-scope="scope">
-        {{ scope.row.price }}
+        {{ scope.row.denomination }}
         </template>
     </el-table-column>
     <el-table-column label="卡密">
       <template slot-scope="scope">
         {{ scope.row.cam_name }}
+        </template>
+    </el-table-column>
+    <el-table-column label="状态">
+      <template slot-scope="scope">
+        <el-tag :type="scope.row.status_name | statusFilter">{{scope.row.status_name}}</el-tag>
+        <input type='hidden' v-model="scope.row.id" />
         </template>
     </el-table-column>
       </el-table>
@@ -88,14 +94,14 @@
 </template>
 
 <script>
-import { get_camilo_detail } from '@/api/purchasing'
+import { get_camilo_detail, set_camilo_userd } from '@/api/purchasing'
 export default {
-  props: ['order'],
+  props: ['order', 'time'],
   data() {
     return {
       tableData: [],
       order_code: this.order,
-      order_time: '',
+      order_time: this.time,
       camilo_num: 0,
       camilo_use: 0,
       camilo_unuse: 0,
@@ -115,7 +121,18 @@ export default {
         label: '面额不符',
         value: 3
       }],
-      dialogVisible: false
+      dialogVisible: false,
+      check_list: []
+    }
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        '未使用': 'success',
+        '问题卡密': 'gray',
+        '已使用': 'danger'
+      }
+      return statusMap[status]
     }
   },
   created() {
@@ -125,7 +142,8 @@ export default {
     fetchData() {
       this.listLoading = true
       get_camilo_detail(this.order).then(response => {
-        this.tableData = response
+        this.tableData = response.data
+        this.camilo_num = response.msg.num
         this.listLoading = false
       })
     },
@@ -135,9 +153,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '设置成功'
+        set_camilo_userd(this.tableData).then(response => {
+          this.$message({
+            type: 'success',
+            message: '设置成功'
+          })
         })
       }).catch(() => {
       })

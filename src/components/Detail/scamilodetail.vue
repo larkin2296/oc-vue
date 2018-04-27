@@ -25,17 +25,22 @@
     </el-table-column>
     <el-table-column label="平台">
       <template slot-scope="scope">
-        {{ scope.row.platform }}
+        {{ scope.row.platform_name }}
         </template>
     </el-table-column>
     <el-table-column label="面额">
       <template slot-scope="scope">
-        {{ scope.row.price }}
+        {{ scope.row.denomination }}
         </template>
     </el-table-column>
     <el-table-column label="卡密">
       <template slot-scope="scope">
         {{ scope.row.cam_name }}
+        </template>
+    </el-table-column>
+    <el-table-column label="状态">
+      <template slot-scope="scope">
+        {{ scope.row.status }}
         </template>
     </el-table-column>
       </el-table>
