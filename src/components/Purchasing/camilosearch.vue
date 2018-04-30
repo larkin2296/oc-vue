@@ -80,7 +80,7 @@
           <span>{{scope.row.platform}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="面额" align="center">
+      <el-table-column label="金额" align="center">
         <template slot-scope="scope">
           {{scope.row.price}}
         </template>
@@ -92,12 +92,12 @@
       </el-table-column>
       <el-table-column label="订单状态" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
+          <el-tag :type="scope.row.order_status | statusFilter">{{scope.row.order_status}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="查看卡密" align="center">
         <template slot-scope="scope">
-          <el-button type="warning" @click="showdetail(scope.row.order_code, scope.row.created_at)">查看卡密</el-button>
+          <el-button v-if="scope.row.order_status == '已完成'" type="warning" @click="showdetail(scope.row.order_code, scope.row.created_at)">查看卡密</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -150,13 +150,13 @@ export default {
     }
   },
   filters: {
-    statusFilter(status) {
+    statusFilter(order_status) {
       const statusMap = {
         '已完成': 'success',
         '问题订单': 'gray',
         '未完成': 'danger'
       }
-      return statusMap[status]
+      return statusMap[order_status]
     }
   },
   created() {
@@ -166,6 +166,7 @@ export default {
     fetchData() {
       this.listLoading = true
       get_camilo_order(this.listQuery).then(response => {
+        console.log(response)
         this.list = response
         this.listLoading = false
       })

@@ -27,3 +27,9 @@ export function add_denomination(list) {
   }
   )
 }
+
+export function get_config_detail() {
+  return request.post('api/configure/get_config_detail', {
+  }
+  )
+}

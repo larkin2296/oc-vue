@@ -39,7 +39,7 @@
         </el-form-item>
         </el-form>
         <div class="app-container">
-        <el-table border fit highlight-current-row>
+        <el-table v-loading.body="listLoading" border fit highlight-current-row>
             <el-table-column label='供货时间'>
                 <template slot-scope="scope">
                 <span>{{scope.row.supply_time}}</span>
@@ -88,3 +88,28 @@
         </div>
   </div>
 </template>
+
+<script>
+import { get_camilo_order } from '@/api/supplier'
+export default {
+  data() {
+    return {
+      listLoading: true
+    }
+  },
+  created() {
+    this.fetchdata()
+  },
+  methods: {
+    fetchdata() {
+      this.listLoading = true
+      get_camilo_order(this.listQuery).then(response => {
+        console.log(response)
+        this.list = response
+        this.listLoading = false
+      })
+    }
+  }
+}
+</script>
+

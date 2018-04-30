@@ -97,16 +97,16 @@ export const asyncRouterMap = [
         meta: { role: ['3', '4'], title: '订单管理', icon: 'table' }
       },
       {
-        path: 'Card',
-        name: 'card',
-        component: () => import('@/views/Administrator/supplier/card'),
-        meta: { role: ['3', '4'], title: '油卡管理', icon: 'tree' }
-      },
-      {
         path: 'deposit',
         name: 'Deposit',
         component: () => import('@/views/Administrator/supplier/deposit'),
         meta: { role: ['3', '4'], title: '提现管理', icon: 'table' }
+      },
+      {
+        path: 'deposit_list',
+        name: 'DepositList',
+        component: () => import('@/views/Administrator/supplier/deposit_list'),
+        meta: { role: ['3', '4'], title: '提现列表', icon: 'table' }
       },
       {
         path: 'permission',

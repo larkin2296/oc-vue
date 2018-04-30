@@ -99,3 +99,10 @@ export function set_camilo_userd(order) {
   }
   )
 }
+
+export function send_problem_card(list) {
+  return request.post('api/purchasing/send_problem_card', {
+    list
+  }
+  )
+}

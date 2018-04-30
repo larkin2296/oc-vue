@@ -2,36 +2,17 @@
   <div id='camilo'>
       <el-form id='form'>
           <el-form-item label='平台选择'>
-              <el-radio-group v-model="radio3">
-                <el-radio-button label="阳光汽车"></el-radio-button>
-                <el-radio-button label="中石化"></el-radio-button>
-                <el-radio-button label="中石油"></el-radio-button>
-                <el-radio-button label="阳光爱车"></el-radio-button>
-                <el-radio-button label="车传奇"></el-radio-button>
+              <el-radio-group v-model="choose_platform">
+                <el-radio-button v-for="item in platform" :key="item.id" :label="item.platform_name">{{item.platform_name}}</el-radio-button>
               </el-radio-group>
           </el-form-item>
           <el-form-item label='面额'>
-            <el-radio v-model="radio" label="1" border>￥100</el-radio>
-            <el-radio v-model="radio" label="2" border>￥200</el-radio>
-            <el-radio v-model="radio" label="3" border>￥300</el-radio>
+            <el-radio-group v-model="choose_price">
+            <el-radio v-for="mtem in platform_money" :key="mtem.id" :label="mtem.denomination" border>￥{{mtem.denomination}}</el-radio>
+            </el-radio-group>
           </el-form-item>
       </el-form>
       <el-tabs type='border-card'>
-        <el-tab-pane label="单张">
-            <template>
-                <el-form label-width="200px" class='single_card'>
-                    <el-form-item label='卡密字段一'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item label='卡密字段二'>
-                        <el-input></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type='danger'>提交</el-button>
-                    </el-form-item>
-                </el-form>
-            </template>
-        </el-tab-pane>
         <el-tab-pane label="导入">
                 <el-upload class="upload-demo"
                 ref="upload"
@@ -47,20 +28,20 @@
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                 </el-upload>                 
             </el-tab-pane>
-        <el-tab-pane label="输入">
-          <el-form :inline="true">
+        <el-tab-pane label="手动">
+          <el-form :inline="true" v-model='camilo_list'>
             <el-form-item label='卡密字段一'>
-              <el-input></el-input>
+              <el-input v-model='camilo_list.cam_name'></el-input>
             </el-form-item>
             <el-form-item label='卡密字段二'>
-              <el-input></el-input>
+              <el-input v-model='camilo_list.cam_other_name'></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type='danger'>添加</el-button>
+              <el-button type='danger' @click='add_list'>添加</el-button>
             </el-form-item>
           </el-form>
           <div class="app-container">
-            <el-table border fit highlight-current-row>
+            <el-table :data='camilo_table' border fit highlight-current-row>
             <el-table-column label='平台名称'>
                 <template slot-scope="scope">
                 <span>{{scope.row.plaform}}</span>
@@ -78,28 +59,49 @@
             </el-table-column>
             <el-table-column label='操作'>
                 <template slot-scope="scope">
-                <el-button type='danger'>删除</el-button>
+                <el-button type='danger' @click='del_list(scope.$index)'>删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
           </div>
-          <el-button type='danger'>提交</el-button>
+          <el-button type='danger' @click='sub_camilo'>提交</el-button>
         </el-tab-pane>
       </el-tabs>
   </div>
 </template>
 
 <script>
+import { get_config_detail } from '@/api/configure.js'
+import { sub_camilo_data } from '@/api/supplier.js'
 import axios from 'axios'
 export default {
   data() {
     return {
       radio: '1',
-      radio3: '中石化',
-      fileList: []
+      choose_platform: '',
+      choose_price: '',
+      fileList: [],
+      platform: [],
+      platform_money: [],
+      camilo_list: {
+        cam_name: '',
+        cam_other_name: ''
+      },
+      camilo_table: []
     }
   },
+  created() {
+    this.fetchdata()
+  },
   methods: {
+    fetchdata() {
+      get_config_detail().then(response => {
+        this.platform = response.platform
+        this.platform_money = response.denomination
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     handleClick(tab, event) {
       console.log(tab, event)
     },
@@ -135,6 +137,32 @@ export default {
         console.log(res)
       })
       return false
+    },
+    add_list() {
+      console.log(this.choose_platform)
+      this.camilo_table.push({ plaform: this.choose_platform, price: this.choose_price, cam_name: this.camilo_list.cam_name + ',' + this.camilo_list.cam_other_name })
+    },
+    del_list($index) {
+      this.camilo_table.splice($index, 1)
+    },
+    sub_camilo() {
+      this.$confirm('是否添加卡密?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        sub_camilo_data(this.camilo_table).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.log(error)
+        })
+        this.$message({
+          type: 'success',
+          message: '卡密提交成功!'
+        })
+      }).catch(() => {
+      })
     }
   }
 }

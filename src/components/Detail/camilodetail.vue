@@ -32,7 +32,7 @@
         <el-table :data='problem_table' border fit highlight-current-row>
           <el-table-column label='错误卡密号'>
             <template slot-scope="scope">
-            {{ scope.row.code }}
+            {{ scope.row.cam_name }}
             </template>
           </el-table-column>
           <el-table-column label='错误类型'>
@@ -48,7 +48,7 @@
             </template>
           </el-table-column>    
         </el-table>
-        <el-button type='danger'>上报</el-button>
+        <el-button type='danger' @click='send_problem'>上报</el-button>
       </el-dialog>
     </div>
   </el-header>
@@ -79,6 +79,7 @@
       <template slot-scope="scope">
         <el-tag :type="scope.row.status_name | statusFilter">{{scope.row.status_name}}</el-tag>
         <input type='hidden' v-model="scope.row.id" />
+        <input type='hidden' v-model="scope.row.order_id" />
         </template>
     </el-table-column>
       </el-table>
@@ -87,14 +88,14 @@
   <el-footer>
     <el-form>
       <el-button type='primary' @click='sub_userd'>上报已使用</el-button>
-      <el-button type='danger' @click='dialogVisible = true'>上报问题卡密</el-button>
+      <el-button type='danger' @click='sub_problem'>上报问题卡密</el-button>
     </el-form>
   </el-footer>
 </el-container>
 </template>
 
 <script>
-import { get_camilo_detail, set_camilo_userd } from '@/api/purchasing'
+import { get_camilo_detail, set_camilo_userd, send_problem_card } from '@/api/purchasing'
 export default {
   props: ['order', 'time'],
   data() {
@@ -110,19 +111,20 @@ export default {
       ],
       mistake_type: [{
         label: '卡密重复',
-        value: 0
+        value: '卡密重复'
       }, {
         label: '卡密错误',
-        value: 1
+        value: '卡密错误'
       }, {
         label: '卡密失效',
-        value: 2
+        value: '卡密失效'
       }, {
         label: '面额不符',
-        value: 3
+        value: '面额不符'
       }],
       dialogVisible: false,
-      check_list: []
+      checkList: [],
+      listLoading: true
     }
   },
   filters: {
@@ -144,6 +146,9 @@ export default {
       get_camilo_detail(this.order).then(response => {
         this.tableData = response.data
         this.camilo_num = response.msg.num
+        this.camilo_use = response.msg.is_usd
+        this.camilo_problem = response.msg.is_error
+        this.camilo_unuse = response.msg.no_use
         this.listLoading = false
       })
     },
@@ -158,6 +163,7 @@ export default {
             type: 'success',
             message: '设置成功'
           })
+          this.fetchData()
         })
       }).catch(() => {
       })
@@ -166,6 +172,37 @@ export default {
       this.$confirm('确认关闭？').then(_ => {
         done()
       }).catch(_ => {})
+    },
+    sub_problem() {
+      var that = this
+      this.problem_table = []
+      this.tableData.forEach(function(val) {
+        if (typeof val['choose'] === 'undefined' || val['choose'] === false) {
+          console.log(val)
+        } else {
+          that.problem_table.push({ cam_name: val['cam_name'], id: val['id'], order_id: val['order_id'] })
+        }
+      })
+      this.dialogVisible = true
+      // this.problem_table = this.checkList
+      // console.log(this.problem_table)
+    },
+    send_problem() {
+      var that = this
+      this.$confirm('确认上报问题卡密后会补发卡密，如有违规操作，自行承担责任', '确认？', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        send_problem_card(that.problem_table).then(response => {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
+          this.fetchData()
+        })
+      }).catch(() => {
+      })
     }
   }
 }
