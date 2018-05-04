@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import store from '@/store'
 
 export function get_platform_list(list) {
   return request.post('api/configure/get_platform_list', {
@@ -32,4 +33,9 @@ export function get_config_detail() {
   return request.post('api/configure/get_config_detail', {
   }
   )
+}
+
+export function upload_file(param) {
+  const headers = { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer${store.getters.token}` }
+  return request.post('api/attachment/cam/upload', param, { headers: headers })
 }

@@ -15,7 +15,7 @@
           </el-form-item>
       </el-form>
       <div class="app-container">
-          <el-table element-loading-text="Loading" border fit highlight-current-row>
+          <el-table :data="initialize_list" element-loading-text="Loading" border fit highlight-current-row>
               <el-table-column align="center" label='序号'>
                 <template slot-scope="scope" >
                     {{scope.$index + 1}}
@@ -50,3 +50,26 @@
       </div>
   </div>
 </template>
+
+<script>
+import { get_initialize_data } from '@/api/purchasing'
+export default {
+  data() {
+    return {
+      initialize_list: []
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      get_initialize_data().then(response => {
+        this.initialize_list = response
+      }).catch(error => {
+        console.log(error)
+      })
+    }
+  }
+}
+</script>

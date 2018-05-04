@@ -21,12 +21,26 @@
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :on-change="handleChange"
+                :on-success="handleSuccess"
                 :before-upload="beforeUpload"
                 :file-list="fileList"
                 :auto-upload="false" accept=".xls,.xlsx">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                </el-upload>                 
+                </el-upload>
+                <el-table :data='card_list' border fit highlight-current-row>
+                  <el-table-column label='卡密字段一'>
+                    <template slot-scope="scope">
+                    {{ scope.row.cam_name }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label='卡密字段二'>
+                    <template slot-scope="scope">
+                    {{ scope.row.cam_other_name }}
+                    </template>
+                  </el-table-column>    
+                </el-table>
+                <el-button type='danger' @click='sub_camilo_list'>提交</el-button>               
             </el-tab-pane>
         <el-tab-pane label="手动">
           <el-form :inline="true" v-model='camilo_list'>
@@ -52,9 +66,14 @@
                 <span>{{scope.row.price}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label='卡密'>
+            <el-table-column label='卡密字段一'>
                 <template slot-scope="scope">
                 <span>{{scope.row.cam_name}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='卡密字段二'>
+                <template slot-scope="scope">
+                <span>{{scope.row.cam_other_name}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='操作'>
@@ -71,9 +90,8 @@
 </template>
 
 <script>
-import { get_config_detail } from '@/api/configure.js'
+import { get_config_detail, upload_file } from '@/api/configure.js'
 import { sub_camilo_data } from '@/api/supplier.js'
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -87,7 +105,9 @@ export default {
         cam_name: '',
         cam_other_name: ''
       },
-      camilo_table: []
+      camilo_table: [],
+      dialogVisible: false,
+      card_list: []
     }
   },
   created() {
@@ -101,6 +121,14 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？').then(_ => {
+        done()
+      }).catch(_ => {})
+    },
+    handleSuccess(res, file, fileList) {
+      console.log(1111111)
     },
     handleClick(tab, event) {
       console.log(tab, event)
@@ -121,13 +149,13 @@ export default {
     beforeUpload(file) {
       // 这里是重点，将文件转化为formdata数据上传
       let param = new FormData()
-      param.append('file', file)
-      axios.post('http://localhost/oil_cord_system/public/index.php/api/upload/', param, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((res) => {
+      param.append('cam_file', file)
+      upload_file(param).then((res) => {
+        console.log(res)
         if (res.status === 200) {
+          // get_camilo_upload().then(res => {
+          //   console.log(res)
+          // })
           this.$message({
             type: 'success',
             message: '上传成功!'
@@ -136,23 +164,28 @@ export default {
       }, (res) => {
         console.log(res)
       })
-      return false
     },
     add_list() {
       console.log(this.choose_platform)
-      this.camilo_table.push({ plaform: this.choose_platform, price: this.choose_price, cam_name: this.camilo_list.cam_name + ',' + this.camilo_list.cam_other_name })
+      this.camilo_table.push({ plaform: this.choose_platform, price: this.choose_price, cam_name: this.camilo_list.cam_name, cam_other_name: this.camilo_list.cam_other_name })
     },
     del_list($index) {
       this.camilo_table.splice($index, 1)
     },
     sub_camilo() {
+      this.send_camilo(this.camilo_table)
+    },
+    sub_camilo_list() {
+      this.send_camilo(this.card_list)
+    },
+    send_camilo(data) {
       this.$confirm('是否添加卡密?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.loading = true
-        sub_camilo_data(this.camilo_table).then(response => {
+        sub_camilo_data(data).then(response => {
           console.log(response)
         }).catch(error => {
           console.log(error)
@@ -166,6 +199,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>

@@ -65,3 +65,27 @@
     </div>
   </div>
 </template>
+
+<script>
+import { get_directly_order } from '@/api/supplier'
+export default {
+  data() {
+    return {
+      listLoading: true
+    }
+  },
+  created() {
+    this.fetchdata()
+  },
+  methods: {
+    fetchdata() {
+      this.listLoading = true
+      get_directly_order(this.listQuery).then(response => {
+        console.log(response)
+        this.list = response
+        this.listLoading = false
+      })
+    }
+  }
+}
+</script>

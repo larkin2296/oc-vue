@@ -106,3 +106,10 @@ export function send_problem_card(list) {
   }
   )
 }
+
+export function get_initialize_data(list) {
+  return request.post('api/purchasing/get_initialize', {
+    list
+  }
+  )
+}
