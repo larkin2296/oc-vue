@@ -134,7 +134,14 @@ export default {
       console.log(tab, event)
     },
     submitUpload() {
-      this.$refs.upload.submit()
+      if (this.choose_platform === '' || this.choose_price === '') {
+        this.$message({
+          type: 'error',
+          message: '请选择平台和面额'
+        })
+      } else {
+        this.$refs.upload.submit()
+      }
     },
     handleRemove(file, fileList) {
       // console.log(file, fileList)
@@ -166,8 +173,14 @@ export default {
       })
     },
     add_list() {
-      console.log(this.choose_platform)
-      this.camilo_table.push({ plaform: this.choose_platform, price: this.choose_price, cam_name: this.camilo_list.cam_name, cam_other_name: this.camilo_list.cam_other_name })
+      if (this.choose_platform === '' || this.choose_price === '') {
+        this.$message({
+          type: 'error',
+          message: '请选择平台和面额'
+        })
+      } else {
+        this.camilo_table.push({ plaform: this.choose_platform, price: this.choose_price, cam_name: this.camilo_list.cam_name, cam_other_name: this.camilo_list.cam_other_name })
+      }
     },
     del_list($index) {
       this.camilo_table.splice($index, 1)

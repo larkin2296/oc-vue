@@ -42,13 +42,12 @@
                 :on-change="handleChange"
                 :before-upload="beforeUpload"
                 :file-list="fileList"
-                :auto-upload="false" accept=".xls,.xlsx">
+                :auto-upload="false" accept=".png,.jpg,.gif">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                 </el-upload> 
             </el-form-item>
             <el-form-item>
-              <el-button type='danger'>确定上传</el-button>
+              <el-button type='danger' @click='sub_button'>确定上传</el-button>
             </el-form-item>
           </el-form>
         </el-popover>
@@ -61,8 +60,8 @@
 </template>
 
 <script>
-import { get_camilo_card } from '@/api/supplier'
-import axios from 'axios'
+import { upload_file } from '@/api/configure.js'
+import { get_camilo_card, send_directly_record } from '@/api/supplier'
 export default {
   data() {
     return {
@@ -88,18 +87,20 @@ export default {
         label: '3.5天以上'
       }],
       arrvie_time: '',
-      list: [{
-        oil_card_code: '123123123',
-        price: '10000'
-      }],
+      list: [],
       gridData: [],
       recharge_time: '',
       fileList: []
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
-    submitUpload() {
-      this.$refs.upload.submit()
+    fetchData() {
+      get_camilo_card().then(response => {
+        this.list = response.data
+      })
     },
     handleRemove(file, fileList) {
       // console.log(file, fileList)
@@ -115,12 +116,12 @@ export default {
       // 这里是重点，将文件转化为formdata数据上传
       let param = new FormData()
       param.append('file', file)
-      axios.post('http://localhost/oil_cord_system/public/index.php/api/upload/', param, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((res) => {
+      upload_file(param).then((res) => {
+        console.log(res)
         if (res.status === 200) {
+          // get_camilo_upload().then(res => {
+          //   console.log(res)
+          // })
           this.$message({
             type: 'success',
             message: '上传成功!'
@@ -138,9 +139,16 @@ export default {
         type: 'warning'
       }).then(() => {
         get_camilo_card().then(response => {
-          this.list = response
+          this.list = response.data
         })
       }).catch((error) => {
+        console.log(error)
+      })
+    },
+    sub_button() {
+      this.$refs.upload.submit()
+      send_directly_record().then(response => {
+      }).catch(error => {
         console.log(error)
       })
     }
@@ -153,5 +161,3 @@ export default {
     padding:40px
 }
 </style>
-
-

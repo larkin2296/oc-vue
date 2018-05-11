@@ -21,6 +21,13 @@ export function get_camilo_card(list) {
   )
 }
 
+export function send_directly_record(list) {
+  return request.post('api/supply/commodity/charge', {
+    list
+  }
+  )
+}
+
 export function get_camilo_upload(list) {
   return request.post('api/attachment/cam/list', {
     list

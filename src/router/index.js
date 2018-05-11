@@ -130,10 +130,22 @@ export const asyncRouterMap = [
     meta: { title: '平台配置管理', icon: 'example', role: ['3', '4'] },
     children: [
       {
+        path: 'goods',
+        name: 'Goods',
+        component: () => import('@/views/Administrator/configuration/goods'),
+        meta: { role: ['3', '4'], title: '商品设置', icon: 'table' }
+      },
+      {
+        path: 'price',
+        name: 'Price',
+        component: () => import('@/views/Administrator/configuration/price'),
+        meta: { role: ['3', '4'], title: '价格管理', icon: 'table' }
+      },
+      {
         path: 'index',
         name: 'Index',
         component: () => import('@/views/Administrator/configuration/index'),
-        meta: { role: ['3', '4'], title: '配置', icon: 'table' }
+        meta: { role: ['3', '4'], title: '公告', icon: 'table' }
       }
     ]
   },
