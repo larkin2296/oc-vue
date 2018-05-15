@@ -91,7 +91,7 @@
 
 <script>
 import { get_config_detail, upload_file } from '@/api/configure.js'
-import { sub_camilo_data } from '@/api/supplier.js'
+import { sub_camilo_data, get_camilo_upload } from '@/api/supplier.js'
 export default {
   data() {
     return {
@@ -156,13 +156,13 @@ export default {
     beforeUpload(file) {
       // 这里是重点，将文件转化为formdata数据上传
       let param = new FormData()
-      param.append('cam_file', file)
+      param.append('file', file)
       upload_file(param).then((res) => {
         console.log(res)
-        if (res.status === 200) {
-          // get_camilo_upload().then(res => {
-          //   console.log(res)
-          // })
+        if (res.code === 200) {
+          get_camilo_upload(res.name).then(result => {
+            console.log(result)
+          })
           this.$message({
             type: 'success',
             message: '上传成功!'

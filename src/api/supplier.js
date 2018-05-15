@@ -29,7 +29,7 @@ export function send_directly_record(list) {
 }
 
 export function get_camilo_upload(list) {
-  return request.post('api/attachment/cam/list', {
+  return request.post('api/supply/commodity/lists', {
     list
   }
   )
