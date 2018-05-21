@@ -26,45 +26,45 @@
                 </el-form-item>
             </el-form>
             <div class='app-container'>
-                <el-table border fit highlight-current-row>
+                <el-table :data='camilo_order' v-loading.body="listLoading" border fit highlight-current-row>
+                    <el-table-column label='订单号'>
+                        <template slot-scope="scope">
+                            {{ scope.row.order_code }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label='商品'>
                         <template slot-scope="scope">
-                            {{ scope.row.name }}
+                            {{ scope.row.platform.platform_name }}
                         </template>
                     </el-table-column>
                     <el-table-column label='面额'>
                         <template slot-scope="scope">
-                            {{ scope.row.code }}
+                            {{ scope.row.denomination.denomination }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='交易时间'>
+                    <el-table-column label='总价'>
                         <template slot-scope="scope">
-                            {{ scope.row.oil_code }}
+                            {{ scope.row.price }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='订单号'>
+                    <el-table-column label='折扣'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.discount }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='卡号'>
+                    <el-table-column label='实际总价'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.real_price }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='价格'>
+                    <el-table-column label='提交时间'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column label='卡密状态'>
-                        <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.created_at }}
                         </template>
                     </el-table-column>
                     <el-table-column label='操作'>
                         <template slot-scope="scope">
-                            <el-button></el-button>
+                            <el-button type='danger'>发放卡密</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -121,7 +121,7 @@
                             {{ scope.row.status }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='订单号'>
+                    <el-table-column label='供应号'>
                         <template slot-scope="scope">
                             {{ scope.row.status }}
                         </template>
@@ -152,3 +152,27 @@
     </el-tabs>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      listLoading: true,
+      camilo_order: []
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+    //   get_pcamilo_order(this.listQuery).then(response => {
+    //     console.log(response)
+    //     this.list = response.data
+    //     this.listLoading = false
+    //   })
+    }
+  }
+}
+</script>

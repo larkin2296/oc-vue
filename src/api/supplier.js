@@ -36,7 +36,14 @@ export function get_camilo_upload(list) {
 }
 
 export function get_directly_order(list) {
-  return request.post('api/supply/verb/directly', {
+  return request.post('api/supply/verb/charge', {
+    list
+  }
+  )
+}
+
+export function get_directly_upload(list) {
+  return request.post('api/supply/commodity/charge', {
     list
   }
   )

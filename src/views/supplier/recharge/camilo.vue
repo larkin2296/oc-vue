@@ -38,7 +38,12 @@
                     <template slot-scope="scope">
                     {{ scope.row.cam_other_name }}
                     </template>
-                  </el-table-column>    
+                  </el-table-column>
+                  <el-table-column label='操作'>
+                    <template slot-scope="scope">
+                    <el-button type='danger' @click='del(scope.$index)'>删除</el-button>
+                    </template>
+                  </el-table-column>     
                 </el-table>
                 <el-button type='danger' @click='sub_camilo_list'>提交</el-button>               
             </el-tab-pane>
@@ -158,10 +163,9 @@ export default {
       let param = new FormData()
       param.append('file', file)
       upload_file(param).then((res) => {
-        console.log(res)
         if (res.code === 200) {
-          get_camilo_upload(res.name).then(result => {
-            console.log(result)
+          get_camilo_upload(res.name).then(response => {
+            this.card_list = response.data
           })
           this.$message({
             type: 'success',
@@ -171,6 +175,9 @@ export default {
       }, (res) => {
         console.log(res)
       })
+    },
+    del($index) {
+      this.card_list.splice($index, 1)
     },
     add_list() {
       if (this.choose_platform === '' || this.choose_price === '') {
@@ -186,10 +193,18 @@ export default {
       this.camilo_table.splice($index, 1)
     },
     sub_camilo() {
-      this.send_camilo(this.camilo_table)
+      var param = Object()
+      param.cam = this.camilo_table
+      param.money_id = this.choose_price
+      param.platform_id = this.choose_platform
+      this.send_camilo(param)
     },
     sub_camilo_list() {
-      this.send_camilo(this.card_list)
+      var param = Object()
+      param.cam = this.card_list
+      param.money_id = this.choose_price
+      param.platform_id = this.choose_platform
+      this.send_camilo(param)
     },
     send_camilo(data) {
       this.$confirm('是否添加卡密?', '提示', {
@@ -199,7 +214,10 @@ export default {
       }).then(() => {
         this.loading = true
         sub_camilo_data(data).then(response => {
-          console.log(response)
+          if (response.code === '200') {
+            this.camilo_table = []
+            this.card_list = []
+          }
         }).catch(error => {
           console.log(error)
         })

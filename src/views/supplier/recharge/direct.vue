@@ -15,53 +15,63 @@
       <el-table-column label="油卡卡号" align="center"  width="400">
         <template slot-scope="scope">
           {{scope.row.oil_card_code}}
-        </template>
+          <input type='hidden' :model='scope.row.id' />
+        </template>     
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-popover ref="popover4" placement="left" width="600" trigger="click">
-          <el-form label-width="150px">
-            <el-form-item label='充值金额' >
-              <el-input style='width:100px;'/>
-            </el-form-item>
-            <el-form-item label='到账时间'>
-              <el-date-picker
-                v-model="recharge_time"
-                type="datetime"
-                placeholder="选择日期时间"
-                default-time="12:00:00">
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label='上传凭证'>
-              <el-upload class="upload-demo"
-                ref="upload"
-                :multiple="false"
-                action="123"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :on-change="handleChange"
-                :before-upload="beforeUpload"
-                :file-list="fileList"
-                :auto-upload="false" accept=".png,.jpg,.gif">
-                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                </el-upload> 
-            </el-form-item>
-            <el-form-item>
-              <el-button type='danger' @click='sub_button'>确定上传</el-button>
-            </el-form-item>
-          </el-form>
-        </el-popover>
-          <el-button type="primary"  v-popover:popover4>充值反馈</el-button>
+          <el-button type="primary"  @click='sub_problem(scope.$index)'>充值反馈</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
+  <el-dialog
+    title="上报充值记录"
+    :visible.sync="dialogVisible"
+    width="50%"
+    :before-close="handleClose">
+    <el-form :model="supplier_data" label-width="150px">
+      <el-form-item label='充值油卡' >
+      {{ supplier_data.oil_card }}
+      <input type='hidden' :model='supplier_data.id' />
+    </el-form-item>
+    <el-form-item label='充值金额' >
+      <el-input v-model='supplier_data.price' style='width:100px;'/>
+    </el-form-item>
+    <el-form-item label='到账时间'>
+      <el-date-picker
+      v-model='supplier_data.recharge_time'
+      type="datetime"
+      placeholder="选择日期时间">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label='上传凭证'>
+      <el-upload class="upload-demo"
+          ref="upload"
+          :multiple="false"
+          action="123"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-change="changeUpload"
+          :on-success="handleSuccess"
+          :before-upload="beforeUpload"
+          :file-list="fileList"
+          :auto-upload="false">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload> 
+    </el-form-item>
+    <el-form-item>
+      <el-button type='danger' @click='submitUpload'>确定上传</el-button>
+    </el-form-item>
+  </el-form>
+  </el-dialog>
   </div>
 </template>
 
 <script>
 import { upload_file } from '@/api/configure.js'
-import { get_camilo_card, send_directly_record } from '@/api/supplier'
+import { get_camilo_card, get_directly_upload } from '@/api/supplier'
 export default {
   data() {
     return {
@@ -89,8 +99,15 @@ export default {
       arrvie_time: '',
       list: [],
       gridData: [],
-      recharge_time: '',
-      fileList: []
+      fileList: [],
+      dialogVisible: false,
+      supplier_data: {
+        oil_card: '',
+        price: '',
+        recharge_time: '',
+        pic_add: ''
+      },
+      pic_list: []
     }
   },
   created() {
@@ -102,6 +119,29 @@ export default {
         this.list = response.data
       })
     },
+    handleClose(done) {
+      this.$confirm('确认关闭？').then(_ => {
+        done()
+      }).catch(_ => {})
+    },
+    sub_problem(index) {
+      this.supplier_data.oil_card = this.list[index].oil_card_code
+      this.supplier_data.id = this.list[index].id
+      this.dialogVisible = true
+    },
+    submitUpload() {
+      if (this.supplier_data.price === '' || this.supplier_data.recharge_time === '') {
+        this.$message({
+          type: 'error',
+          message: '请填写完整'
+        })
+      } else {
+        this.$refs.upload.submit()
+      }
+    },
+    handleSuccessfunction(response, file, fileList) {
+      console.log(response)
+    },
     handleRemove(file, fileList) {
       // console.log(file, fileList)
     },
@@ -112,25 +152,39 @@ export default {
       // console.log(file)
       // console.log(fileList)
     },
+    changeUpload: function(file, fileList) {
+      this.fileList = fileList
+      this.$nextTick(
+        () => {
+          let upload_list_li = document.getElementsByClassName('el-upload-list')[0].children
+          for (let i = 0; i < upload_list_li.length; i++) {
+            let li_a = upload_list_li[i]
+            let imgElement = document.createElement('img')
+            imgElement.setAttribute('src', fileList[i].url)
+            imgElement.setAttribute('style', 'max-width:30%;padding-left:5%')
+            if (li_a.lastElementChild.nodeName !== 'IMG') {
+              li_a.appendChild(imgElement)
+            }
+          }
+        })
+    },
     beforeUpload(file) {
-      // 这里是重点，将文件转化为formdata数据上传
       let param = new FormData()
       param.append('file', file)
+      param.append('status', 3)
       upload_file(param).then((res) => {
-        console.log(res)
-        if (res.status === 200) {
-          // get_camilo_upload().then(res => {
-          //   console.log(res)
-          // })
-          this.$message({
-            type: 'success',
-            message: '上传成功!'
-          })
-        }
+        this.supplier_data.pic_add = res.id
+        get_directly_upload(this.supplier_data).then(response => {
+          console.log(response)
+          this.dialogVisible = false
+        })
+        this.$message({
+          type: 'success',
+          message: '上传成功!'
+        })
       }, (res) => {
         console.log(res)
       })
-      return false
     },
     get_camilo() {
       this.$confirm('是否获取油卡?', '提示', {
@@ -142,13 +196,6 @@ export default {
           this.list = response.data
         })
       }).catch((error) => {
-        console.log(error)
-      })
-    },
-    sub_button() {
-      this.$refs.upload.submit()
-      send_directly_record().then(response => {
-      }).catch(error => {
         console.log(error)
       })
     }

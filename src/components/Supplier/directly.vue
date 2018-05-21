@@ -25,44 +25,47 @@
     </el-form-item>
     </el-form>
     <div class="app-container">
-    <el-table border fit highlight-current-row>
+    <el-table :data="list" border fit highlight-current-row>
         <el-table-column label='供应单号'>
             <template slot-scope="scope">
-            <span>{{scope.row.order_code}}</span>
+            <span>{{scope.row.supply_single_number}}</span>
             </template>
         </el-table-column>
         <el-table-column label='油卡号'>
             <template slot-scope="scope">
-            <span>{{scope.row.oil_card_code}}</span>
+            <span>{{scope.row.oil_number}}</span>
             </template>
         </el-table-column>
         <el-table-column label='到账时间'>
             <template slot-scope="scope">
-            <span>{{scope.row.arrive_time}}</span>
+            <span>{{scope.row.end_time}}</span>
             </template>
         </el-table-column>
         <el-table-column label='提交时间'>
             <template slot-scope="scope">
-            <span>{{scope.row.submit_time}}</span>
+            <span>{{scope.row.created_at}}</span>
             </template>
         </el-table-column>
         <el-table-column label='金额'>
             <template slot-scope="scope">
-            <span>{{scope.row.price}}</span>
+            <span>{{scope.row.already_card}}</span>
             </template>
         </el-table-column>
         <el-table-column label='订单状态'>
             <template slot-scope="scope">
-            <span>{{scope.row.status}}</span>
+            <span>{{scope.row.supply_status}}</span>
             </template>
         </el-table-column>
         <el-table-column label='操作'>
             <template slot-scope="scope">
-            <el-button type='success'>查看凭证</el-button>
+            <el-button type='success' @click='show_pic(scope.row.direct_id)'>查看凭证</el-button>
             </template>
         </el-table-column>
     </el-table>
     </div>
+    <el-dialog title="图片详情" :before-close="handleClose" :visible.sync="dialogTableVisible">
+    <img v-bind:src="img_url" style='width:50%;height:50%;'/>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,7 +74,10 @@ import { get_directly_order } from '@/api/supplier'
 export default {
   data() {
     return {
-      listLoading: true
+      listLoading: true,
+      list: [],
+      img_url: '',
+      dialogTableVisible: false
     }
   },
   created() {
@@ -81,10 +87,18 @@ export default {
     fetchdata() {
       this.listLoading = true
       get_directly_order(this.listQuery).then(response => {
-        console.log(response)
-        this.list = response
+        this.list = response.data
         this.listLoading = false
       })
+    },
+    show_pic(pic) {
+      this.img_url = 'http://localhost/oil_cord_system/' + pic
+      this.dialogTableVisible = true
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？').then(_ => {
+        done()
+      }).catch(_ => {})
     }
   }
 }

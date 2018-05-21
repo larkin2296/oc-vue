@@ -3,7 +3,7 @@
   <el-header>
     <el-form :inline="true" label-width="140px">
       <el-form-item label='油卡号'>
-        {{ oil_card_code }}
+        {{ card }}
       </el-form-item>
       <el-form-item label='最近充值时间'>
         {{ last_recharge_time }}
@@ -18,20 +18,20 @@
   </el-header>
   <el-main>
     <div class="app-container">
-    <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
+    <el-table :data="tableData" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column label="油卡">
       <template slot-scope="scope">
-          {{scope.row.oil_card_code}}
+          {{scope.row.oil_number}}
         </template>
     </el-table-column>
     <el-table-column label="充值时间">
       <template slot-scope="scope">
-          {{scope.row.recharge_time}}
+          {{scope.row.end_time}}
         </template>
     </el-table-column>
     <el-table-column label="充值金额">
       <template slot-scope="scope">
-          {{scope.row.recharge_price}}
+          {{scope.row.already_card}}
         </template>
     </el-table-column>
       </el-table>
@@ -44,10 +44,12 @@
 <script>
 import { get_ldirectly_detail } from '@/api/purchasing'
 export default {
-  props: ['order'],
+  props: ['card'],
   data() {
     return {
-      tableData: []
+      tableData: [],
+      last_recharge_time: '',
+      save_money: 0
     }
   },
   created() {
@@ -55,10 +57,13 @@ export default {
   },
   methods: {
     fetchData() {
-      this.listLoading = true
-      get_ldirectly_detail(this.order).then(response => {
-        this.tableData = response
-        this.listLoading = false
+      get_ldirectly_detail(this.card).then(response => {
+        this.tableData = response.data
+        this.last_recharge_time = response.data[0].end_time
+        let tabs = response.data
+        tabs.forEach((tab, index) => {
+          this.save_money += Number(tab.already_card)
+        })
       })
     }
   }

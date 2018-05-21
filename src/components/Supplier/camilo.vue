@@ -39,25 +39,30 @@
         </el-form-item>
         </el-form>
         <div class="app-container">
-        <el-table v-loading.body="listLoading" border fit highlight-current-row>
+        <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row>
             <el-table-column label='供货时间'>
                 <template slot-scope="scope">
-                <span>{{scope.row.supply_time}}</span>
+                <span>{{scope.row.supplier_time.date}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label='卡密'>
+            <el-table-column label='卡密字段一'>
                 <template slot-scope="scope">
-                <span>{{scope.row.camilo_code}}</span>
+                <span>{{scope.row.cam_name}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='卡密字段二'>
+                <template slot-scope="scope">
+                <span>{{scope.row.cam_other_name}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='商品名称'>
                 <template slot-scope="scope">
-                <span>{{scope.row.plaform}}</span>
+                <span>{{scope.row.platform_id['platform_name']}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='面额'>
                 <template slot-scope="scope">
-                <span>{{scope.row.price}}</span>
+                <span>{{scope.row.denomination['denomination']}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='折扣'>
@@ -94,7 +99,8 @@ import { get_camilo_order } from '@/api/supplier'
 export default {
   data() {
     return {
-      listLoading: true
+      listLoading: true,
+      list: []
     }
   },
   created() {
@@ -105,7 +111,7 @@ export default {
       this.listLoading = true
       get_camilo_order(this.listQuery).then(response => {
         console.log(response)
-        this.list = response
+        this.list = response.data
         this.listLoading = false
       })
     }
