@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { get_directly_order } from '@/api/supplier'
+import { get_directly_order, get_directly_pic } from '@/api/supplier'
 export default {
   data() {
     return {
@@ -92,7 +92,9 @@ export default {
       })
     },
     show_pic(pic) {
-      this.img_url = 'http://localhost/oil_cord_system/' + pic
+      get_directly_pic(pic).then(response => {
+        this.img_url = response
+      })
       this.dialogTableVisible = true
     },
     handleClose(done) {

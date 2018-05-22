@@ -162,6 +162,7 @@ export default {
       // 这里是重点，将文件转化为formdata数据上传
       let param = new FormData()
       param.append('file', file)
+      param.append('status', 1)
       upload_file(param).then((res) => {
         if (res.code === 200) {
           get_camilo_upload(res.name).then(response => {

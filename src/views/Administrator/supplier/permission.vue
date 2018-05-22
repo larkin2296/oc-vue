@@ -1,7 +1,7 @@
 <template>
   <div>
       <el-form :inline='true' id='form'>
-          <el-form-item label='供应商选择'>
+          <el-form-item label='供应商'>
               <el-input></el-input>
           </el-form-item>
           <el-form-item>

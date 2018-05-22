@@ -12,10 +12,7 @@
                 <el-form-item label='交易时间'>
                     <el-input></el-input>
                 </el-form-item>
-                <el-form-item label='订单号'>
-                    <el-input></el-input>
-                </el-form-item>
-                <el-form-item label='卡号'>
+                <el-form-item label='卡号字段一'>
                     <el-input></el-input>
                 </el-form-item>
                 <el-form-item label='卡密状态'>

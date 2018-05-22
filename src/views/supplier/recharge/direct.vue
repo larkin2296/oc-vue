@@ -173,7 +173,7 @@ export default {
       param.append('file', file)
       param.append('status', 3)
       upload_file(param).then((res) => {
-        this.supplier_data.pic_add = res.id
+        this.supplier_data.id_hash = res.data.id_hash
         get_directly_upload(this.supplier_data).then(response => {
           console.log(response)
           this.dialogVisible = false

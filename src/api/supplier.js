@@ -48,3 +48,8 @@ export function get_directly_upload(list) {
   }
   )
 }
+
+export function get_directly_pic(id) {
+  return request.get('common/attach/show/' + id
+  )
+}
