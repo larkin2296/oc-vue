@@ -25,7 +25,7 @@
     </el-form-item>
     </el-form>
     <div class="app-container">
-    <el-table :data="list" border fit highlight-current-row>
+    <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row>
         <el-table-column label='供应单号'>
             <template slot-scope="scope">
             <span>{{scope.row.supply_single_number}}</span>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { get_directly_order, get_directly_pic } from '@/api/supplier'
+import { get_directly_order } from '@/api/supplier'
 export default {
   data() {
     return {
@@ -92,15 +92,11 @@ export default {
       })
     },
     show_pic(pic) {
-      get_directly_pic(pic).then(response => {
-        this.img_url = response
-      })
+      this.img_url = '/oc/common/attach/show/' + pic
       this.dialogTableVisible = true
     },
     handleClose(done) {
-      this.$confirm('确认关闭？').then(_ => {
-        done()
-      }).catch(_ => {})
+      done()
     }
   }
 }

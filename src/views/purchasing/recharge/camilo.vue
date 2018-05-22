@@ -5,7 +5,7 @@
 
         <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
 
-            <el-option v-for="item in platform" :label="item.label" :key="item.value"  :value="item">
+            <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item">
 
             </el-option>
 
@@ -16,9 +16,9 @@
 
         <el-select v-model="form.card_price" placeholder="选择金额">
 
-          <el-option label="50" value="50"></el-option>
+          <el-option v-for="items in platform_money" :label="items.denomination" :key="items.id"  :value="items">
 
-          <el-option label="100" value="100"></el-option>
+          </el-option>
 
         </el-select>
     </el-form-item>
@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column label="面额" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.unit_price}}</span>
+          <span>{{scope.row.unit_price_1}}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center">
@@ -82,6 +82,7 @@
 
 <script>
 import { camilo_order } from '@/api/purchasing'
+import { get_config_detail } from '@/api/configure'
 import store from '@/store'
 export default {
   data() {
@@ -93,18 +94,10 @@ export default {
       },
       list: [],
       totalprice: 0,
-      platform: [
-        {
-          label: '车传奇',
-          value: 'car_legend'
-        },
-        {
-          label: '汽车钱包',
-          value: 'car_wallet'
-        }
-      ],
+      platform: [],
+      platform_money: [],
       discount: '',
-      order_type: '1'
+      order_type: 1
     }
   },
   created() {
@@ -112,11 +105,17 @@ export default {
   },
   methods: {
     fetchData() {
+      get_config_detail().then(response => {
+        this.platform = response.platform
+        this.platform_money = response.denomination
+      }).catch(error => {
+        console.log(error)
+      })
       this.discount = 0.98
     },
     add_trolly() {
-      this.list.push({ goods: this.form.goods_type.label, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), platform: this.form.goods_type.value, discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
-      this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
+      this.list.push({ goods: this.form.goods_type.platform_name, unit_price_1: this.form.card_price.denomination, num: this.form.card_num, real_unit_price: Number(this.form.card_price.denomination) * Number(this.discount), price: Number(Number(this.form.card_price.denomination) * Number(this.discount)) * Number(this.form.card_num), platform: this.form.goods_type.id, unit_price: this.form.card_price.id, discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
+      this.totalprice += Number(Number(this.form.card_price.denomination) * Number(this.discount)) * Number(this.form.card_num)
     },
     onCancel() {
       this.$message({
@@ -135,6 +134,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
+        // let param = Object()
+        // param.
         camilo_order(this.list).then(response => {
         }).catch(error => {
           console.log(error)

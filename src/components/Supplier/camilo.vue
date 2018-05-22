@@ -72,7 +72,10 @@
             </el-table-column>
             <el-table-column label='供货状态'>
                 <template slot-scope="scope">
-                <span>{{scope.row.status}}</span>
+                <el-tag type='success' v-if='scope.row.status == 1'>未使用</el-tag>
+                <el-tag type='warning' v-else-if='scope.row.status == 2'>已发放</el-tag>
+                <el-tag type='info' v-else-if='scope.row.status == 3'>问题卡密</el-tag>
+                <el-tag type='primary' v-else-if='scope.row.status == 4'>销卡成功</el-tag>
                 </template>
             </el-table-column>
             <el-table-column label='实际销卡面额'>

@@ -64,6 +64,12 @@ export const asyncRouterMap = [
         meta: { role: ['3', '4'], title: '订单管理', icon: 'table' }
       },
       {
+        path: 'sorder',
+        name: 'Sorder',
+        component: () => import('@/views/Administrator/purchasing/short_directly'),
+        meta: { role: ['3', '4'], title: '短充管理', icon: 'table' }
+      },
+      {
         path: 'card',
         name: 'Card',
         component: () => import('@/views/Administrator/purchasing/card'),

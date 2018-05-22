@@ -70,9 +70,14 @@
         {{ scope.row.denomination }}
         </template>
     </el-table-column>
-    <el-table-column label="卡密">
+    <el-table-column label="卡密字段一">
       <template slot-scope="scope">
         {{ scope.row.cam_name }}
+        </template>
+    </el-table-column>
+    <el-table-column label="卡密字段二">
+      <template slot-scope="scope">
+        {{ scope.row.cam_other_name }}
         </template>
     </el-table-column>
     <el-table-column label="状态">
@@ -101,7 +106,7 @@ export default {
   data() {
     return {
       tableData: [],
-      order_code: this.order,
+      order_code: '',
       order_time: this.time,
       camilo_num: 0,
       camilo_use: 0,
@@ -149,6 +154,7 @@ export default {
         this.camilo_use = response.msg.is_usd
         this.camilo_problem = response.msg.is_error
         this.camilo_unuse = response.msg.no_use
+        this.order_code = response.msg.order
         this.listLoading = false
       })
     },

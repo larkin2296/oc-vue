@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column label="商品" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.platform}}</span>
+          <span>{{scope.row.platform.platform_name}}</span>
         </template>
       </el-table-column>
       <el-table-column label="金额" align="center">
@@ -97,7 +97,7 @@
       </el-table-column>
       <el-table-column label="查看卡密" align="center">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.order_status == '已完成'" type="warning" @click="showdetail(scope.row.order_code, scope.row.created_at)">查看卡密</el-button>
+          <el-button v-if="scope.row.order_status == '已完成'" type="warning" @click="showdetail(scope.row.id, scope.row.created_at)">查看卡密</el-button>
         </template>
       </el-table-column>
     </el-table>
