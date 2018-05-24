@@ -5,7 +5,7 @@
 
         <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
 
-            <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item">
+            <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
 
             </el-option>
 
@@ -16,7 +16,7 @@
 
         <el-select v-model="form.card_price" placeholder="选择金额">
 
-          <el-option v-for="items in platform_money" :label="items.denomination" :key="items.id"  :value="items">
+          <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
 
           </el-option>
 
@@ -42,13 +42,12 @@
       </el-table-column>
       <el-table-column label="商品" align="center">
         <template slot-scope="scope">
-          {{scope.row.goods}}
-          <el-input type='hidden' v-model='scope.row.platform_code' name='platform_code' />
+          {{scope.row.platform}}
         </template>
       </el-table-column>
       <el-table-column label="面额" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.unit_price_1}}</span>
+          <span>{{scope.row.unit_price}}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center">
@@ -114,8 +113,8 @@ export default {
       this.discount = 0.98
     },
     add_trolly() {
-      this.list.push({ goods: this.form.goods_type.platform_name, unit_price_1: this.form.card_price.denomination, num: this.form.card_num, real_unit_price: Number(this.form.card_price.denomination) * Number(this.discount), price: Number(Number(this.form.card_price.denomination) * Number(this.discount)) * Number(this.form.card_num), platform: this.form.goods_type.id, unit_price: this.form.card_price.id, discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
-      this.totalprice += Number(Number(this.form.card_price.denomination) * Number(this.discount)) * Number(this.form.card_num)
+      this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
+      this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
     },
     onCancel() {
       this.$message({

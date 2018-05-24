@@ -31,17 +31,17 @@
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column label="油卡">
       <template slot-scope="scope">
-          {{scope.row.oil_card_code}}
+          {{scope.row.oil_number}}
         </template>
     </el-table-column>
     <el-table-column label="充值时间">
       <template slot-scope="scope">
-          {{scope.row.recharge_time}}
+          {{scope.row.end_time}}
         </template>
     </el-table-column>
     <el-table-column label="充值金额">
       <template slot-scope="scope">
-          {{scope.row.recharge_price}}
+          {{scope.row.already_card}}
         </template>
     </el-table-column>
       </el-table>
@@ -57,7 +57,8 @@ export default {
   props: ['order'],
   data() {
     return {
-      tableData: []
+      tableData: [],
+      order_code: this.order
     }
   },
   created() {
@@ -67,7 +68,7 @@ export default {
     fetchData() {
       this.listLoading = true
       get_sdirectly_detail(this.order).then(response => {
-        this.tableData = response
+        this.tableData = response.data
         this.listLoading = false
       })
     }

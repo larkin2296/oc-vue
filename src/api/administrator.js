@@ -15,6 +15,13 @@ export function get_pdirectly_order(list) {
   )
 }
 
+export function get_sdirectly_order(list) {
+  return request.post('api/administrator/purchasing/get_sdirectly', {
+    list
+  }
+  )
+}
+
 export function send_camilo_data(list) {
   return request.post('api/administrator/purchasing/send_camilo', {
     list
@@ -38,6 +45,20 @@ export function get_user_list(list) {
 
 export function set_user_perrmission(list) {
   return request.post('api/administrator/purchasing/set_user_perrmission', {
+    list
+  }
+  )
+}
+
+export function get_directly_upload(list) {
+  return request.post('api/administrator/purchasing/charge', {
+    list
+  }
+  )
+}
+
+export function get_sdirectly_detail(list) {
+  return request.post('api/administrator/purchasing/get_sdirectly_detail', {
     list
   }
   )

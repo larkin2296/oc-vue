@@ -57,7 +57,9 @@
       </el-table-column>
       <el-table-column class-name="status-col" label="订单状态" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>
+          <el-tag type='success' v-if='scope.row.status == 1'>未完成</el-tag>
+          <el-tag type='info' v-else-if='scope.row.status == 2'>已完成</el-tag>
+          <el-tag type='primary' v-else-if='scope.row.status == 3'>问题订单</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="订单累计充值金额">
