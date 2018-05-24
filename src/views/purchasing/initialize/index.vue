@@ -23,31 +23,27 @@
               </el-table-column>
               <el-table-column align="center" label='卡号'>
                 <template slot-scope="scope" >
-                    {{scope.$index}}
+                    {{scope.row.oil_card_code}}
                 </template>
               </el-table-column>
               <el-table-column align="center" label='余额'>
                 <template slot-scope="scope" >
-                    {{scope.$index}}
+                    {{scope.row.save_money}}
                 </template>
               </el-table-column>
               <el-table-column align="center" label='已圈存'>
                 <template slot-scope="scope" >
-                    {{scope.$index}}
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label='上报圈存'>
-                <template slot-scope="scope" >
-                    {{scope.$index}}
+                    {{scope.row.initialize_price}}
                 </template>
               </el-table-column>
               <el-table-column align="center" label='操作'>
                 <template slot-scope="scope" >
-                    {{scope.$index}}
+                    <el-button type='danger' >上报圈存</el-button>
                 </template>
               </el-table-column>
           </el-table>
-      </div>
+          <el-button type='danger' >生成对账单</el-button>
+      </div> 
   </div>
 </template>
 
@@ -65,7 +61,7 @@ export default {
   methods: {
     fetchData() {
       get_initialize_data().then(response => {
-        this.initialize_list = response
+        this.initialize_list = response.data
       }).catch(error => {
         console.log(error)
       })

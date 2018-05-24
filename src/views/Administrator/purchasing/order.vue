@@ -133,45 +133,45 @@
                 </el-form-item>
             </el-form>
             <div class='app-container'>
-                <el-table border fit highlight-current-row>
+                <el-table :data='directly_order' border fit highlight-current-row>
                     <el-table-column label='采购商'>
                         <template slot-scope="scope">
-                            {{ scope.row.name }}
+                            {{ scope.row.purchasing_name }}
                         </template>
                     </el-table-column>
                     <el-table-column label='油卡编号'>
                         <template slot-scope="scope">
-                            {{ scope.row.code }}
+                            {{ scope.row.serial_number }}
                         </template>
                     </el-table-column>
                     <el-table-column label='油卡姓名'>
                         <template slot-scope="scope">
-                            {{ scope.row.oil_code }}
+                            {{ scope.row.ture_name }}
                         </template>
                     </el-table-column>
                     <el-table-column label='油卡号'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.oil_number }}
                         </template>
                     </el-table-column>
                     <el-table-column label='交易日期'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.end_time }}
                         </template>
                     </el-table-column>
                     <el-table-column label='供应号'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.supply_single_number }}
                         </template>
                     </el-table-column>
                     <el-table-column label='金额'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.already_card }}
                         </template>
                     </el-table-column>
                     <el-table-column label='折后金额'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.discount * scope.row.already_card }}
                         </template>
                     </el-table-column>
                     <el-table-column label='对账状态'>
@@ -181,7 +181,7 @@
                     </el-table-column>
                     <el-table-column label='折扣'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            {{ scope.row.discount }}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -192,7 +192,7 @@
 </template>
 
 <script>
-import { get_pcamilo_order, send_camilo_data } from '@/api/administrator'
+import { get_pcamilo_order, send_camilo_data, get_pdirectly_order } from '@/api/administrator'
 import { get_camilo_detail } from '@/api/purchasing'
 export default {
   data() {
@@ -200,7 +200,8 @@ export default {
       listLoading: true,
       camilo_order: [],
       camilo_detail_list: [],
-      dialogVisible: false
+      dialogVisible: false,
+      directly_order: []
     }
   },
   created() {
@@ -212,6 +213,9 @@ export default {
       get_pcamilo_order(this.listQuery).then(response => {
         this.camilo_order = response.data
         this.listLoading = false
+      })
+      get_pdirectly_order(this.listQuery).then(res => {
+        this.directly_order = res.data
       })
     },
     send_camilo(index) {

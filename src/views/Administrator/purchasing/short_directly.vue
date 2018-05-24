@@ -32,17 +32,17 @@
             </el-table-column>
             <el-table-column label='油卡'>
                 <template slot-scope="scope">
-                    {{ scope.row.platform_id.platform_name }}
+                    {{ scope.row.platform_id.oil_card_code }}
                 </template>
             </el-table-column>
             <el-table-column label='金额'>
                 <template slot-scope="scope">
-                    {{ scope.row.num }}
+                    {{ scope.row.price }}
                 </template>
             </el-table-column>
             <el-table-column label='时间'>
                 <template slot-scope="scope">
-                    {{ scope.row.denomination.denomination * scope.row.num }}
+                    {{ scope.row.cutoff_time }}
                 </template>
             </el-table-column>
             <el-table-column label='折扣'>
@@ -52,24 +52,24 @@
             </el-table-column>
             <el-table-column label='实际总价'>
                 <template slot-scope="scope">
-                    {{ scope.row.denomination.denomination * scope.row.num * scope.row.discount }}
+                    {{ scope.row.price * scope.row.discount }}
                 </template>
             </el-table-column>
             <el-table-column label='已充值金额'>
                 <template slot-scope="scope">
-                    {{ scope.row.denomination.denomination * scope.row.num * scope.row.discount }}
+                    {{ scope.row.recharged_money }}
                 </template>
             </el-table-column>
             <el-table-column label='操作' width='200'>
                 <template slot-scope="scope">
-                    <el-button type='warning' size="mini" @click='end_send_camilo'>查看</el-button>
-                    <el-button type='primary' size="mini"  @click='show_detail(scope.row.id)'>充值</el-button>  
+                    <el-button type='warning' size="mini" @click='show_detail(scope.row.id)'>查看</el-button>
+                    <el-button type='primary' size="mini"  @click='recharge(scope.row.id)'>充值</el-button>  
                 </template>
             </el-table-column>
         </el-table>
     </div>
     <el-dialog
-    title="卡密详情"
+    title="充值记录"
     :visible.sync="dialogVisible"
     width="50%"
     :before-close="handleClose">
@@ -98,19 +98,60 @@
     </el-table-column>  
     </el-table>
     </el-dialog>
+    <el-dialog
+    title="上报充值记录"
+    :visible.sync="dialogVisible1"
+    width="50%"
+    :before-close="handleClose">
+    <el-form :model="supplier_data" label-width="150px">
+      <el-form-item label='充值油卡' >
+      {{ supplier_data.oil_card }}
+      <input type='hidden' :model='supplier_data.id' />
+    </el-form-item>
+    <el-form-item label='充值金额' >
+      <el-input v-model='supplier_data.price' style='width:100px;'/>
+    </el-form-item>
+    <el-form-item label='到账时间'>
+      <el-date-picker
+      v-model='supplier_data.recharge_time'
+      type="datetime"
+      placeholder="选择日期时间">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label='上传凭证'>
+      <el-upload class="upload-demo"
+          ref="upload"
+          :multiple="false"
+          action="123"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-change="changeUpload"
+          :on-success="handleSuccess"
+          :before-upload="beforeUpload"
+          :file-list="fileList"
+          :auto-upload="false">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload> 
+    </el-form-item>
+    <el-form-item>
+      <el-button type='danger' @click='submitUpload'>确定上传</el-button>
+    </el-form-item>
+  </el-form>
+  </el-dialog>
   </div>
 </template>
 
 <script>
-import { get_pcamilo_order, send_camilo_data } from '@/api/administrator'
-import { get_camilo_detail } from '@/api/purchasing'
+import { get_pcamilo_order } from '@/api/administrator'
 export default {
   data() {
     return {
       listLoading: true,
       camilo_order: [],
       camilo_detail_list: [],
-      dialogVisible: false
+      dialogVisible: false,
+      dialogVisible1: false
     }
   },
   created() {
@@ -124,33 +165,11 @@ export default {
         this.listLoading = false
       })
     },
-    send_camilo(index) {
-      let param = this.camilo_order[index]
-      this.$confirm('是否下发卡密?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.loading = true
-        send_camilo_data(param).then(response => {
-          if (response.code === '200') {
-            this.$message({
-              type: 'success',
-              message: '卡密下发成功!'
-            })
-          }
-        }).catch(error => {
-          console.log(error)
-          this.$message.error('卡密下发失败!')
-        })
-      }).catch(() => {
-      })
-    },
     show_detail(id) {
-      get_camilo_detail(id).then(response => {
-        this.camilo_detail_list = response.data
-        this.dialogVisible = true
-      })
+      this.dialogVisible = true
+    },
+    recharge(id) {
+      this.dialogVisible1 = true
     },
     handleClose(done) {
       this.$confirm('确认关闭？').then(_ => {

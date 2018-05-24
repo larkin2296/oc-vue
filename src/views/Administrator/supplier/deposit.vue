@@ -24,6 +24,7 @@
             </template>
           </el-table-column>
       </el-table>
+      <el-button type='danger' @click='modify'>修改</el-button>
       <el-button type='danger'>关闭/开启提现</el-button>
       <el-button type='danger'>关闭/开启提现接口</el-button>
       </div>
@@ -31,42 +32,73 @@
 </template>
 
 <script>
+import { get_deposit_list, modify_deposit } from '@/api/system'
 export default {
   data() {
     return {
-      list: [{
-        conf_type: '提现上限',
-        status: '0',
-        conf_code: 'up_deposit',
-        edit: false
-      }, {
-        conf_type: '提现下限',
-        status: '0',
-        conf_code: 'down_deposit',
-        edit: false
-      }, {
-        conf_type: '扣费设置',
-        status: '0',
-        conf_code: 'deduction',
-        edit: false
-      }]
+      greater_money: 0,
+      proportion: 0,
+      deductions: 0,
+      lower_money: 0,
+      upper_money: 0,
+      list: []
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
-    cancelEdit(row) {
-      row.title = row.originalTitle
-      row.edit = false
-      this.$message({
-        message: 'The title has been restored to the original value',
-        type: 'warning'
+    fetchData() {
+      get_deposit_list().then(res => {
+        console.log(res.data[0])
+        this.greater_money = res.data[0].greater_money
+        this.proportion = res.data[0].proportion
+        this.deductions = res.data[0].deductions
+        this.lower_money = res.data[0].lower_money
+        this.upper_money = res.data[0].upper_money
+        this.list.push({
+          conf_type: '提现上限',
+          status: this.upper_money,
+          conf_code: 'upper_money',
+          edit: false
+        }, {
+          conf_type: '提现下限',
+          status: this.lower_money,
+          conf_code: 'lower_money',
+          edit: false
+        }, {
+          conf_type: '扣费金额',
+          status: this.deductions,
+          conf_code: 'deduction',
+          edit: false
+        }, {
+          conf_type: '扣费比例',
+          status: this.proportion,
+          conf_code: 'proportion',
+          edit: false
+        }, {
+          conf_type: '大于金额开始扣费设置',
+          status: this.greater_money,
+          conf_code: 'greater_money',
+          edit: false
+        })
       })
     },
-    confirmEdit(row) {
+    cancelEdit(row) {
+      row.status = row.originalTitle
       row.edit = false
-      row.originalTitle = row.title
-      this.$message({
-        message: 'The title has been edited',
-        type: 'success'
+    },
+    confirmEdit(row) {
+      console.log(row)
+      row.edit = false
+      row.originalTitle = row.status
+    },
+    modify() {
+      modify_deposit(this.list).then(res => {
+        this.$message({
+          message: res.message,
+          type: 'success'
+        })
       })
     }
   }

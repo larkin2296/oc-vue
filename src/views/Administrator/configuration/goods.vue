@@ -53,12 +53,68 @@
             </el-table>
       </div>
       </el-tab-pane>
+      <el-tab-pane label='商品配置管理'>
+      <h3>商品配置管理</h3>
+      <div class="app-container">
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">
+            短充金额范围
+          </div>
+        </el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">
+          <el-input></el-input>~<el-input></el-input></div></el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">
+            短充截止时间
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <el-select v-model="goods_day">
+              <el-option
+              v-for="item in days"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">
+            卡密商品暂停
+          </div>
+        </el-col>
+        <el-col :span="3">
+          <div class="grid-content bg-purple">
+            <el-select v-model="goods_platform" placeholder="请选择商品">
+              <el-option
+              v-for="item in platform"
+              :key="item.id"
+              :label="item.platform_name"
+              :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+        </el-col>
+        <el-col :span="4"><div class="grid-content bg-purple">
+          <el-input placeholder="请输入所包含字段"></el-input></div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">
+          <el-button type='danger'>暂停</el-button></div></el-col>
+      </el-row>
+      </div>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import { get_platform_list, get_denomination_list, add_platform, add_denomination } from '@/api/configure'
+import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail } from '@/api/configure'
 export default {
   data() {
     return {
@@ -69,7 +125,20 @@ export default {
         denomination: ''
       },
       platform_list: [],
-      denomination_list: []
+      platform: [],
+      goods_platform: '',
+      denomination_list: [],
+      days: [{
+        label: '一周',
+        value: '7'
+      }, {
+        label: '一个月',
+        value: '30'
+      }, {
+        label: '一季度',
+        value: '90'
+      }],
+      goods_day: ''
     }
   },
   created() {
@@ -85,6 +154,11 @@ export default {
       get_denomination_list(this.listQuery).then(response => {
         this.denomination_list = response
         this.listLoading = false
+      })
+      get_config_detail().then(response => {
+        this.platform = response.platform
+      }).catch(error => {
+        console.log(error)
       })
     },
     addplatform() {
@@ -131,7 +205,13 @@ export default {
 h3{
   margin-left: 10px;
 }
+.el-row{
+  margin-bottom: 20px;
+}
 .el-button{
     margin:10px;
+}
+.el-input{
+  width:150px;
 }
 </style>

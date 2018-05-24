@@ -104,16 +104,33 @@ export default {
       })
     },
     countdown: function() {
-      this.b_msg_state = '0'
-      this.click_button = 0
-      this.vn = true
-      const TIME_COUNT = 60
       if (!this.timer) {
-        this.ver_number = TIME_COUNT
-        this.show = false
         if (this.b_msg === '获取验证码') {
           send_message(this.registerForm.tel).then(response => {
-            console.log(response)
+            if (response.code !== '200') {
+              this.$message.error(response.message)
+            } else {
+              this.b_msg_state = '0'
+              this.click_button = 0
+              this.vn = true
+              const TIME_COUNT = 60
+              this.ver_number = TIME_COUNT
+              this.show = false
+              this.b_msg = '已发送短信'
+              this.timer = setInterval(() => {
+                if (this.ver_number > 0 && this.ver_number <= TIME_COUNT) {
+                  this.ver_number--
+                } else {
+                  this.show = true
+                  clearInterval(this.timer)
+                  this.timer = null
+                  this.vn = false
+                  this.click_button = 1
+                  this.b_msg = '重新发送短信'
+                  this.b_msg_state = '1'
+                }
+              }, 1000)
+            }
           }).catch(error => {
             console.log(error)
           })
@@ -124,20 +141,6 @@ export default {
             console.log(error)
           })
         }
-        this.b_msg = '已发送短信'
-        this.timer = setInterval(() => {
-          if (this.ver_number > 0 && this.ver_number <= TIME_COUNT) {
-            this.ver_number--
-          } else {
-            this.show = true
-            clearInterval(this.timer)
-            this.timer = null
-            this.vn = false
-            this.click_button = 1
-            this.b_msg = '重新发送短信'
-            this.b_msg_state = '1'
-          }
-        }, 1000)
       }
     }
   }
