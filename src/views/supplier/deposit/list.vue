@@ -5,22 +5,22 @@
       <el-table :data='deposit_list' border fit highlight-current-row>
           <el-table-column label='提现单'>
                 <template slot-scope="scope">
-                <span>{{scope.row.cam_name}}</span>
+                <span>{{scope.row.forward_number}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='金额'>
                 <template slot-scope="scope">
-                <span>{{scope.row.price}}</span>
+                <span>{{scope.row.money}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='提现时间'>
                 <template slot-scope="scope">
-                <span>{{scope.row.status}}</span>
+                <span>{{scope.row.created_at}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='提现状态'>
                 <template slot-scope="scope">
-                <span>{{scope.row.status}}</span>
+                <el-tag>{{scope.row.status}}</el-tag>
                 </template>
             </el-table-column>
             </el-table>
@@ -29,10 +29,21 @@
 </template>
 
 <script>
+import { get_deposit_list } from '@/api/supplier'
 export default {
   data() {
     return {
       deposit_list: []
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      get_deposit_list().then(res => {
+        this.deposit_list = res.data
+      })
     }
   }
 }

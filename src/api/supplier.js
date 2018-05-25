@@ -53,3 +53,31 @@ export function get_directly_pic(id) {
   return request.get('common/attach/show/' + id
   )
 }
+
+export function get_deposit_data(list) {
+  return request.post('api/supply/forward/index/', {
+    list
+  }
+  )
+}
+
+export function send_deposit_data(list) {
+  return request.post('api/supply/forward/edit/', {
+    list
+  }
+  )
+}
+
+export function deposit(list) {
+  return request.post('api/supply/forward/store/', {
+    list
+  }
+  )
+}
+
+export function get_deposit_list(list) {
+  return request.post('api/supply/forward/show/', {
+    list
+  }
+  )
+}

@@ -15,15 +15,15 @@ export function get_ddirectly_list(list) {
   )
 }
 
-export function get_deposit_list(list) {
-  return request.get('api/system/supply/present/index', {
+export function modify_deposit(list) {
+  return request.post('api/system/supply/present/update', {
     list
   }
   )
 }
 
-export function modify_deposit(list) {
-  return request.post('api/system/supply/present/update', {
+export function get_deposit_list(list) {
+  return request.get('api/system/supply/presentShow/index', {
     list
   }
   )
