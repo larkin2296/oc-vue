@@ -21,12 +21,12 @@
         <el-date-picker
         v-model="form.time_start"
         type="date"
-        placeholder="选择日期" size='small'>
+        placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
       </el-date-picker>~
       <el-date-picker
         v-model="form.time_end"
         type="date"
-        placeholder="选择日期" size='small'>
+        placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
       </el-date-picker>
       </el-form-item>
       <el-form-item>

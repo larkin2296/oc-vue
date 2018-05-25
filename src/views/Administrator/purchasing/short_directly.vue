@@ -108,7 +108,7 @@
       <el-date-picker
       v-model='supplier_data.recharge_time'
       type="datetime"
-      placeholder="选择日期时间">
+      placeholder="选择日期时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
       </el-date-picker>
     </el-form-item>
     <el-form-item label='上传凭证'>
