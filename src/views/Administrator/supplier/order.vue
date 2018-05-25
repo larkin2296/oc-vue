@@ -149,9 +149,9 @@
                             <el-button type='warning' @click='show_pic(scope.row.direct_id)'>查看</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label='操作'>
+                    <el-table-column label='操作' width='150'>
                         <template slot-scope="scope">
-                            <el-button v-if="scope.row.supply_status == '未到账'" type='success'>置为已到账</el-button>
+                            <el-button size='mini' v-if="scope.row.supply_status == '未到账'" type='success'>置为已到账</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

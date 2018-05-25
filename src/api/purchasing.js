@@ -113,3 +113,10 @@ export function get_initialize_data(list) {
   }
   )
 }
+
+export function confirm_status(id) {
+  return request.post('api/purchasing/confirm_status', {
+    id
+  }
+  )
+}

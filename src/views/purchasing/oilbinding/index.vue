@@ -72,7 +72,7 @@
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column label="序号">
       <template slot-scope="scope">
-          {{scope.row.id}}
+          {{scope.$index + 1}}
         </template>
     </el-table-column>
     <el-table-column label="编号">
@@ -92,7 +92,7 @@
     </el-table-column>
     <el-table-column label="状态">
         <template slot-scope="scope">
-          <el-radio-group v-model="scope.row.status" size="small" @change="set_status(scope.$index)" :disabled="scope.row.disabled">
+          <el-radio-group v-model="scope.row.status" size="small" @change="set_status(scope.row.id)" :disabled="scope.row.disabled">
             <el-radio-button label="正常"></el-radio-button>
             <el-radio-button label="停用"></el-radio-button>
           </el-radio-group>
@@ -112,7 +112,7 @@
 
 <script>
 
-import { binding_card, get_card_list, card_start, set_longtrem } from '@/api/purchasing'
+import { binding_card, get_card_list, card_start, set_longtrem, confirm_status } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
 // import { upload } from '@/api/message'
 import store from '@/store'
@@ -247,12 +247,24 @@ export default {
       }).catch(() => {
       })
     },
-    set_status($index) {
-      this.$confirm('更改油卡状态需要平台审核通过后执行，是否继续?', '提示', {
+    set_status(id) {
+      this.$confirm('更改油卡状态(如有未完成充值订单将无法停用)?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        confirm_status(id).then(res => {
+          if (res.code === '200') {
+            this.$message({
+              type: 'success',
+              message: '设置成功!'
+            })
+            this.fetchData()
+          } else {
+            this.$message.error(res.message)
+            this.fetchData()
+          }
+        })
       }).catch(() => {
       })
     },

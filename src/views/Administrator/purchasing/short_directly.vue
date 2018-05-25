@@ -45,6 +45,11 @@
                      {{ scope.row.history_price }}
                 </template>
             </el-table-column>
+            <el-table-column label='已到账金额'>
+                <template slot-scope="scope">
+                     {{ scope.row.success_price }}
+                </template>
+            </el-table-column>
             <el-table-column label='时间'>
                 <template slot-scope="scope">
                     {{ scope.row.created_at.date }}
@@ -88,7 +93,12 @@
         <template slot-scope="scope">
         {{ scope.row.already_card }}
         </template>
-    </el-table-column> 
+    </el-table-column>
+    <el-table-column label='到账时间'>
+        <template slot-scope="scope">
+        {{ scope.row.end_time }}
+        </template>
+    </el-table-column>  
     </el-table>
     </el-dialog>
     <el-dialog

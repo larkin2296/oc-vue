@@ -88,10 +88,6 @@
                 <span>{{scope.row.remark}}</span>
                 </template>
             </el-table-column>
-            <el-table-column label='操作'>
-                <template slot-scope="scope">
-                </template>
-            </el-table-column>
         </el-table>
         </div>
   </div>

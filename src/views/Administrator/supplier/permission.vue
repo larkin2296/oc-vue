@@ -17,25 +17,25 @@
           </el-table-column>
           <el-table-column label='卡密供货权限'>
               <template slot-scope="scope">
-                  <el-button v-if='scope.row.p_re_camilo == 1' type='danger' size='small'>已开启，点击关闭</el-button>
+                  <el-button v-if='scope.row.p_re_camilo == 1' type='success' size='small'>已开启，点击关闭</el-button>
                   <el-button v-else type='primary'>开启</el-button>
               </template>
           </el-table-column>
           <el-table-column label='长充供货权限'>
               <template slot-scope="scope">
-                  <el-button v-if='scope.row.p_re_directly == 1' type='danger' size='small'>已开启，点击关闭</el-button>
+                  <el-button v-if='scope.row.p_re_directly == 1' type='success' size='small'>已开启，点击关闭</el-button>
                   <el-button v-else type='primary'>开启</el-button>
               </template>
           </el-table-column>
           <el-table-column label='提现权限'>
               <template slot-scope="scope">
-                  <el-button v-if='scope.row.p_re_deposit == 1' type='danger' size='small'>已开启，点击关闭</el-button>
+                  <el-button v-if='scope.row.p_re_deposit == 1' type='success' size='small'>已开启，点击关闭</el-button>
                   <el-button v-else type='primary'>开启</el-button>
               </template>
           </el-table-column>
           <el-table-column label='推荐好友权限'>
               <template slot-scope="scope">
-                  <el-button v-if='scope.row.p_re_invite == 1' type='danger' size='small'>已开启，点击关闭</el-button>
+                  <el-button v-if='scope.row.p_re_invite == 1' type='success' size='small'>已开启，点击关闭</el-button>
                   <el-button v-else type='primary'>开启</el-button>
               </template>
           </el-table-column>
@@ -52,6 +52,11 @@
             <template slot-scope="scope">
               <el-button v-if="scope.row.edit" type="success" @click="confirmEdit(scope.row)" size="small" icon="el-icon-circle-check-outline">Ok</el-button>
               <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit' size="small" icon="el-icon-edit">编辑</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label='操作'>
+            <template slot-scope="scope">
+              <el-button type="danger" >保存</el-button>            
             </template>
           </el-table-column>
       </el-table>
