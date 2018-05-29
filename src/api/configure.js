@@ -39,3 +39,10 @@ export function upload_file(param) {
   const headers = { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer${store.getters.token}` }
   return request.post('common/attach/upload', param, { headers: headers })
 }
+
+export function get_oil_card(list) {
+  return request.post('api/configure/get_oil_card', {
+    list
+  }
+  )
+}

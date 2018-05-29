@@ -39,7 +39,7 @@
                             {{ scope.row.denomination }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='字段一'>
+                    <el-table-column label='字段一' width='150'>
                         <template slot-scope="scope">
                             {{ scope.row.cam_name }}
                         </template>
@@ -64,7 +64,7 @@
                             {{ scope.row.status }}
                         </template>
                     </el-table-column>
-                    <el-table-column label='操作'>
+                    <el-table-column label='操作' width='150'>
                         <template slot-scope="scope">
                             <el-button size='mini' type='danger'>删除</el-button>
                             <el-button size='mini' type='warning'>恢复</el-button>
@@ -151,7 +151,7 @@
                     </el-table-column>
                     <el-table-column label='操作' width='150'>
                         <template slot-scope="scope">
-                            <el-button size='mini' v-if="scope.row.supply_status == '未到账'" type='success'>置为已到账</el-button>
+                            <el-button size='mini' v-if="scope.row.supply_status == '未到账'" type='success' @click='make_account(scope.$index)'>置为已到账</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import { get_dcamilo_list, get_ddirectly_list } from '@/api/system'
+import { get_dcamilo_list, get_ddirectly_list, set_account } from '@/api/system'
 export default {
   data() {
     return {
@@ -193,6 +193,21 @@ export default {
     },
     handleClose(done) {
       done()
+    },
+    make_account(index) {
+      var param = Object()
+      param.id = this.directly_list[index].id
+      param.card = this.directly_list[index].oil_number
+      param.money = this.directly_list[index].already_card
+      set_account(param).then(res => {
+        if (res.code === '200') {
+          this.$message({
+            type: 'success',
+            message: '设置成功!'
+          })
+          this.fetchData()
+        }
+      })
     }
   }
 }

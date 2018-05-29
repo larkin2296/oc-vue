@@ -28,3 +28,10 @@ export function get_deposit_list(list) {
   }
   )
 }
+
+export function set_account(list) {
+  return request.post('api/system/supply/order/set_account', {
+    list
+  }
+  )
+}

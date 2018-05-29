@@ -120,3 +120,17 @@ export function confirm_status(id) {
   }
   )
 }
+
+export function send_initialize(list) {
+  return request.post('api/purchasing/send_initialize', {
+    list
+  }
+  )
+}
+
+export function get_reconciliation_data(list) {
+  return request.post('api/purchasing/get_reconciliation_data', {
+    list
+  }
+  )
+}
