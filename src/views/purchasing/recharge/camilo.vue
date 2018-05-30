@@ -1,5 +1,7 @@
 <template>
-<div>
+<div v-if='is_permission == 1'>
+    <div class='title'>今日折扣 {{config.camilo_sell}}</div>
+
     <el-form :inline="true" ref="form" :model="form" label-width="120px" class='choose'>
     <el-form-item label="商品类型" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
 
@@ -81,11 +83,12 @@
 
 <script>
 import { camilo_order } from '@/api/purchasing'
-import { get_config_detail } from '@/api/configure'
+import { get_config_detail, get_config_goodset, get_permission_data } from '@/api/configure'
 import store from '@/store'
 export default {
   data() {
     return {
+      is_permission: 0,
       form: {
         goods_type: '',
         card_price: '',
@@ -96,7 +99,8 @@ export default {
       platform: [],
       platform_money: [],
       discount: '',
-      order_type: 1
+      order_type: 1,
+      config: []
     }
   },
   created() {
@@ -104,13 +108,21 @@ export default {
   },
   methods: {
     fetchData() {
-      get_config_detail().then(response => {
-        this.platform = response.platform
-        this.platform_money = response.denomination
-      }).catch(error => {
-        console.log(error)
+      get_permission_data('recharge_camilo').then(res => {
+        if (res.code === '200') {
+          this.is_permission = 1
+          get_config_detail().then(response => {
+            this.platform = response.platform
+            this.platform_money = response.denomination
+          }).catch(error => {
+            console.log(error)
+          })
+          get_config_goodset().then(res => {
+            this.config = res.data
+            this.discount = res.data.camilo_sell
+          })
+        }
       })
-      this.discount = 0.98
     },
     add_trolly() {
       this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
@@ -153,6 +165,11 @@ export default {
 <style scoped>
 .choose{
   padding-top:50px;
+}
+.title{
+  margin-top: 25px;
+  margin-left:50px;
+  color:red;
 }
 </style>
 

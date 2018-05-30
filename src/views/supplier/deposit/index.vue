@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if='is_permission == 1'>
       <el-button type='danger' @click='send_deposit'>一键提现</el-button>
       <h3>卡密售出情况</h3>
       <div class="app-container">
@@ -46,9 +46,11 @@
 
 <script>
 import { get_deposit_data, send_deposit_data, deposit } from '@/api/supplier'
+import { get_permission_data } from '@/api/configure'
 export default {
   data() {
     return {
+      is_permission: 0,
       camilo_list: [],
       directly_list: []
     }
@@ -58,10 +60,15 @@ export default {
   },
   methods: {
     fetchData() {
-      get_deposit_data().then(res => {
-        console.log(res)
-        this.camilo_list = res.data.cam
-        this.directly_list = res.data.forward
+      get_permission_data().then(res => {
+        if (res.code === '200') {
+          this.is_permission = 1
+          get_deposit_data().then(res => {
+            console.log(res)
+            this.camilo_list = res.data.cam
+            this.directly_list = res.data.forward
+          })
+        }
       })
     },
     send_deposit() {

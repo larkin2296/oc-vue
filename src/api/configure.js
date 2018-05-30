@@ -46,3 +46,24 @@ export function get_oil_card(list) {
   }
   )
 }
+
+export function get_config_goodset(list) {
+  return request.post('api/configure/get_config_set', {
+    list
+  }
+  )
+}
+
+export function save_config(list) {
+  return request.post('api/configure/save_config', {
+    list
+  }
+  )
+}
+
+export function get_permission_data(data) {
+  return request.post('api/admin/checkUserOauth', {
+    data
+  }
+  )
+}

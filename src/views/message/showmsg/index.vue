@@ -30,7 +30,7 @@
             </el-form-item>
         </el-form>
         </el-tab-pane>
-        <el-tab-pane label="邀请查看">
+        <el-tab-pane label="邀请查看" v-if='is_permission == 1'>
           <el-button type='danger' @click='create_link'>生成邀请链接</el-button>
           {{ invitelink }}
             <el-table  v-model="inviteform" border fit highlight-current-row>
@@ -78,6 +78,7 @@
 import axios from 'axios'
 import { get_message, c_link } from '@/api/message'
 import { password_modify } from '@/api/message'
+import { get_permission_data } from '@/api/configure'
 import store from '@/store'
 import qs from 'qs'
 export default {
@@ -98,6 +99,7 @@ export default {
       }
     }
     return {
+      is_permission: 0,
       msg: [{
         sex: '男'
       }],
@@ -124,6 +126,13 @@ export default {
       this.listLoading = true
       get_message(store.getters.token).then(response => {
         this.msg = response.data
+      })
+      get_permission_data('recommend_status').then(res => {
+        if (res.code === '200') {
+          this.is_permission = 1
+        } else {
+          this.is_permission = 0
+        }
       })
     },
     modify_password() {

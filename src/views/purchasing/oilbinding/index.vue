@@ -101,7 +101,7 @@
     <el-table-column label="操作" width="220">
         <template slot-scope="scope">
         <el-button type='danger' v-show="scope.row.is_start" @click="start_card(scope.$index)">启用此卡</el-button>
-        <el-button v-if="scope.row.is_longtrem === 0" type='primary' v-show="scope.row.longtrem" @click="longtrem_card(scope.$index)">设置为长期</el-button>
+        <el-button v-if="scope.row.is_longtrem === 0 && is_permission == 1" type='primary' v-show="scope.row.longtrem" @click="longtrem_card(scope.$index)">设置为长期</el-button>
         <el-button v-else-if="scope.row.is_longtrem === 1" type='success' v-show="scope.row.longtrem">长期卡</el-button>
         </template>
     </el-table-column>
@@ -114,6 +114,7 @@
 
 import { binding_card, get_card_list, card_start, set_longtrem, confirm_status } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
+import { get_permission_data } from '@/api/configure'
 // import { upload } from '@/api/message'
 import store from '@/store'
 import axios from 'axios'
@@ -143,6 +144,7 @@ export default {
       }
     }
     return {
+      is_permission: 0,
       tableData: [],
       addform: {
         serial_number: '',
@@ -182,6 +184,11 @@ export default {
       get_card_list(this.listQuery).then(response => {
         this.tableData = response
         this.listLoading = false
+      })
+      get_permission_data('recharge_long_directly').then(res => {
+        if (res.code === '200') {
+          this.is_permission = 1
+        }
       })
     },
     addcard() {

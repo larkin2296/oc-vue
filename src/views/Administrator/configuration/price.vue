@@ -12,13 +12,13 @@
             进货折扣
         </el-col>
         <el-col :span="4">
-            <el-input></el-input>
+            <el-input v-model='form.camilo_recharge'></el-input>
         </el-col>
         <el-col :span="2">
             销售折扣
         </el-col>
         <el-col :span="4">
-            <el-input></el-input>
+            <el-input v-model='form.camilo_sell'></el-input>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -26,7 +26,7 @@
               长充折扣
           </el-col>
           <el-col :span="4">
-              <el-input></el-input>
+              <el-input v-model='form.ldirectly_discount'></el-input>
           </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -34,12 +34,12 @@
               短充折扣范围
           </el-col>
           <el-col :span="10">
-              <el-input></el-input>~<el-input></el-input>
+              <el-input v-model='form.sdirectly_discount_down'></el-input>~<el-input v-model='form.sdirectly_discount_up'></el-input>
           </el-col>
       </el-row>
       <el-row :gutter="20">
           <el-col :span="4">
-              <el-button type='danger'>修改</el-button>
+              <el-button type='danger' @click='savedata'>修改</el-button>
           </el-col>
       </el-row>
       </div>
@@ -49,9 +49,17 @@
 </template>
 
 <script>
+import { get_config_goodset, save_config } from '@/api/configure'
 export default {
   data() {
     return {
+      form: {
+        camilo_recharge: '',
+        camilo_sell: '',
+        ldirectly_discount: '',
+        sdirectly_discount_down: '',
+        sdirectly_discount_up: ''
+      }
     }
   },
   created() {
@@ -59,7 +67,19 @@ export default {
   },
   methods: {
     fetchData() {
-      console.log()
+      get_config_goodset().then(res => {
+        console.log(res)
+        this.form = res.data
+      })
+    },
+    savedata() {
+      save_config(this.form).then(res => {
+        this.$message({
+          type: 'success',
+          message: '修改成功'
+        })
+        this.form = res.data
+      })
     }
   }
 }

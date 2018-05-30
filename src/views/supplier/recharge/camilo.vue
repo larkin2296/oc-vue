@@ -1,5 +1,6 @@
 <template>
-  <div id='camilo'>
+  <div id='camilo' v-if='is_permission == 1'>
+      <div class='title'>今日折扣 {{config.camilo_recharge}}</div>
       <el-form id='form'>
           <el-form-item label='平台选择'>
               <el-radio-group v-model="choose_platform">
@@ -95,11 +96,12 @@
 </template>
 
 <script>
-import { get_config_detail, upload_file } from '@/api/configure.js'
+import { get_config_detail, upload_file, get_config_goodset, get_permission_data } from '@/api/configure.js'
 import { sub_camilo_data, get_camilo_upload } from '@/api/supplier.js'
 export default {
   data() {
     return {
+      is_permission: 0,
       radio: '1',
       choose_platform: '',
       choose_price: '',
@@ -112,7 +114,9 @@ export default {
       },
       camilo_table: [],
       dialogVisible: false,
-      card_list: []
+      card_list: [],
+      config: [],
+      discount: ''
     }
   },
   created() {
@@ -120,11 +124,23 @@ export default {
   },
   methods: {
     fetchdata() {
-      get_config_detail().then(response => {
-        this.platform = response.platform
-        this.platform_money = response.denomination
-      }).catch(error => {
-        console.log(error)
+      get_permission_data('cam_permission').then(res => {
+        if (res.code === '200') {
+          this.is_permission = 1
+          get_config_detail().then(response => {
+            this.platform = response.platform
+            this.platform_money = response.denomination
+          }).catch(error => {
+            console.log(error)
+          })
+          get_config_goodset().then(res => {
+            this.config = res.data
+            this.discount = res.data.camilo_recharge
+          })
+        } else {
+          this.is_permission = 0
+          this.$message.error('您没有权限')
+        }
       })
     },
     handleClose(done) {
@@ -198,6 +214,7 @@ export default {
       param.cam = this.camilo_table
       param.money_id = this.choose_price
       param.platform_id = this.choose_platform
+      param.discount = this.discount
       this.send_camilo(param)
     },
     sub_camilo_list() {
@@ -205,6 +222,7 @@ export default {
       param.cam = this.card_list
       param.money_id = this.choose_price
       param.platform_id = this.choose_platform
+      param.discount = this.discount
       this.send_camilo(param)
     },
     send_camilo(data) {
@@ -246,5 +264,10 @@ export default {
 }
 .single_card .el-form-item{
   width:400px;
+}
+.title{
+  margin-top: 25px;
+  margin-left:50px;
+  color:red;
 }
 </style>

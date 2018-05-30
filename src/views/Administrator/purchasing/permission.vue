@@ -30,14 +30,14 @@
             </el-table-column>
             <el-table-column label='卡密付款'>
                 <template slot-scope="scope">
-                    <el-radio v-model="scope.row.pay_camilo" label="0">先款</el-radio>
-                    <el-radio v-model="scope.row.pay_camilo" label="1">后款</el-radio>
+                    <el-radio v-model="scope.row.pay_camilo" label="1">先款</el-radio>
+                    <el-radio v-model="scope.row.pay_camilo" label="2">后款</el-radio>
                 </template>
             </el-table-column>
             <el-table-column label='直充付款'>
                 <template slot-scope="scope">
-                    <el-radio v-model="scope.row.pay_directly" label="0">先款</el-radio>
-                    <el-radio v-model="scope.row.pay_directly" label="1">后款</el-radio>
+                    <el-radio v-model="scope.row.pay_directly" label="1">先款</el-radio>
+                    <el-radio v-model="scope.row.pay_directly" label="2">后款</el-radio>
                 </template>
             </el-table-column>
             <el-table-column label='操作' width='100'>

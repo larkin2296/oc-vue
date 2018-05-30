@@ -63,7 +63,7 @@
           </div>
         </el-col>
         <el-col :span="8"><div class="grid-content bg-purple">
-          <el-input></el-input>~<el-input></el-input></div></el-col>
+          <el-input v-model='form.sdirectly_price_down'></el-input>~<el-input v-model='form.sdirectly_price_up'></el-input></div></el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="4">
@@ -73,14 +73,21 @@
         </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple">
-            <el-select v-model="goods_day">
+            <el-select v-model="form.sdirectly_day">
               <el-option
               v-for="item in days"
               :key="item.value"
-              :label="item.label"
+              :label="item.value"
               :value="item.value">
               </el-option>
-            </el-select>
+            </el-select>天
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <div class="grid-content bg-purple">
+          <el-button type='danger' @click='savedata'>保存</el-button>
           </div>
         </el-col>
       </el-row>
@@ -114,7 +121,7 @@
 </template>
 
 <script>
-import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail } from '@/api/configure'
+import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail, get_config_goodset, save_config } from '@/api/configure'
 export default {
   data() {
     return {
@@ -138,7 +145,12 @@ export default {
         label: '一季度',
         value: '90'
       }],
-      goods_day: ''
+      goods_day: '',
+      form: {
+        sdirectly_price_down: '',
+        sdirectly_price_up: '',
+        sdirectly_day: ''
+      }
     }
   },
   created() {
@@ -159,6 +171,10 @@ export default {
         this.platform = response.platform
       }).catch(error => {
         console.log(error)
+      })
+      get_config_goodset().then(res => {
+        console.log(res)
+        this.form = res.data
       })
     },
     addplatform() {
@@ -195,6 +211,15 @@ export default {
           message: '添加成功!'
         })
       }).catch(() => {
+      })
+    },
+    savedata() {
+      save_config(this.form).then(res => {
+        this.$message({
+          type: 'success',
+          message: '修改成功'
+        })
+        this.form = res.data
       })
     }
   }

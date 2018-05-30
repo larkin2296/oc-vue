@@ -49,3 +49,10 @@ export function check_status(status_examine, id) {
   }
   )
 }
+
+export function get_user_list(list) {
+  return request.post('api/admin/getSupplierAll', {
+    list
+  }
+  )
+}

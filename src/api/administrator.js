@@ -43,8 +43,22 @@ export function get_user_list(list) {
   )
 }
 
+export function get_supplier_list(list) {
+  return request.post('api/administrator/purchasing/get_supplier_user', {
+    list
+  }
+  )
+}
+
 export function set_user_perrmission(list) {
   return request.post('api/administrator/purchasing/set_user_perrmission', {
+    list
+  }
+  )
+}
+
+export function set_supplier_perrmission(list) {
+  return request.post('api/administrator/purchasing/set_supplier_perrmission', {
     list
   }
   )
