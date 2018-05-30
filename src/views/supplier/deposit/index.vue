@@ -3,7 +3,7 @@
       <el-button type='danger' @click='send_deposit'>一键提现</el-button>
       <h3>卡密售出情况</h3>
       <div class="app-container">
-      <el-table :data='camilo_list' border fit highlight-current-row>
+      <el-table :data='camilo_list' border fit highlight-current-row max-height='300'>
           <el-table-column label='卡密'>
                 <template slot-scope="scope">
                 <span>{{scope.row.cam_name}}</span>
@@ -12,6 +12,11 @@
             <el-table-column label='面额'>
                 <template slot-scope="scope">
                 <span>{{scope.row.price}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='折后金额'>
+                <template slot-scope="scope">
+                <span>{{scope.row.real_money}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='供货状态'>
@@ -23,7 +28,7 @@
       </div>
       <h3>直充售出情况</h3>
       <div class="app-container">
-      <el-table :data='directly_list' border fit highlight-current-row>
+      <el-table :data='directly_list' border fit highlight-current-row max-height='300'>
           <el-table-column label='直充供应单号'>
                 <template slot-scope="scope">
                 <span>{{scope.row.supply_single_number}}</span>
@@ -32,6 +37,11 @@
             <el-table-column label='金额'>
                 <template slot-scope="scope">
                 <span>{{scope.row.already_card}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label='折后金额'>
+                <template slot-scope="scope">
+                <span>{{scope.row.real_money}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='供货状态'>
@@ -60,7 +70,7 @@ export default {
   },
   methods: {
     fetchData() {
-      get_permission_data().then(res => {
+      get_permission_data('put_forward_premission').then(res => {
         if (res.code === '200') {
           this.is_permission = 1
           get_deposit_data().then(res => {

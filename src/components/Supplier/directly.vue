@@ -25,7 +25,7 @@
     </el-form-item>
     </el-form>
     <div class="app-container">
-    <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row>
+    <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row height='480'>
         <el-table-column label='供应单号'>
             <template slot-scope="scope">
             <span>{{scope.row.supply_single_number}}</span>
@@ -58,7 +58,7 @@
         </el-table-column>
         <el-table-column label='操作'>
             <template slot-scope="scope">
-            <el-button type='success' @click='show_pic(scope.row.direct_id)'>查看凭证</el-button>
+            <el-button type='primary' @click='show_pic(scope.row.direct_id)'>查看凭证</el-button>
             </template>
         </el-table-column>
     </el-table>

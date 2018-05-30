@@ -39,7 +39,7 @@
         </el-form-item>
         </el-form>
         <div class="app-container">
-        <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row>
+        <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row height='400'>
             <el-table-column label='供货时间'>
                 <template slot-scope="scope">
                 <span>{{scope.row.supplier_time.date}}</span>
@@ -80,7 +80,7 @@
             </el-table-column>
             <el-table-column label='实际销卡面额'>
                 <template slot-scope="scope">
-                <span>{{scope.row.real_price}}</span>
+                <span>{{scope.row.discount * scope.row.denomination['denomination']}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='备注'>

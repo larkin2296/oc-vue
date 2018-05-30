@@ -12,7 +12,7 @@
                   <el-button type='danger' @click='addplatform'>添加</el-button>
               </el-form-item>
           </el-form>
-      <el-table :data='platform_list' border fit highlight-current-row>
+      <el-table :data='platform_list' border fit highlight-current-row height='400'>
           <el-table-column label='平台名称'>
                 <template slot-scope="scope">
                 <span>{{scope.row.platform_name}}</span>
@@ -38,7 +38,7 @@
                   <el-button type='danger' @click='adddenomination'>添加</el-button>
               </el-form-item>
           </el-form>
-      <el-table :data='denomination_list' border fit highlight-current-row>
+      <el-table :data='denomination_list' border fit highlight-current-row height='400'>
           <el-table-column label='面额'>
                 <template slot-scope="scope">
                 <span>{{scope.row.denomination}}</span>
@@ -238,5 +238,8 @@ h3{
 }
 .el-input{
   width:150px;
+}
+.el-table-column{
+  height: 40px;
 }
 </style>

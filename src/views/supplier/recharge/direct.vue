@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class='title'>今日折扣 {{config.ldirectly_discount}}</div>
     <el-form :inline='true' id='form'>
         <el-form-item>
             <el-button type='danger' @click='get_camilo'>获取</el-button>
@@ -70,7 +71,7 @@
 </template>
 
 <script>
-import { upload_file } from '@/api/configure.js'
+import { upload_file, get_config_goodset, get_permission_data } from '@/api/configure.js'
 import { get_camilo_card, get_directly_upload } from '@/api/supplier'
 export default {
   data() {
@@ -107,7 +108,9 @@ export default {
         recharge_time: '',
         pic_add: ''
       },
-      pic_list: []
+      pic_list: [],
+      config: [],
+      discount: 0
     }
   },
   created() {
@@ -115,8 +118,16 @@ export default {
   },
   methods: {
     fetchData() {
-      get_camilo_card().then(response => {
-        this.list = response.data
+      get_permission_data('long_term_permission').then(res => {
+        if (res.code === '200') {
+          get_camilo_card().then(response => {
+            this.list = response.data
+          })
+          get_config_goodset().then(res => {
+            this.config = res.data
+            this.discount = res.data.ldirectly_discount
+          })
+        }
       })
     },
     handleClose(done) {
@@ -174,6 +185,7 @@ export default {
       param.append('status', 3)
       upload_file(param).then((res) => {
         this.supplier_data.id_hash = res.data.id_hash
+        this.supplier_data.discount = this.discount
         get_directly_upload(this.supplier_data).then(response => {
           console.log(response)
           this.dialogVisible = false
@@ -206,5 +218,10 @@ export default {
 <style scoped>
 #form{
     padding:40px
+}
+.title{
+  margin-top: 25px;
+  margin-left:50px;
+  color:red;
 }
 </style>

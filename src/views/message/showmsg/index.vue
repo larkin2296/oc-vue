@@ -8,7 +8,8 @@
               {{ msg.name }}
             </el-form-item>
             <el-form-item label='性别'>
-              {{ msg.sex }}
+              <el-tag v-if='msg.sex == 1'>男</el-tag>
+              <el-tag v-if='msg.sex == 2'>女</el-tag>
             </el-form-item>
             <el-form-item label="手机">
               {{ msg.mobile }}
@@ -21,12 +22,6 @@
             </el-form-item>
             <el-form-item label="city">
               {{ msg.city }}
-            </el-form-item>
-            <el-form-item label='状态'>
-              <el-radio-group v-model='msg.status'>
-                <el-radio label="正常" value='0'></el-radio>
-                <el-radio label="锁定" value='1'></el-radio>
-              </el-radio-group>
             </el-form-item>
         </el-form>
         </el-tab-pane>
