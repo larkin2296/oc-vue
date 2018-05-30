@@ -22,8 +22,15 @@ export function modify_deposit(list) {
   )
 }
 
-export function get_deposit_list(list) {
+export function get_depositshow_list(list) {
   return request.get('api/system/supply/presentShow/index', {
+    list
+  }
+  )
+}
+
+export function get_deposit_list(list) {
+  return request.get('api/system/supply/present/index', {
     list
   }
   )

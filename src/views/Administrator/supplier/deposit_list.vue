@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { get_deposit_list } from '@/api/system'
+import { get_depositshow_list } from '@/api/system'
 export default {
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     fetchData() {
-      get_deposit_list().then(res => {
+      get_depositshow_list().then(res => {
         console.log(res)
         this.list = res.data
       })
