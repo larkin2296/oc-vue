@@ -22,3 +22,10 @@ export function password_modify(token, list) {
   const headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': `Bearer${token}` }
   return request.post('api/user/modify', list, { headers: headers })
 }
+
+export function create_msg(list) {
+  return request.post('api/system/supply/audit/create', {
+    list
+  }
+  )
+}

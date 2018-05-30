@@ -35,3 +35,17 @@ export function set_account(list) {
   }
   )
 }
+
+export function get_audit_data(list) {
+  return request.post('api/system/supply/audit/index', {
+    list
+  }
+  )
+}
+
+export function check_status(status_examine, id) {
+  return request.post('api/system/supply/audit/store', {
+    status_examine, id
+  }
+  )
+}

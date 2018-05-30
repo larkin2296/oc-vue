@@ -50,14 +50,14 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="充值金额">
         <template slot-scope="scope">
-          <span>{{scope.row.save_money}}</span>
+          <span>{{scope.row.total_money}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="已圈存金额">
+      <!-- <el-table-column align="center" prop="created_at" label="已圈存金额">
         <template slot-scope="scope">
           <span>{{scope.row.initialize_price}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="查看详情" align="center">
         <template slot-scope="scope">
           <el-button type="warning" @click="showdetail(scope.row.oil_card_code)">查看详情</el-button>

@@ -63,3 +63,10 @@ export function get_sdirectly_detail(list) {
   }
   )
 }
+
+export function get_audit_data(list) {
+  return request.post('api/administrator/purchasing/get_audit_data', {
+    list
+  }
+  )
+}
