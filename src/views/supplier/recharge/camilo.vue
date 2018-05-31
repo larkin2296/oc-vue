@@ -181,7 +181,7 @@ export default {
       param.append('status', 1)
       upload_file(param).then((res) => {
         if (res.code === 200) {
-          get_camilo_upload(res.data.origin_name).then(response => {
+          get_camilo_upload(res.data.origin_name + res.data.ext).then(response => {
             this.card_list = response.data
           })
           this.$message({
