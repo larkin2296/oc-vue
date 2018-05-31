@@ -361,6 +361,21 @@ export default {
       }, (res) => {
         console.log(res)
       })
+    },
+    sub_camilo_list() {
+      binding_card(this.addcard_list).then(response => {
+        if (response.code === '200') {
+          this.$message({
+            message: '恭喜你，油卡添加成功',
+            type: 'success'
+          })
+          this.fetchData()
+        } else if (response.code === '500') {
+          this.$message.error(response.message)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

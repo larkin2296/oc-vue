@@ -48,6 +48,11 @@
             <el-button type='warning' v-if='scope.row.status == 1' @click='show(scope.row.id)'>完成对账</el-button>
         </template>
       </el-table-column>
+      <el-table-column label="操作" width="200" align="center">
+        <template slot-scope="scope">
+            <el-button type='warning' @click='get(scope.row.id)'>查看详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
       </div>
       <el-dialog
@@ -83,7 +88,7 @@
 </template>
 
 <script>
-import { get_reconciliation_list } from '@/api/purchasing'
+import { get_reconciliation_list, get_reconciliation_detail } from '@/api/purchasing'
 import { set_reconciliation_status } from '@/api/administrator'
 export default {
   data() {
@@ -106,7 +111,6 @@ export default {
     },
     show(id) {
       set_reconciliation_status(id).then(res => {
-        this.dialogVisible = true
         this.$message({
           type: 'success',
           message: '启动成功!'
@@ -116,6 +120,12 @@ export default {
     },
     handleClose(done) {
       done()
+    },
+    get(id) {
+      get_reconciliation_detail(id).then(res => {
+        this.dialogVisible = true
+        this.recon_list = res.data
+      })
     }
   }
 }
