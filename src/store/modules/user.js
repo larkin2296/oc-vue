@@ -48,7 +48,6 @@ const user = {
     Refresh({ commit, state }) {
       return new Promise((resolve, reject) => {
         refresh(state.token).then(response => {
-          console.log(response)
           const data = response.data
           setToken(data.token)
           commit('SET_TOKEN', data.token)
@@ -64,7 +63,11 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
-          commit('SET_ROLES', data.roles)
+          if (response.data.status_examine !== 1) {
+            commit('SET_ROLES', 10)
+          } else {
+            commit('SET_ROLES', data.roles)
+          }
           commit('SET_NAME', data.name)
           commit('SET_UID', data.id)
           resolve(response)

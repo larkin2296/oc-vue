@@ -7,8 +7,9 @@ export function camilo_order(list) {
   )
 }
 
-export function get_camilo_order() {
+export function get_camilo_order(list) {
   return request.post('api/purchasing/get_camilo_order', {
+    list
   }
   )
 }
@@ -19,14 +20,16 @@ export function set_sdirectly_order(list) {
   }
   )
 }
-export function get_sdirecty_order() {
+export function get_sdirecty_order(list) {
   return request.post('api/purchasing/get_sdirecty_order', {
+    list
   }
   )
 }
 
-export function get_ldirecty_order() {
+export function get_ldirecty_order(list) {
   return request.post('api/purchasing/get_ldirecty_order', {
+    list
   }
   )
 }
@@ -38,9 +41,9 @@ export function binding_card(list) {
   )
 }
 
-export function get_card_list(params) {
+export function get_card_list(list) {
   return request.post('api/purchasing/get_card', {
-    params
+    list
   }
   )
 }
@@ -130,6 +133,13 @@ export function send_initialize(list) {
 
 export function get_reconciliation_data(list) {
   return request.post('api/purchasing/get_reconciliation_data', {
+    list
+  }
+  )
+}
+
+export function get_oilcard_upload(list) {
+  return request.post('api/purchasing/get_oilcard_upload', {
     list
   }
   )

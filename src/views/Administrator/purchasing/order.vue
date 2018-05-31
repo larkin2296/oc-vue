@@ -2,31 +2,53 @@
   <div>
     <el-tabs type="border-card">
         <el-tab-pane label="卡密订单">
-            <el-form :inline="true" label-width="120px">
+            <el-form v-model='form' :inline="true" label-width="120px">
                 <el-form-item label='商品'>
-                    <el-input></el-input>
+                    <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
+
+                        <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
+
+                        </el-option>
+
+                    </el-select>
                 </el-form-item>
                 <el-form-item label='面额'>
-                    <el-input></el-input>
+                    <el-select v-model="form.card_price" placeholder="选择金额">
+
+                    <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
+
+                    </el-option>
+
+                    </el-select>
                 </el-form-item>
                 <el-form-item label='交易时间'>
-                    <el-input></el-input>
+                    <el-date-picker
+                        v-model="form.time_start"
+                        type="date"
+                        placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                    </el-date-picker>~
+                    <el-date-picker
+                        v-model="form.time_end"
+                        type="date"
+                        placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                    </el-date-picker>
                 </el-form-item>
                 <el-form-item label='订单号'>
-                    <el-input></el-input>
-                </el-form-item>
-                <el-form-item label='卡号'>
-                    <el-input></el-input>
+                    <el-input v-model='form.order_code'></el-input>
                 </el-form-item>
                 <el-form-item label='卡密状态'>
-                    <el-input></el-input>
+                    <el-select v-model="form.order_status" placeholder="状态">
+                    <el-option label="未完成" value="1"></el-option>
+                    <el-option label="终止发放" value="3"></el-option>
+                    <el-option label="已完成" value="2"></el-option>                
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type='danger'>查询</el-button>
+                    <el-button type='danger' @click='go_search'>查询</el-button>
                 </el-form-item>
             </el-form>
             <div class='app-container'>
-                <el-table :data='camilo_order' v-loading.body="listLoading" border fit highlight-current-row>
+                <el-table :data='camilo_order' v-loading.body="listLoading" border fit highlight-current-row height='600'>
                     <el-table-column label='订单号'>
                         <template slot-scope="scope">
                             {{ scope.row.order_code }}
@@ -109,31 +131,38 @@
         </el-dialog>
         </el-tab-pane>
         <el-tab-pane label="代充订单">
-            <el-form :inline="true" label-width="120px">
-                <el-form-item label='采购商'>
-                    <el-input></el-input>
-                </el-form-item>
+            <el-form v-model='form1' :inline="true" label-width="120px">
+                <!-- <el-form-item label='采购商'>
+                    <el-input v-model='form1.user'></el-input>
+                </el-form-item> -->
                 <el-form-item label='油卡编号'>
-                    <el-input></el-input>
+                    <el-input v-model='form1.serial_number'></el-input>
                 </el-form-item>
-                <el-form-item label='油卡姓名'>
-                    <el-input></el-input>
-                </el-form-item>
+                <!-- <el-form-item label='油卡姓名'>
+                    <el-input v-model='form1.ture_name'></el-input>
+                </el-form-item> -->
                 <el-form-item label='油卡号'>
-                    <el-input></el-input>
+                    <el-input v-model='form1.oil_card_code'></el-input>
                 </el-form-item>
                 <el-form-item label='交易日期'>
-                    <el-input></el-input>
+                    <el-date-picker
+                    v-model="form1.time_start"
+                    type="date"
+                    placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+                </el-date-picker>
                 </el-form-item>
                 <el-form-item label='对账状态'>
-                    <el-input></el-input>
+                    <el-select v-model="form1.check_money" placeholder="状态">
+                    <el-option label="已对账" value="1"></el-option>
+                    <el-option label="未对账" value="0"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type='danger'>查询</el-button>
+                    <el-button type='danger' @click='go_search1'>查询</el-button>
                 </el-form-item>
             </el-form>
             <div class='app-container'>
-                <el-table :data='directly_order' border fit highlight-current-row>
+                <el-table :data='directly_order' border fit highlight-current-row height='400'>
                     <el-table-column label='采购商'>
                         <template slot-scope="scope">
                             {{ scope.row.purchasing_name }}
@@ -176,7 +205,8 @@
                     </el-table-column>
                     <el-table-column label='对账状态'>
                         <template slot-scope="scope">
-                            {{ scope.row.status }}
+                            <el-tag v-if='scope.row.check_money == 0'>未对账</el-tag>
+                            <el-tag v-if='scope.row.check_money == 1'>已对账</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column label='折扣'>
@@ -194,13 +224,18 @@
 <script>
 import { get_pcamilo_order, send_camilo_data, get_pdirectly_order } from '@/api/administrator'
 import { get_camilo_detail } from '@/api/purchasing'
+import { get_config_detail } from '@/api/configure'
 export default {
   data() {
     return {
+      form: {},
+      form1: {},
       listLoading: true,
       camilo_order: [],
       camilo_detail_list: [],
       dialogVisible: false,
+      platform: [],
+      platform_money: [],
       directly_order: []
     }
   },
@@ -215,6 +250,24 @@ export default {
         this.listLoading = false
       })
       get_pdirectly_order(this.listQuery).then(res => {
+        this.directly_order = res.data
+      })
+      get_config_detail().then(response => {
+        this.platform = response.platform
+        this.platform_money = response.denomination
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_pcamilo_order(this.form).then(response => {
+        this.camilo_order = response.data
+        this.listLoading = false
+      })
+    },
+    go_search1() {
+      get_pdirectly_order(this.form1).then(res => {
         this.directly_order = res.data
       })
     },
@@ -232,6 +285,8 @@ export default {
               type: 'success',
               message: '卡密下发成功!'
             })
+          } else {
+            this.$message.error(response.message)
           }
         }).catch(error => {
           console.log(error)
@@ -247,9 +302,7 @@ export default {
       })
     },
     handleClose(done) {
-      this.$confirm('确认关闭？').then(_ => {
-        done()
-      }).catch(_ => {})
+      done()
     }
   }
 }

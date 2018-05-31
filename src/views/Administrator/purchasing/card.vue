@@ -1,17 +1,17 @@
 <template>
   <div>
-    <el-form :inline="true" label-width="120px">
+    <el-form v-model='form' :inline="true" label-width="120px">
         <el-form-item label="采购商">
-            <el-input></el-input>
+            <el-input v-model='form.truename'></el-input>
         </el-form-item>
         <el-form-item label="油卡编号">
-            <el-input></el-input>
+            <el-input v-model='form.serial_number'></el-input>
         </el-form-item>
         <el-form-item label="油卡号">
-            <el-input></el-input>
+            <el-input v-model='form.oil_card_code'></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type='danger'>查询</el-button>
+            <el-button type='danger' @click='go_search'>查询</el-button>
         </el-form-item>
         </el-form>
         <div class='app-container'>
@@ -59,6 +59,7 @@ import { get_purchasing_card } from '@/api/administrator'
 export default {
   data() {
     return {
+      form: {},
       list: [],
       listLoading: false
     }
@@ -70,6 +71,14 @@ export default {
     fetchData() {
       this.listLoading = true
       get_purchasing_card().then(res => {
+        console.log(res)
+        this.list = res.data
+        this.listLoading = false
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_purchasing_card(this.form).then(res => {
         console.log(res)
         this.list = res.data
         this.listLoading = false

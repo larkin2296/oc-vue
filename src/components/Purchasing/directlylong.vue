@@ -2,15 +2,15 @@
   <div id='search'>
     <el-form :inline="true" ref="form" :model="form" label-width="120px">
       <el-form-item label='编号'>
-        <el-input v-model="form.number" placeholder="编号" />
+        <el-input v-model="form.serial_number" placeholder="编号" />
       </el-form-item>
       <el-form-item label='姓名'>
-        <el-input v-model="form.name" placeholder="姓名" />
+        <el-input v-model="form.ture_name" placeholder="姓名" />
       </el-form-item>
       <el-form-item label='卡号'>
-        <el-input v-model="form.card" placeholder="卡号" />
+        <el-input v-model="form.oil_card_code" placeholder="卡号" />
       </el-form-item>
-      <el-form-item label='最近充值时间'>
+      <!-- <el-form-item label='最近充值时间'>
         <el-date-picker
         v-model="form.time_start"
         type="date"
@@ -21,9 +21,9 @@
         type="date"
         placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
       </el-date-picker>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
-        <el-button type='danger' >查找</el-button>
+        <el-button type='danger' @click='go_search'>查找</el-button>
       </el-form-item>
   </el-form>
     <div class="app-container">
@@ -74,15 +74,7 @@ export default {
   name: 'OcForm',
   data() {
     return {
-      form: {
-        status: '',
-        number: '',
-        card: '',
-        price: '',
-        time_start: '',
-        time_end: '',
-        name: ''
-      },
+      form: {},
       list: null,
       listLoading: true
     }
@@ -104,6 +96,14 @@ export default {
     fetchData() {
       this.listLoading = true
       get_ldirecty_order().then(response => {
+        console.log(response)
+        this.list = response
+        this.listLoading = false
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_ldirecty_order(this.form).then(response => {
         console.log(response)
         this.list = response
         this.listLoading = false

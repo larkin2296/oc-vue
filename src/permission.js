@@ -14,7 +14,10 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
-          const roles = res.data.roles
+          var roles = res.data.roles
+          if (res.data.status_examine !== 1) {
+            roles = ['10']
+          }
           store.dispatch('GenerateRoutes', { roles }).then(() => { // 生成可访问的路由表
             // console.log(store.getters.addRouters)
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表

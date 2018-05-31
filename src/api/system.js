@@ -2,16 +2,12 @@
 import request from '@/utils/request'
 
 export function get_dcamilo_list(list) {
-  return request.post('api/system/supply/order/index', {
-    list
-  }
+  return request.post('api/system/supply/order/index', list
   )
 }
 
 export function get_ddirectly_list(list) {
-  return request.post('api/system/supply/order/show', {
-    list
-  }
+  return request.post('api/system/supply/order/show', list
   )
 }
 
@@ -23,9 +19,7 @@ export function modify_deposit(list) {
 }
 
 export function get_depositshow_list(list) {
-  return request.get('api/system/supply/presentShow/index', {
-    list
-  }
+  return request.post('api/system/supply/presentShow/index', list
   )
 }
 
@@ -44,9 +38,7 @@ export function set_account(list) {
 }
 
 export function get_audit_data(list) {
-  return request.post('api/system/supply/audit/index', {
-    list
-  }
+  return request.post('api/system/supply/audit/index', list
   )
 }
 

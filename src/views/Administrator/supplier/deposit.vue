@@ -26,7 +26,6 @@
       </el-table>
       <el-button type='danger' @click='modify'>修改</el-button>
       <el-button type='danger'>关闭/开启提现</el-button>
-      <el-button type='danger'>关闭/开启提现接口</el-button>
       </div>
   </div>
 </template>

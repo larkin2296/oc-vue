@@ -1,23 +1,24 @@
 <template>
   <div>
-      <el-form :inline="true" label-width="120px">
+      <el-form v-model='form' :inline="true" label-width="120px">
         <el-form-item label='采购商'>
-            <el-input></el-input>
+            <el-input v-model='form.truename'></el-input>
         </el-form-item>
         <el-form-item label='账号'>
-            <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='联系方式'>
-            <el-input></el-input>
+            <el-input v-model='form.mobile'></el-input>
         </el-form-item>
         <el-form-item label='qq'>
-            <el-input></el-input>
+            <el-input v-model='form.qq_num'></el-input>
         </el-form-item>
         <el-form-item label='审核结果'>
-            <el-input></el-input>
+            <el-select v-model="form.status_examine" placeholder="状态">
+            <el-option label="通过" value="1"></el-option>
+            <el-option label="审核中" value="2"></el-option>
+            <el-option label="未通过" value="3"></el-option>                
+            </el-select>
         </el-form-item>
         <el-form-item>
-            <el-button type='danger'>查询</el-button>
+            <el-button type='danger' @click='go_search'>查询</el-button>
         </el-form-item>
     </el-form>
     <div class='app-container'>
@@ -79,6 +80,7 @@ import { check_status } from '@/api/system'
 export default {
   data() {
     return {
+      form: {},
       list: [],
       dialogTableVisible: false,
       img_url: []
@@ -90,6 +92,11 @@ export default {
   methods: {
     fetchData() {
       get_audit_data().then(res => {
+        this.list = res.data
+      })
+    },
+    go_search() {
+      get_audit_data(this.form).then(res => {
         this.list = res.data
       })
     },

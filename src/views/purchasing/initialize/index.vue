@@ -1,17 +1,17 @@
 <template>
   <div>
-      <el-form :inline="true" label-width="120px">
+      <el-form v-model='form' :inline="true" label-width="120px">
           <el-form-item label='卡号' >
-              <el-input></el-input>
+              <el-input :model='form.oil_card_code'></el-input>
           </el-form-item>
           <el-form-item label='存款'>
-              <el-select placeholder="请选择">
+              <el-select placeholder="请选择" v-model='form.save_money'>
                   <el-option label='有存款' value='1' ></el-option>
                   <el-option label='无存款' value='0' ></el-option>
               </el-select>
           </el-form-item>
           <el-form-item>
-              <el-button type='danger' >查询</el-button>
+              <el-button type='danger' @click='go_search'>查询</el-button>
           </el-form-item>
       </el-form>
       <div class="app-container">
@@ -75,6 +75,7 @@ import { get_initialize_data, send_initialize } from '@/api/purchasing'
 export default {
   data() {
     return {
+      form: {},
       initialize_list: [],
       dialogVisible: false,
       initialize_data: {
@@ -90,6 +91,13 @@ export default {
   methods: {
     fetchData() {
       get_initialize_data().then(response => {
+        this.initialize_list = response.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    go_search() {
+      get_initialize_data(this.form).then(response => {
         this.initialize_list = response.data
       }).catch(error => {
         console.log(error)

@@ -1,27 +1,29 @@
 <template>
   <div>
-      <el-form :inline="true" label-width="80px">
+      <el-form v-model='form' :inline="true" label-width="80px">
         <el-form-item label='油卡'>
-            <el-input></el-input>
+            <el-input v-model='form.oil_number'></el-input>
         </el-form-item>
         <el-form-item label='供货状态'>
-            <el-select placeholder="供货状态">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="未核实" value="0"></el-option>
-            <el-option label="已核实" value="1"></el-option>
+            <el-select v-model='form.supply_status' placeholder="供货状态">
+            <el-option label="未到账" value="2"></el-option>
+            <el-option label="已到账" value="1"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label='周期'>
         <el-date-picker
-        v-model="value6"
-        type="daterange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
-        </el-date-picker>
+                v-model="form.time_start"
+                type="datetime"
+                placeholder="选择日期时间" size='small' format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>~
+            <el-date-picker
+                v-model="form.time_end"
+                type="datetime"
+                placeholder="选择日期时间" size='small' format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
     </el-form-item>
     <el-form-item>
-        <el-button type='danger'>查询</el-button>
+        <el-button type='danger' @click='go_search'>查询</el-button>
     </el-form-item>
     </el-form>
     <div class="app-container">
@@ -74,6 +76,7 @@ import { get_directly_order } from '@/api/supplier'
 export default {
   data() {
     return {
+      form: {},
       listLoading: true,
       list: [],
       img_url: '',
@@ -87,6 +90,13 @@ export default {
     fetchdata() {
       this.listLoading = true
       get_directly_order(this.listQuery).then(response => {
+        this.list = response.data
+        this.listLoading = false
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_directly_order(this.form).then(response => {
         this.list = response.data
         this.listLoading = false
       })

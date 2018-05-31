@@ -1,26 +1,47 @@
 <template>
   <div>
     <el-form :inline="true" label-width="120px" style='margin-top:20px;'>
-        <el-form-item label='商品'>
-            <el-input></el-input>
+        <!-- <el-form-item label='商品'>
+            <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
+
+                <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
+
+                </el-option>
+
+            </el-select>
         </el-form-item>
         <el-form-item label='面额'>
-            <el-input></el-input>
-        </el-form-item>
+            <el-select v-model="form.card_price" placeholder="选择金额">
+
+            <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
+
+            </el-option>
+
+            </el-select>
+        </el-form-item> -->
         <el-form-item label='交易时间'>
-            <el-input></el-input>
+            <el-date-picker
+                v-model="form.time_start"
+                type="date"
+                placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+            </el-date-picker>~
+            <el-date-picker
+                v-model="form.time_end"
+                type="date"
+                placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+            </el-date-picker>
         </el-form-item>
         <el-form-item label='订单号'>
-            <el-input></el-input>
+            <el-input v-model='form.order_code'></el-input>
         </el-form-item>
-        <el-form-item label='卡号'>
+        <!-- <el-form-item label='卡号'>
             <el-input></el-input>
-        </el-form-item>
-        <el-form-item label='卡密状态'>
+        </el-form-item> -->
+        <!-- <el-form-item label='卡密状态'>
             <el-input></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-            <el-button type='danger'>查询</el-button>
+            <el-button type='danger' @click='go_search'>查询</el-button>
         </el-form-item>
     </el-form>
     <div class='app-container'>
@@ -146,11 +167,12 @@
 </template>
 
 <script>
-import { upload_file } from '@/api/configure.js'
+import { upload_file, get_config_detail } from '@/api/configure.js'
 import { get_sdirectly_order, get_directly_upload, get_sdirectly_detail } from '@/api/administrator'
 export default {
   data() {
     return {
+      form: {},
       listLoading: true,
       camilo_order: [],
       camilo_detail_list: [],
@@ -162,6 +184,8 @@ export default {
         price: '',
         recharge_time: ''
       },
+      platform: [],
+      platform_money: [],
       oil_card_code: []
     }
   },
@@ -172,6 +196,19 @@ export default {
     fetchData() {
       this.listLoading = true
       get_sdirectly_order(this.listQuery).then(response => {
+        this.camilo_order = response.data
+        this.listLoading = false
+      })
+      get_config_detail().then(response => {
+        this.platform = response.platform
+        this.platform_money = response.denomination
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_sdirectly_order(this.form).then(response => {
         this.camilo_order = response.data
         this.listLoading = false
       })

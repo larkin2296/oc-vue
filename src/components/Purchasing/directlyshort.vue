@@ -2,7 +2,7 @@
   <div id='search'>
     <el-form :inline="true" ref="form" :model="form" label-width="120px">
       <el-form-item label='订单状态'>
-        <el-select v-model="form.status" placeholder="请选择">
+        <el-select v-model="form.order_status" placeholder="请选择">
           <el-option
             v-for="item in c_status"
             :key="item.value"
@@ -11,26 +11,23 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label='姓名'>
-        <el-input v-model="form.name" placeholder="姓名" />
-      </el-form-item>
       <el-form-item label='订单号'>
-        <el-input v-model="form.card" placeholder="订单号" />
+        <el-input v-model="form.order_code" placeholder="订单号" />
       </el-form-item>
-      <el-form-item label='最近充值时间'>
+      <!-- <el-form-item label='最近充值时间'>
         <el-date-picker
         v-model="form.time_start"
-        type="date"
-        placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+        type="datetime"
+        placeholder="选择日期时间" size='small' format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
       </el-date-picker>~
       <el-date-picker
         v-model="form.time_end"
-        type="date"
-        placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+        type="datetime"
+        placeholder="选择日期时间" size='small' format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
       </el-date-picker>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
-        <el-button type='danger' >查找</el-button>
+        <el-button type='danger' @click='go_search'>查找</el-button>
       </el-form-item>
   </el-form>
     <div class="app-container">
@@ -88,15 +85,7 @@ export default {
   name: 'OcForm',
   data() {
     return {
-      form: {
-        status: '',
-        number: '',
-        card: '',
-        price: '',
-        time_start: '',
-        time_end: '',
-        name: ''
-      },
+      form: {},
       c_status: [{
         value: '0',
         label: '已完成'
@@ -140,6 +129,13 @@ export default {
       this.$message({
         message: 'cancel!',
         type: 'warning'
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_sdirecty_order(this.form).then(response => {
+        this.list = response
+        this.listLoading = false
       })
     }
   }

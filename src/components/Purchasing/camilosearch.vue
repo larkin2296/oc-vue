@@ -1,8 +1,8 @@
 <template>
   <div>
       <el-form :inline="true" ref="form" :model="form" label-width="120px">
-      <el-form-item label='卡密状态'>
-        <el-select v-model="form.status" placeholder="请选择">
+      <el-form-item label='订单状态'>
+        <el-select v-model="form.order_status" placeholder="请选择">
           <el-option
             v-for="item in c_status"
             :key="item.value"
@@ -12,39 +12,24 @@
         </el-select>
       </el-form-item>
       <el-form-item label='商品'>
-        <el-select v-model="form.goods" placeholder="请选择">
-          <el-option
-            v-for="item in c_goods"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
+        <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
+
+            <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
+
+            </el-option>
+
         </el-select>
       </el-form-item>
       <el-form-item label='订单号'>
-        <el-input v-model="form.order" placeholder="订单号" />
-      </el-form-item>
-      <el-form-item label='卡号'>
-        <el-input v-model="form.card" placeholder="卡号" />
+        <el-input v-model="form.order_code" placeholder="订单号" />
       </el-form-item>
       <el-form-item label='面额'>
-        <el-select v-model="form.price" placeholder="请选择">
-          <el-option
-            v-for="item in c_price"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
+        <el-select v-model="form.card_price" placeholder="选择金额">
+
+          <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
+
           </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label='卡密'>
-        <el-select v-model="form.camilo_status" placeholder="请选择">
-          <el-option
-            v-for="item in c_status"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
+
         </el-select>
       </el-form-item>
       <el-form-item label='交易时间'>
@@ -60,7 +45,7 @@
       </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type='danger' >查找</el-button>
+        <el-button type='danger' @click='go_search'>查找</el-button>
       </el-form-item>
   </el-form>
   <div class="app-container">
@@ -107,43 +92,22 @@
 
 <script>
 import { get_camilo_order } from '@/api/purchasing'
+import { get_config_detail } from '@/api/configure'
 export default {
   name: 's_camilo',
   data() {
     return {
-      form: {
-        status: '',
-        goods: '',
-        order: '',
-        card: '',
-        price: '',
-        time_start: '',
-        time_end: ''
-      },
+      form: {},
       c_status: [{
-        value: '0',
-        label: '未用完'
-      },
-      {
         value: '1',
-        label: '已用完'
-      }],
-      c_goods: [{
-        value: '0',
-        label: '汽车钱包'
+        label: '未完成'
       },
       {
-        value: '1',
-        label: '车传奇'
+        value: '2',
+        label: '已完成'
       }],
-      c_price: [{
-        value: '50',
-        label: '50元'
-      },
-      {
-        value: '100',
-        label: '100元'
-      }],
+      platform: [],
+      platform_money: [],
       list: null,
       listLoading: true,
       hello: '测试是不是成功'
@@ -170,9 +134,23 @@ export default {
         this.list = response
         this.listLoading = false
       })
+      get_config_detail().then(response => {
+        this.platform = response.platform
+        this.platform_money = response.denomination
+      }).catch(error => {
+        console.log(error)
+      })
     },
     showdetail(code, time) {
       this.$emit('my-event', code, time)
+    },
+    go_search() {
+      this.listLoading = true
+      get_camilo_order(this.form).then(response => {
+        console.log(response)
+        this.list = response
+        this.listLoading = false
+      })
     }
   }
 }

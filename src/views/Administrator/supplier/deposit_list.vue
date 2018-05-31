@@ -1,17 +1,24 @@
 <template>
   <div>
-      <el-form :inline="true" label-width="120px">
+      <el-form v-model='form' :inline="true" label-width="120px">
         <el-form-item label='供应商'>
-            <el-input></el-input>
+            <el-input v-model='form.truename'></el-input>
         </el-form-item>
         <el-form-item label='时间'>
-            <el-input></el-input>
+            <el-date-picker
+                v-model="form.created_at"
+                type="date"
+                placeholder="选择日期" size='small' format="yyyy-MM-dd" value-format="yyyy-MM-dd">
+            </el-date-picker>
         </el-form-item>
         <el-form-item label='提现单状态'>
-            <el-input></el-input>
+            <el-select v-model="form.status" placeholder="状态">
+            <el-option label="已转账" value="1"></el-option>
+            <el-option label="未转账" value="2"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item>
-            <el-button type='danger'>查询</el-button>
+            <el-button type='danger' @click='go_search'>查询</el-button>
         </el-form-item>
     </el-form>
     <div class='app-container'>
@@ -61,6 +68,7 @@ import { get_depositshow_list } from '@/api/system'
 export default {
   data() {
     return {
+      form: {},
       list: []
     }
   },
@@ -70,6 +78,12 @@ export default {
   methods: {
     fetchData() {
       get_depositshow_list().then(res => {
+        console.log(res)
+        this.list = res.data
+      })
+    },
+    go_search() {
+      get_depositshow_list(this.form).then(res => {
         console.log(res)
         this.list = res.data
       })

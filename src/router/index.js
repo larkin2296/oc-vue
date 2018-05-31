@@ -262,13 +262,13 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/msg/users',
     name: 'Msg',
-    meta: { title: '信息管理', icon: 'example', role: ['1', '2'] },
+    meta: { title: '信息管理', icon: 'example', role: ['1', '2', '10'] },
     children: [
       {
         path: 'users',
         name: 'Users',
         component: () => import('@/views/message/msgmodify'),
-        meta: { title: '信息上传', icon: 'table' }
+        meta: { role: ['1', '2', '10'], title: '信息上传', icon: 'table' }
       },
       {
         path: 'ushow',

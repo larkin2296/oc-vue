@@ -36,6 +36,7 @@
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :on-change="handleChange"
+                :on-success="handleSuccess"
                 :before-upload="beforeUpload"
                 :file-list="fileList"
                 :auto-upload="false" accept=".xls,.xlsx">
@@ -45,24 +46,24 @@
             </el-tab-pane>
         </el-tabs>
     </el-collapse-transition>
-    <el-form id='search_card' :inline="true" :model="formInline">
+    <el-form id='search_card' :inline="true" :model="form">
         <el-form-item label='编号'>
-            <el-input v-model='formInline.serial_number'></el-input>
+            <el-input v-model='form.serial_number'></el-input>
         </el-form-item>
         <el-form-item label='姓名'>
-            <el-input v-model='formInline.true_name'></el-input>
+            <el-input v-model='form.true_name'></el-input>
         </el-form-item>
         <el-form-item label='油卡号'>
-            <el-input v-model='formInline.oil_card_code'></el-input>
+            <el-input v-model='form.oil_card_code'></el-input>
         </el-form-item>
         <el-form-item label="状态" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
-        <el-select v-model='formInline.status' placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai"></el-option>
-          <el-option label="Zone two" value="beijing"></el-option>
+        <el-select v-model='form.is_longtrem' placeholder="选择状态">
+          <el-option label="长期" value="1"></el-option>
+          <el-option label="短期" value="0"></el-option>
         </el-select>
     </el-form-item>
     <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="go_search">查询</el-button>
       </el-form-item>
     <el-form-item>
         <el-button type="danger" @click="show3 = !show3">添加</el-button>
@@ -112,12 +113,11 @@
 
 <script>
 
-import { binding_card, get_card_list, card_start, set_longtrem, confirm_status } from '@/api/purchasing'
+import { binding_card, get_card_list, card_start, set_longtrem, confirm_status, get_oilcard_upload } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
-import { get_permission_data } from '@/api/configure'
+import { get_permission_data, upload_file } from '@/api/configure'
 // import { upload } from '@/api/message'
 import store from '@/store'
-import axios from 'axios'
 
 export default {
   name: 'card',
@@ -161,12 +161,7 @@ export default {
         identity_card: [{ trigger: 'blur', validator: validateIdentiy }],
         oil_card_code: [{ trigger: 'blur', validator: validateCard }]
       },
-      formInline: {
-        serial_number: '',
-        ture_name: '',
-        oil_card_code: '',
-        status: ''
-      },
+      form: {},
       value2: true,
       show3: false,
       fileList: [],
@@ -189,6 +184,13 @@ export default {
         if (res.code === '200') {
           this.is_permission = 1
         }
+      })
+    },
+    go_search() {
+      this.listLoading = true
+      get_card_list(this.form).then(response => {
+        this.tableData = response
+        this.listLoading = false
       })
     },
     addcard() {
@@ -275,7 +277,11 @@ export default {
       }).catch(() => {
       })
     },
-    onSubmit() {
+    handleSuccess(res, file, fileList) {
+      console.log(1111111)
+    },
+    handleClick(tab, event) {
+      console.log(tab, event)
     },
     submitUpload() {
       this.$refs.upload.submit()
@@ -294,12 +300,12 @@ export default {
       // 这里是重点，将文件转化为formdata数据上传
       let param = new FormData()
       param.append('file', file)
-      axios.post('http://localhost/oil_cord_system/public/index.php/api/upload/', param, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then((res) => {
-        if (res.status === 200) {
+      param.append('status', 1)
+      upload_file(param).then((res) => {
+        if (res.code === 200) {
+          get_oilcard_upload(res.name).then(response => {
+            this.card_list = response.data
+          })
           this.$message({
             type: 'success',
             message: '上传成功!'
@@ -308,7 +314,6 @@ export default {
       }, (res) => {
         console.log(res)
       })
-      return false
     }
   }
 }
