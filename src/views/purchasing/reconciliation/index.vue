@@ -59,13 +59,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button type='danger'>生成对账单</el-button>
+    <el-button type='danger' @click='set_list'>生成对账单</el-button>
       </div>
   </div>
 </template>
 
 <script>
-import { get_reconciliation_data } from '@/api/purchasing'
+import { get_reconciliation_data, set_reconciliation_data } from '@/api/purchasing'
 import { get_oil_card } from '@/api/configure'
 export default {
   name: 'reconciliation',
@@ -106,6 +106,35 @@ export default {
     },
     go_search() {
       this.fetchData(this.search)
+    },
+    set_list() {
+      this.$confirm('是否生成对账单，已对账数据不会重复显示?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var param = Object()
+        param.data = this.list
+        param.sum_money = this.sum_money
+        param.initialize_money = this.initialize_money
+        param.recharge_money = this.recharge_money
+        param.recon_start = this.search.start_time
+        param.recon_end = this.search.end_time
+        if (this.list.length === 0) {
+          this.$message.error('没有数据')
+        } else {
+          set_reconciliation_data(param).then(res => {
+            if (res.code === '200') {
+              this.$message({
+                type: 'success',
+                message: '生成成功!'
+              })
+              this.list = []
+            }
+          })
+        }
+      }).catch(() => {
+      })
     }
   }
 }

@@ -86,6 +86,12 @@ export const asyncRouterMap = [
         name: 'Check',
         component: () => import('@/views/Administrator/purchasing/check'),
         meta: { role: ['3', '4'], title: '资质审核', icon: 'table' }
+      },
+      {
+        path: 'reconciliation',
+        name: 'Reconciliation',
+        component: () => import('@/views/Administrator/purchasing/reconciliation'),
+        meta: { role: ['3', '4'], title: '对账管理', icon: 'table' }
       }
     ]
   },
@@ -300,8 +306,14 @@ export const asyncRouterMap = [
       {
         path: 'reconcil',
         name: 'Reconcil',
-        component: () => import('@/views/purchasing/reconciliation'),
+        component: () => import('@/views/purchasing/reconciliation/index'),
         meta: { title: '对账', icon: 'table', role: ['1'] }
+      },
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/purchasing/reconciliation/list'),
+        meta: { title: '对账单', icon: 'table', role: ['1'] }
       }
     ]
   },

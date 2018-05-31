@@ -138,6 +138,25 @@ export function get_reconciliation_data(list) {
   )
 }
 
+export function set_reconciliation_data(list) {
+  return request.post('api/purchasing/set_reconciliation_data', list
+  )
+}
+
+export function get_reconciliation_list(list) {
+  return request.post('api/purchasing/get_reconciliation_list', {
+    list
+  }
+  )
+}
+
+export function get_reconciliation_detail(id) {
+  return request.post('api/purchasing/get_reconciliation_detail', {
+    id
+  }
+  )
+}
+
 export function get_oilcard_upload(list) {
   return request.post('api/purchasing/get_oilcard_upload', {
     list

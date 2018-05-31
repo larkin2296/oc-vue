@@ -84,3 +84,10 @@ export function get_audit_data(list) {
   }
   )
 }
+
+export function set_reconciliation_status(id) {
+  return request.post('api/administrator/purchasing/set_reconciliation_status', {
+    id
+  }
+  )
+}
