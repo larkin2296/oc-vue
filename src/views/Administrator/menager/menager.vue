@@ -8,7 +8,7 @@
                         <el-input v-model='addform.name'></el-input>
                     </el-form-item>
                     <el-form-item  label='密码' prop="name">
-                        <el-input v-model='addform.name' auto-complete="on" />
+                        <el-input v-model='addform.password' auto-complete="on" />
                     </el-form-item>
                     <el-form-item  label='姓名' prop="truename">
                         <el-input v-model='addform.truename'></el-input>
@@ -43,10 +43,10 @@
             </el-tab-pane>
         </el-tabs>
     </el-collapse-transition>
-    <el-button type="danger" @click="show3 = !show3">新增</el-button>
     <div class="app-container">
+    <el-button type="danger" @click="show3 = !show3">新增</el-button>
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
-    <el-table-column label="序号">
+    <el-table-column label="序号"  width='50'>
       <template slot-scope="scope">
           {{scope.$index + 1}}
         </template>
@@ -61,22 +61,35 @@
           {{scope.row.name}}
         </template>
     </el-table-column>
-    <el-table-column label="性别" width="220">
+    <el-table-column label="性别">
       <template slot-scope="scope">
           <el-tag v-if='scope.row.sex == 1'>男</el-tag>
           <el-tag v-if='scope.row.sex == 2'>女</el-tag>
         </template>
     </el-table-column>
-    <el-table-column label="手机号">
+    <el-table-column label="手机号" width='120'>
         <template slot-scope="scope">
           {{scope.row.mobile}}
         </template>
     </el-table-column>
-    <el-table-column label="角色" width="220">
+    <el-table-column label="角色" width='120'>
         <template slot-scope="scope">
           <el-tag v-if='scope.row.role_status == 3'>普通管理员</el-tag>
-          <el-tag v-if='scope.row.role_status == 4'>超级管理员</el-tag>
+          <el-tag type='warning' v-if='scope.row.role_status == 4'>超级管理员</el-tag>
         </template>
+    </el-table-column>
+    <el-table-column label="权限" width='480'>
+      <template slot-scope="scope">
+        <el-checkbox v-model="scope.row.supply_jurisdiction">供应权限</el-checkbox>
+        <el-checkbox v-model="scope.row.purchase_jurisdiction">采购权限</el-checkbox>
+        <el-checkbox v-model="scope.row.service_jurisdiction">服务权限</el-checkbox>
+        <el-checkbox v-model="scope.row.commodity_jurisdiction">商品权限</el-checkbox>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作"  width='100'>
+        <template slot-scope="scope">
+          <el-button type='warning' size="mini" @click='modify_role(scope.$index)'>修改权限</el-button>
+        </template>       
     </el-table-column>
       </el-table>
       </div>
@@ -84,6 +97,7 @@
 </template>
 
 <script>
+import { get_admin_list, add_admin, modify_manger } from '@/api/system'
 export default {
   name: 'card',
   data() {
@@ -94,7 +108,8 @@ export default {
         truename: '',
         password: '',
         mobile: '',
-        sex: ''
+        sex: '',
+        role_status: ''
       },
       listLoading: true,
       formInline: {
@@ -130,20 +145,47 @@ export default {
   },
   methods: {
     fetchData() {
-      this.listLoading = false
+      this.listLoading = true
+      get_admin_list().then(res => {
+        this.tableData = res.data
+        this.listLoading = false
+      })
     },
     addcard() {
-      this.$confirm('是否添加该油卡?', '提示', {
+      this.$confirm('是否添加该管理员?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$refs.addform.validate(valid => {
-          if (valid) {
-            this.loading = false
-          }
-        })
+        if (this.addform.name === '' || this.addform.truename === '' || this.addform.password === '' || this.addform.mobile === '' || this.addform.sex === '' || this.addform.role_status === '') {
+          this.$message.error('请填写完整')
+        } else {
+          add_admin(this.addform).then(res => {
+            this.$message({
+              type: 'success',
+              message: '添加成功!'
+            })
+            this.addform = {}
+            this.show3 = false
+            this.fetchData()
+          })
+        }
       }).catch(() => {
+      })
+    },
+    modify_role(index) {
+      let param = Object()
+      param.user_id = this.tableData[index].id
+      param.supply_jurisdiction = this.tableData[index].supply_jurisdiction === true ? 1 : 2
+      param.purchase_jurisdiction = this.tableData[index].purchase_jurisdiction === true ? 1 : 2
+      param.service_jurisdiction = this.tableData[index].service_jurisdiction === true ? 1 : 2
+      param.commodity_jurisdiction = this.tableData[index].commodity_jurisdiction === true ? 1 : 2
+      modify_manger(param).then(res => {
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
+        })
+        this.fetchData()
       })
     }
   }

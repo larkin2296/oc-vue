@@ -55,3 +55,18 @@ export function get_user_list(list) {
   }
   )
 }
+
+export function add_admin(list) {
+  return request.post('api/system/admin/create', list
+  )
+}
+
+export function get_admin_list(list) {
+  return request.post('api/system/admin/index', list
+  )
+}
+
+export function modify_manger(list) {
+  return request.post('api/system/admin/setAdmin', list
+  )
+}
