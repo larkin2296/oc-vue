@@ -108,6 +108,50 @@
     </el-table-column>
       </el-table>
       </div>
+      <el-dialog
+        title="充值记录"
+        :visible.sync="dialogVisible"
+        width="50%"
+        :before-close="handleClose">
+        <el-table :data='addcard_list' border fit highlight-current-row>
+        <el-table-column label='编号'>
+          <template slot-scope="scope">
+          {{ scope.row.serial_number }}
+          </template>
+        </el-table-column>
+        <el-table-column label='姓名'>
+          <template slot-scope="scope">
+          {{ scope.row.ture_name }}
+          </template>
+        </el-table-column>
+        <el-table-column label='油卡号'>
+          <template slot-scope="scope">
+          {{ scope.row.oil_card_code }}
+          </template>
+        </el-table-column>
+        <el-table-column label='身份证号'>
+          <template slot-scope="scope">
+          {{ scope.row.identity_card }}
+          </template>
+        </el-table-column>
+        <el-table-column label='官网账号'>
+          <template slot-scope="scope">
+          {{ scope.row.web_account }}
+          </template>
+        </el-table-column>
+        <el-table-column label='官网密码'>
+          <template slot-scope="scope">
+          {{ scope.row.web_password }}
+          </template>
+        </el-table-column>
+        <el-table-column label='操作'>
+          <template slot-scope="scope">
+          <el-button type='danger' @click='del(scope.$index)'>删除</el-button>
+          </template>
+        </el-table-column>     
+      </el-table>
+      <el-button type='danger' @click='sub_camilo_list'>提交</el-button>
+        </el-dialog>
   </div>
 </template>
 
@@ -167,7 +211,9 @@ export default {
       fileList: [],
       token: {
         accessToken: ''
-      }
+      },
+      dialogVisible: false,
+      addcard_list: []
     }
   },
   created() {
@@ -304,11 +350,12 @@ export default {
       upload_file(param).then((res) => {
         if (res.code === 200) {
           get_oilcard_upload(res.name).then(response => {
-            this.card_list = response.data
-          })
-          this.$message({
-            type: 'success',
-            message: '上传成功!'
+            this.$message({
+              type: 'success',
+              message: '上传成功!'
+            })
+            this.addcard_list = response.data
+            this.dialogVisible = true
           })
         }
       }, (res) => {
