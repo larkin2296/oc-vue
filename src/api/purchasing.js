@@ -168,3 +168,8 @@ export function del_short_order(order) {
   return request.post('api/purchasing/del_short_order', { order }
   )
 }
+
+export function del_card_data(id) {
+  return request.post('api/purchasing/del_card', { id }
+  )
+}

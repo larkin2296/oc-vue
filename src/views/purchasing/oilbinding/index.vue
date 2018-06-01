@@ -104,6 +104,7 @@
         <el-button type='danger' v-show="scope.row.is_start" @click="start_card(scope.$index)">启用此卡</el-button>
         <el-button v-if="scope.row.is_longtrem === 0 && is_permission == 1" type='primary' v-show="scope.row.longtrem" @click="longtrem_card(scope.$index)">设置为长期</el-button>
         <el-button v-else-if="scope.row.is_longtrem === 1" type='success' v-show="scope.row.longtrem">长期卡</el-button>
+        <el-button type='info' v-if="scope.row.card_status === 2" @click="del_card(scope.row.id)">删除此卡</el-button>
         </template>
     </el-table-column>
       </el-table>
@@ -157,7 +158,7 @@
 
 <script>
 
-import { binding_card, get_card_list, card_start, set_longtrem, confirm_status, get_oilcard_upload } from '@/api/purchasing'
+import { binding_card, get_card_list, card_start, set_longtrem, confirm_status, get_oilcard_upload, del_card_data } from '@/api/purchasing'
 import { validatorName, validatorID } from '@/utils/validate'
 import { get_permission_data, upload_file } from '@/api/configure'
 // import { upload } from '@/api/message'
@@ -262,6 +263,24 @@ export default {
               console.log(error)
             })
           }
+        })
+      }).catch(() => {
+      })
+    },
+    del_card(id) {
+      this.$confirm('是否删除该油卡?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        del_card_data(id).then(response => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.fetchData()
+        }).catch(error => {
+          console.log(error)
         })
       }).catch(() => {
       })

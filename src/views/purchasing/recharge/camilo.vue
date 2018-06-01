@@ -32,7 +32,7 @@
     </el-form-item>
 
     <el-form-item>
-        <el-button type="primary" @click="add_trolly">Create</el-button>
+        <el-button type="primary" @click="add_trolly">添加</el-button>
       </el-form-item>
 </el-form>
     <div class="app-container">

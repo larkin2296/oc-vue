@@ -3,24 +3,24 @@
     <el-form autoComplete="on" :model="registerForm" :rules="registerRules" ref="registerForm" label-width="0px"
       class="card-box login-form">
       <h3 class="title">注 册</h3>
-      <el-form-item prop="tel">
+      <el-form-item prop="mobile">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name='tel' placeholder="输入手机号" v-model='registerForm.mobile' auto-complete="on"/>
+        <el-input name='mobile' placeholder="输入手机号" v-model='registerForm.mobile' auto-complete="on"/>
       </el-form-item>
       <el-form-item>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name='verification' v-model='registerForm.code' placeholder='输入验证码' style='width:35%;'/>
+        <el-input name='code' v-model='registerForm.code' placeholder='输入验证码' style='width:35%;'/>
         <el-button type='primary' :disabled="b_msg_state == '0'" v-on:click='countdown' :class="{ 'c_before':click_button === 1,'c_after':click_button === 0}">{{ b_msg }}</el-button><span class='ver_code' v-show="vn">{{ver_number}}</span>
       </el-form-item>
-      <el-form-item prop='pass'>
+      <el-form-item prop='password'>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name='pass' type='password' placeholder="输入密码"  v-model='registerForm.password' auto-complete="on"/>
+        <el-input name='password' type='password' placeholder="输入密码"  v-model='registerForm.password' auto-complete="on"/>
       </el-form-item>
       <el-form-item prop='pass_again'>
         <span class="svg-container svg-container_login">
@@ -62,7 +62,7 @@ export default {
       }
     }
     const validatePagain = (rule, value, callback) => {
-      if (value !== this.registerForm.pass) {
+      if (value !== this.registerForm.password) {
         callback(new Error('两次密码不一样'))
       } else {
         callback()
@@ -70,13 +70,17 @@ export default {
     }
     return {
       registerForm: {
-        id: ''
+        id: '',
+        mobile: '',
+        password: '',
+        pass_again: '',
+        code: ''
       },
       ver_number: 60,
       registerRules: {
-        tel: [{ required: true, trigger: 'blur', validator: validateTel }],
-        pass: [{ required: true, trigger: 'blur', validator: validatePass }],
-        pass_again: [{ required: true, trigger: 'blur', validator: validatePagain }]
+        mobile: [{ trigger: 'blur', validator: validateTel }],
+        password: [{ trigger: 'blur', validator: validatePass }],
+        pass_again: [{ trigger: 'blur', validator: validatePagain }]
       },
       loading: false,
       active: 0,
@@ -110,7 +114,7 @@ export default {
     countdown: function() {
       if (!this.timer) {
         if (this.b_msg === '获取验证码') {
-          send_message(this.registerForm.tel).then(response => {
+          send_message(this.registerForm.mobile).then(response => {
             if (response.code !== '200') {
               this.$message.error(response.message)
             } else {
@@ -139,7 +143,7 @@ export default {
             console.log(error)
           })
         } else {
-          send_message_again(this.registerForm.tel).then(response => {
+          send_message_again(this.registerForm.mobile).then(response => {
             console.log(response)
           }).catch(error => {
             console.log(error)

@@ -27,7 +27,7 @@
           <el-input v-model='msg.city'></el-input>
         </el-form-item>
         <el-form-item label="身份证号">
-          <el-input v-model='msg.id_card'></el-input><span class='must'>*</span>
+          <el-input v-model='msg.id_card'></el-input><span class='must' v-if='role == 2'>*</span>
         </el-form-item>
         <el-form-item>
         <el-button type='primary' style="margin-top: 12px;" @click="next">下一步</el-button>
@@ -121,6 +121,7 @@
 <script>
 import { upload_file } from '@/api/configure.js'
 import { create_msg } from '@/api/message.js'
+import store from '@/store'
 export default {
   name: 'msg',
   data() {
@@ -150,7 +151,8 @@ export default {
       params: {
         data: {}
       },
-      result_msg: ''
+      result_msg: '',
+      role: ''
     }
   },
   computed: {
@@ -164,10 +166,19 @@ export default {
       }
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
+    fetchData() {
+      this.role = store.getters.roles
+      console.log(this.role)
+    },
     next() {
-      if (this.msg.true_name === '' || this.msg.alipay === '' || this.msg.id_card === '') {
-        this.$message.error('必填项请填写完整')
+      if (this.msg.true_name === '' || this.msg.alipay === '') {
+        if (this.role === 2 && this.msg.id_card === '') {
+          this.$message.error('必填项请填写完整')
+        }
       } else {
         this.active++
       }
