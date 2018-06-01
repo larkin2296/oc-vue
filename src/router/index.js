@@ -33,7 +33,7 @@ export const constantRouterMap = [
     path: '/dashboard',
     component: Layout,
     name: 'Dashboard',
-    meta: { title: '首页', icon: 'example' },
+    meta: { title: '', icon: 'example' },
     children: [{
       path: 'index',
       name: 'Dashboard',

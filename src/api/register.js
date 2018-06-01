@@ -8,7 +8,7 @@ export function send_message(mobile) {
 }
 
 export function send_message_again(mobile) {
-  return request.post('api/messages/resetpassMessage', {
+  return request.post('api/messages/registerMessage', {
     mobile
   }
   )
