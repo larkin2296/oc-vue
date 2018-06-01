@@ -162,7 +162,7 @@ export default {
     create_link() {
       c_link(store.getters.token).then(response => {
         console.log(response)
-        this.invitelink = response.data
+        this.invitelink = 'http://47.98.199.243:8080/register?id=' + response.data
         this.listLoading = false
       })
     },
