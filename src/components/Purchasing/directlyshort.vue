@@ -71,7 +71,7 @@
       </el-table-column>
       <el-table-column label="删除订单" align="center">
         <template slot-scope="scope">
-          <el-button type="danger" @click="del(scope.row.order_code)">删除</el-button>
+          <el-button type="danger" v-if='scope.row.real_unit_price == 0' @click="del(scope.row.order_code)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { get_sdirecty_order } from '@/api/purchasing'
+import { get_sdirecty_order, del_short_order } from '@/api/purchasing'
 export default {
   name: 'OcForm',
   data() {
@@ -136,6 +136,26 @@ export default {
       get_sdirecty_order(this.form).then(response => {
         this.list = response
         this.listLoading = false
+      })
+    },
+    del(code) {
+      this.$confirm('确定删除短充订单？(如有已充值未到账订单将无法删除)', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        del_short_order(code).then(res => {
+          if (res.code === 200) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            this.fetchData()
+          } else {
+            this.$message.error('已有未到账充值，无法删除')
+          }
+        })
+      }).catch(() => {
       })
     }
   }

@@ -163,3 +163,8 @@ export function get_oilcard_upload(list) {
   }
   )
 }
+
+export function del_short_order(order) {
+  return request.post('api/purchasing/del_short_order', { order }
+  )
+}
