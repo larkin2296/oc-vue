@@ -98,7 +98,7 @@ export default {
     },
     handleRegister: function() {
       this.loading = true
-      register(this.registerForm).then(response => {
+      register(this.registerForm, this.registerForm.id).then(response => {
         console.log(response)
         this.loading = false
         // this.$router.push({ path: '/' })
