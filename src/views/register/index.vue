@@ -7,20 +7,20 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name='tel' placeholder="输入手机号" v-model='registerForm.tel' auto-complete="on"/>
+        <el-input name='tel' placeholder="输入手机号" v-model='registerForm.mobile' auto-complete="on"/>
       </el-form-item>
       <el-form-item>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name='verification' v-model='registerForm.verification' placeholder='输入验证码' style='width:35%;'/>
+        <el-input name='verification' v-model='registerForm.code' placeholder='输入验证码' style='width:35%;'/>
         <el-button type='primary' :disabled="b_msg_state == '0'" v-on:click='countdown' :class="{ 'c_before':click_button === 1,'c_after':click_button === 0}">{{ b_msg }}</el-button><span class='ver_code' v-show="vn">{{ver_number}}</span>
       </el-form-item>
       <el-form-item prop='pass'>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name='pass' type='password' placeholder="输入密码"  v-model='registerForm.pass' auto-complete="on"/>
+        <el-input name='pass' type='password' placeholder="输入密码"  v-model='registerForm.password' auto-complete="on"/>
       </el-form-item>
       <el-form-item prop='pass_again'>
         <span class="svg-container svg-container_login">
@@ -39,7 +39,7 @@
 
 <script>
 import { validatorTel } from '@/utils/validate'
-import { register, send_message, send_message_again } from '@/api/register'
+import { register, send_message, send_message_again, getUrlKey } from '@/api/register'
 // import { login } from '@/api/login'
 
 export default {
@@ -70,10 +70,7 @@ export default {
     }
     return {
       registerForm: {
-        tel: '',
-        pass: '',
-        pass_again: '',
-        verification: ''
+        id: ''
       },
       ver_number: 60,
       registerRules: {
@@ -91,7 +88,14 @@ export default {
       b_msg_state: '0'
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
+    fetchData() {
+      var id = getUrlKey('id')
+      this.registerForm.id = id
+    },
     handleRegister: function() {
       this.loading = true
       register(this.registerForm).then(response => {
