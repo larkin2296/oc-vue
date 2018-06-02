@@ -115,7 +115,7 @@ export default {
       if (this.initialize_data.money > this.initialize_list[index].save_money) {
         this.$message({
           type: 'error',
-          message: '上报金额小于当前余额'
+          message: '上报金额大于当前余额'
         })
       } else if (this.initialize_data.money < 0) {
         this.$message({

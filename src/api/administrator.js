@@ -91,3 +91,8 @@ export function set_reconciliation_status(id) {
   }
   )
 }
+
+export function stop_send_camilo(list) {
+  return request.post('api/administrator/purchasing/stop_send_camilo', list
+  )
+}

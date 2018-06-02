@@ -92,7 +92,7 @@
                     <el-table-column label='操作' width='200'>
                         <template slot-scope="scope">
                             <el-button type='danger' size="mini" v-if='scope.row.status == 1' @click='send_camilo(scope.$index)'>发放卡密</el-button>
-                            <el-button type='warning' size="mini" v-if='scope.row.status == 1' @click='end_send_camilo'>终止发放</el-button>
+                            <el-button type='warning' size="mini" v-if='scope.row.status == 1' @click='end_send_camilo(scope.$index)'>终止发放</el-button>
                             <el-button type='primary' v-if='scope.row.status == 2' @click='show_detail(scope.row.id)'>查看下发卡密</el-button>
                             <el-button type='info' v-if='scope.row.status == 3' >已终止</el-button>   
                         </template>
@@ -218,11 +218,23 @@
             </div>
         </el-tab-pane>
     </el-tabs>
+    <el-dialog
+    title="终止原因"
+    :visible.sync="dialogVisible1"
+    width="20%"
+    :before-close="handleClose">
+    <el-form v-model='error_reason' inline="true">
+    <el-form-item label='终止原因'>
+        <el-input v-model='error_reason.reason'></el-input>
+        <el-button type='danger' @click='stop_send'>终止</el-button>
+    </el-form-item>
+    </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { get_pcamilo_order, send_camilo_data, get_pdirectly_order } from '@/api/administrator'
+import { get_pcamilo_order, send_camilo_data, get_pdirectly_order, stop_send_camilo } from '@/api/administrator'
 import { get_camilo_detail } from '@/api/purchasing'
 import { get_config_detail } from '@/api/configure'
 export default {
@@ -236,7 +248,12 @@ export default {
       dialogVisible: false,
       platform: [],
       platform_money: [],
-      directly_order: []
+      directly_order: [],
+      error_reason: {
+        id: '',
+        reason: ''
+      },
+      dialogVisible1: false
     }
   },
   created() {
@@ -285,6 +302,7 @@ export default {
               type: 'success',
               message: '卡密下发成功!'
             })
+            this.fetchData()
           } else {
             this.$message.error(response.message)
           }
@@ -295,14 +313,43 @@ export default {
       }).catch(() => {
       })
     },
+    end_send_camilo(index) {
+      this.dialogVisible1 = true
+      this.error_reason.id = this.camilo_order[index].id
+    },
+    stop_send() {
+      let param = this.error_reason
+      this.$confirm('是否终止下发卡密?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        stop_send_camilo(param).then(response => {
+          if (response.code === '200') {
+            this.$message({
+              type: 'success',
+              message: '卡密终止成功!'
+            })
+            this.dialogVisible1 = false
+          } else {
+            this.$message.error(response.message)
+          }
+        }).catch(error => {
+          console.log(error)
+          this.$message.error('卡密终止失败!')
+        })
+      }).catch(() => {
+      })
+    },
+    handleClose(done) {
+      this.error_reason = {}
+      done()
+    },
     show_detail(id) {
       get_camilo_detail(id).then(response => {
         this.camilo_detail_list = response.data
         this.dialogVisible = true
       })
-    },
-    handleClose(done) {
-      done()
     }
   }
 }

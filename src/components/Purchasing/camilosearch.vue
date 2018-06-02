@@ -80,6 +80,11 @@
           <el-tag :type="scope.row.order_status | statusFilter">{{scope.row.order_status}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column class-name="status-col" label="备注" align="center">
+        <template slot-scope="scope">
+          {{scope.row.remark}}
+        </template>
+      </el-table-column>
       <el-table-column label="查看卡密" align="center">
         <template slot-scope="scope">
           <el-button v-if="scope.row.order_status == '已完成'" type="warning" @click="showdetail(scope.row.id, scope.row.created_at)">查看卡密</el-button>
