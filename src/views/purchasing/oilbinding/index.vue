@@ -369,7 +369,7 @@ export default {
       param.append('status', 1)
       upload_file(param).then((res) => {
         if (res.code === 200) {
-          get_oilcard_upload(res.name).then(response => {
+          get_oilcard_upload(res.data.path).then(response => {
             this.$message({
               type: 'success',
               message: '上传成功!'
