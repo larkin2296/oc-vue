@@ -42,7 +42,7 @@
                 :auto-upload="false" accept=".xls,.xlsx">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                  <a class='downbutton' href='http://47.98.199.243:8080/src/template/oil_binding.xlsx'>下载模板</a>
+                  <a class='downbutton' href='http://localhost:8080/src/template/oil_binding.xlsx'>下载模板</a>
                 </el-upload>    
             </el-tab-pane>
         </el-tabs>
