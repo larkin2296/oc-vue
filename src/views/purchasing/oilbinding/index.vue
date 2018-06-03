@@ -42,7 +42,8 @@
                 :auto-upload="false" accept=".xls,.xlsx">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                </el-upload>                 
+                  <a class='downbutton' href='http://47.98.199.243:8080/src/template/oil_binding.xlsx'>下载模板</a>
+                </el-upload>    
             </el-tab-pane>
         </el-tabs>
     </el-collapse-transition>
@@ -409,5 +410,21 @@ export default {
 #add_card{
     width: 1200px;
     margin: 0 auto;
+}
+.downbutton{
+      display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+        box-sizing: border-box;
+    outline: 0;
+    margin: 0;
+    transition: .1s;
+    background: #f56c6c;
+    border-color: #f56c6c;
+    color: #fff;
+    padding: 9px 15px;
+    font-size: 12px;
+    border-radius: 3px;
 }
 </style>
