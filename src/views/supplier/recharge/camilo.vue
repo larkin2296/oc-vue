@@ -1,9 +1,9 @@
 <template>
   <div id='camilo' v-if='is_permission == 1'>
-      <div class='title'>今日折扣 {{config.camilo_recharge}}</div>
+      <div class='title'>{{choose_platform}}今日折扣 {{discount}}</div>
       <el-form id='form'>
           <el-form-item label='平台选择'>
-              <el-radio-group v-model="choose_platform">
+              <el-radio-group v-model="choose_platform" @change='changediscount'>
                 <el-radio-button v-for="item in platform" :key="item.id" :label="item.platform_name">{{item.platform_name}}</el-radio-button>
               </el-radio-group>
           </el-form-item>
@@ -136,13 +136,19 @@ export default {
           })
           get_config_goodset().then(res => {
             this.config = res.data
-            this.discount = res.data.camilo_recharge
           })
         } else {
           this.is_permission = 0
           this.$message.error('您没有权限')
         }
       })
+    },
+    changediscount() {
+      let obj = {}
+      obj = this.platform.find((item) => {
+        return item.platform_name === this.choose_platform
+      })
+      this.discount = obj.camilo_recharge
     },
     handleClose(done) {
       this.$confirm('确认关闭？').then(_ => {

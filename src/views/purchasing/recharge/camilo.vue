@@ -1,11 +1,11 @@
 <template>
 <div v-if='is_permission == 1'>
-    <div class='title'>今日折扣 {{config.camilo_sell}}</div>
+    <div class='title'>{{form.goods_type}}今日折扣 {{discount}}</div>
 
     <el-form :inline="true" ref="form" :model="form" label-width="120px" class='choose'>
     <el-form-item label="商品类型" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
 
-        <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
+        <el-select v-model="form.goods_type" @change='changediscount' value-key="label" placeholder="选择商品">
 
             <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
 
@@ -119,7 +119,6 @@ export default {
           })
           get_config_goodset().then(res => {
             this.config = res.data
-            this.discount = res.data.camilo_sell
           })
         }
       })
@@ -137,6 +136,13 @@ export default {
     del($index) {
       this.totalprice -= this.list[$index].price
       this.list.splice($index, 1)
+    },
+    changediscount() {
+      let obj = {}
+      obj = this.platform.find((item) => {
+        return item.platform_name === this.form.goods_type
+      })
+      this.discount = obj.camilo_sell
     },
     onsubmit() {
       this.$confirm('是否付款创建订单?', '提示', {

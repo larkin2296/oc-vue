@@ -67,3 +67,8 @@ export function get_permission_data(data) {
   }
   )
 }
+
+export function save_platform_discount(data) {
+  return request.post('api/configure/save_platform_discount', data
+  )
+}
