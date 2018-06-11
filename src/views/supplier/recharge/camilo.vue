@@ -28,8 +28,8 @@
                 :auto-upload="false" accept=".xls,.xlsx">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                  <a class='downbutton' href='down$/purchasing.xlsx' download>下载模板</a>
-                </el-upload>
+                  <el-button type='danger' @click='download'>下载模板</el-button>                
+                  </el-upload>
                 <el-table :data='card_list' border fit highlight-current-row>
                   <el-table-column label='卡密字段一'>
                     <template slot-scope="scope">
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { get_config_detail, upload_file, get_config_goodset, get_permission_data, get_discount_data } from '@/api/configure.js'
+import { get_config_detail, upload_file, get_config_goodset, get_permission_data, get_discount_data, get_file } from '@/api/configure.js'
 import { sub_camilo_data, get_camilo_upload } from '@/api/supplier.js'
 export default {
   data() {
@@ -141,6 +141,12 @@ export default {
           this.is_permission = 0
           this.$message.error('您没有权限')
         }
+      })
+    },
+    download() {
+      var param = 80
+      get_file(param).then(res => {
+        console.log(res)
       })
     },
     changediscount() {

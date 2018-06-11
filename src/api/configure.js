@@ -83,6 +83,11 @@ export function save_discount_data(data) {
   )
 }
 
+export function get_file(data) {
+  return request.get('common/attach/download/' + data
+  )
+}
+
 export function formatDate(time, fmt) {
   var date = new Date(time)
   if (/(y+)/.test(fmt)) {

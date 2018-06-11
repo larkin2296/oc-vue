@@ -42,7 +42,7 @@
                 :auto-upload="false" accept=".xls,.xlsx">
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                  <a class='downbutton' href='down$/oil_binding.xlsx' download>下载模板</a>
+                  <el-button type='danger' @click='download'>下载模板</el-button>
                 </el-upload>    
             </el-tab-pane>
         </el-tabs>
@@ -161,7 +161,7 @@
 
 import { binding_card, get_card_list, card_start, set_longtrem, confirm_status, get_oilcard_upload, del_card_data } from '@/api/purchasing'
 import { validatorName } from '@/utils/validate'
-import { get_permission_data, upload_file } from '@/api/configure'
+import { get_permission_data, upload_file, get_file } from '@/api/configure'
 // import { upload } from '@/api/message'
 import store from '@/store'
 
@@ -231,6 +231,12 @@ export default {
         if (res.code === '200') {
           this.is_permission = 1
         }
+      })
+    },
+    download() {
+      var param = 79
+      get_file(param).then(res => {
+        console.log(res)
       })
     },
     go_search() {
