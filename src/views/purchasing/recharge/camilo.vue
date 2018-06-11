@@ -124,8 +124,15 @@ export default {
       })
     },
     add_trolly() {
-      this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
-      this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
+      if (this.form.card_num <= 0) {
+        this.$message({
+          message: '数量不小0!',
+          type: 'error'
+        })
+      } else {
+        this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
+        this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
+      }
     },
     onCancel() {
       this.$message({
