@@ -105,7 +105,13 @@ export default {
       register(this.registerForm, this.registerForm.id).then(response => {
         console.log(response)
         this.loading = false
-        // this.$router.push({ path: '/' })
+        this.$message({
+          type: 'success',
+          message: response.message
+        })
+        if (response.code === '200') {
+          this.$router.push({ path: '/' })
+        }
       }).catch(error => {
         console.log(error)
         this.loading = false
