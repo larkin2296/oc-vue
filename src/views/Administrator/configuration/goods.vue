@@ -8,23 +8,50 @@
               <el-form-item label='平台名称'>
                   <el-input v-model='addplat.platform_name'></el-input>
               </el-form-item>
+              <el-form-item label='默认进货折扣'>
+                  <el-input v-model='addplat.camilo_recharge'></el-input>
+              </el-form-item>
+              <el-form-item label='默认销售折扣'>
+                  <el-input v-model='addplat.camilo_sell'></el-input>
+              </el-form-item>
               <el-form-item>
                   <el-button type='danger' @click='addplatform'>添加</el-button>
               </el-form-item>
           </el-form>
       <el-table :data='platform_list' border fit highlight-current-row height='400'>
-          <el-table-column label='平台名称'>
-                <template slot-scope="scope">
-                <span>{{scope.row.platform_name}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label='操作'>
-                <template slot-scope="scope">
-                <el-button v-if='scope.row.status === 1' type='success'>停用</el-button>
-                <el-button v-else-if='scope.row.status === 0' type='danger'>启用</el-button>
-                </template>
-            </el-table-column>
-            </el-table>
+            <el-table-column label='商品'>
+              <template slot-scope="scope">
+                  {{ scope.row.platform_name }}
+              </template>
+          </el-table-column>
+          <el-table-column label='进货折扣'>
+            <template slot-scope="scope">
+            <template v-if="scope.row.edit">
+              <el-input class="edit-input" size="small" v-model="scope.row.camilo_recharge"></el-input>
+              <el-button class='cancel-btn' size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit(scope.row)">cancel</el-button>
+              </template>
+            <span v-else>{{ scope.row.camilo_recharge }}</span>
+              <el-button v-if="scope.row.edit" type="success" @click="confirmEdit(scope.row)" size="small" icon="el-icon-circle-check-outline">Ok</el-button>
+              <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit' size="small" icon="el-icon-edit">Edit</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label='销售折扣'>
+            <template slot-scope="scope">
+            <template v-if="scope.row.edit1">
+              <el-input class="edit-input" size="small" v-model="scope.row.camilo_sell"></el-input>
+              <el-button class='cancel-btn' size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit1(scope.row)">cancel</el-button>
+              </template>
+            <span v-else>{{ scope.row.camilo_sell }}</span>
+            <el-button v-if="scope.row.edit1" type="success" @click="confirmEdit1(scope.row)" size="small" icon="el-icon-circle-check-outline">Ok</el-button>
+            <el-button v-else type="primary" @click='scope.row.edit1=!scope.row.edit1' size="small" icon="el-icon-edit">Edit</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label='操作'>
+            <template slot-scope="scope">
+              <el-button type='danger' @click='save_discount(scope.$index)'>保存</el-button>
+            </template>
+          </el-table-column>
+          </el-table>
       </div>
       </el-tab-pane>
       <el-tab-pane label='商品面额管理'>
@@ -121,7 +148,7 @@
 </template>
 
 <script>
-import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail, get_config_goodset, save_config } from '@/api/configure'
+import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail, get_config_goodset, save_config, save_platform_discount } from '@/api/configure'
 export default {
   data() {
     return {
@@ -161,7 +188,6 @@ export default {
       this.listLoading = true
       get_platform_list(this.listQuery).then(response => {
         this.platform_list = response
-        this.listLoading = false
       })
       get_denomination_list(this.listQuery).then(response => {
         this.denomination_list = response
@@ -178,25 +204,32 @@ export default {
       })
     },
     addplatform() {
-      this.$confirm('是否该商品平台?', '提示', {
+      this.$confirm('是否添加该商品平台?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        add_platform(this.addplat).then(response => {
-          this.fetchData()
-        }).catch(error => {
-          console.log(error)
-        })
-        this.$message({
-          type: 'success',
-          message: '添加成功!'
-        })
+        if (this.addplat.camilo_recharge > 1 || this.addplat.camilo_sell > 1 || this.addplat.camilo_recharge === '' || this.addplat.camilo_sell === '' || this.addplat.platform_name === '') {
+          this.$message({
+            type: 'error',
+            message: '请正确填写!'
+          })
+        } else {
+          add_platform(this.addplat).then(response => {
+            this.$message({
+              type: 'success',
+              message: '添加成功!'
+            })
+            this.fetchData()
+          }).catch(error => {
+            console.log(error)
+          })
+        }
       }).catch(() => {
       })
     },
     adddenomination() {
-      this.$confirm('是否该面额?', '提示', {
+      this.$confirm('是否添加该面额?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -221,6 +254,43 @@ export default {
         })
         this.form = res.data
       })
+    },
+    save_discount(index) {
+      let data = this.platform_list[index]
+      this.$confirm('是否修改该平台折扣?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        save_platform_discount(data).then(res => {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          })
+          console.log(res)
+        }).catch(error => {
+          console.log(error)
+        })
+      }).catch(() => {
+      })
+    },
+    cancelEdit(row) {
+      row.status = row.originalTitle
+      row.edit = false
+    },
+    confirmEdit(row) {
+      console.log(row)
+      row.edit = false
+      row.originalTitle = row.status
+    },
+    cancelEdit1(row) {
+      row.status = row.originalTitle
+      row.edit1 = false
+    },
+    confirmEdit1(row) {
+      console.log(row)
+      row.edit1 = false
+      row.originalTitle = row.status
     }
   }
 }

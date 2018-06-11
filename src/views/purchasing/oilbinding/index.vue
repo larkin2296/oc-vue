@@ -23,7 +23,7 @@
                         <el-input v-model='addform.web_password'></el-input>
                     </el-form-item>
                     <el-form-item>
-                    <el-button type="primary" @click="addcard">Create</el-button>
+                    <el-button type="primary" @click="addcard">添加</el-button>
                 </el-form-item>
                 <el-input type='hidden' v-model='addform.user_id' />
                 </el-form>
@@ -160,7 +160,7 @@
 <script>
 
 import { binding_card, get_card_list, card_start, set_longtrem, confirm_status, get_oilcard_upload, del_card_data } from '@/api/purchasing'
-import { validatorName, validatorID } from '@/utils/validate'
+import { validatorName } from '@/utils/validate'
 import { get_permission_data, upload_file } from '@/api/configure'
 // import { upload } from '@/api/message'
 import store from '@/store'
@@ -175,13 +175,13 @@ export default {
         callback()
       }
     }
-    const validateIdentiy = (rule, value, callback) => {
-      if (!validatorID(value)) {
-        callback(new Error('请输入正确身份证'))
-      } else {
-        callback()
-      }
-    }
+    // const validateIdentiy = (rule, value, callback) => {
+    //   if (!validatorID(value)) {
+    //     callback(new Error('请输入正确身份证'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     const validateCard = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('不能为空'))
@@ -204,7 +204,6 @@ export default {
       listLoading: true,
       CardRules: {
         ture_name: [{ trigger: 'blur', validator: validateTname }],
-        identity_card: [{ trigger: 'blur', validator: validateIdentiy }],
         oil_card_code: [{ trigger: 'blur', validator: validateCard }]
       },
       form: {},

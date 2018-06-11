@@ -16,7 +16,7 @@
 
     <el-form-item label="面额">
 
-        <el-select v-model="form.card_price" placeholder="选择金额">
+        <el-select v-model="form.card_price" @change='changediscount' placeholder="选择金额">
 
           <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
 
@@ -83,7 +83,7 @@
 
 <script>
 import { camilo_order } from '@/api/purchasing'
-import { get_config_detail, get_config_goodset, get_permission_data } from '@/api/configure'
+import { get_config_detail, get_config_goodset, get_permission_data, get_discount_data } from '@/api/configure'
 import store from '@/store'
 export default {
   data() {
@@ -138,11 +138,9 @@ export default {
       this.list.splice($index, 1)
     },
     changediscount() {
-      let obj = {}
-      obj = this.platform.find((item) => {
-        return item.platform_name === this.form.goods_type
+      get_discount_data(this.form).then(res => {
+        this.discount = res.data[0].camilo_sell
       })
-      this.discount = obj.camilo_sell
     },
     onsubmit() {
       this.$confirm('是否付款创建订单?', '提示', {

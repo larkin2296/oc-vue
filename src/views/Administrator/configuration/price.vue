@@ -29,10 +29,41 @@
       </el-tab-pane>
       <el-tab-pane label="商品折扣">
       <div class="app-container">
-          <el-table :data='platform_list' border fit highlight-current-row height='400'>
+          <el-form :inline="true" :model="addplat" label-width="100px">
+              <el-form-item label="商品类型">
+
+                  <el-select v-model="addplat.goods_type" value-key="label" placeholder="选择商品">
+
+                      <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
+
+                      </el-option>
+
+                  </el-select>
+              </el-form-item>
+
+              <el-form-item label="面额">
+
+                  <el-select v-model="addplat.card_price" placeholder="选择金额">
+
+                    <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
+
+                    </el-option>
+
+                  </el-select>
+              </el-form-item>
+              <el-form-item>
+                  <el-button type='danger' @click='search'>查找</el-button>
+              </el-form-item>
+          </el-form>
+          <el-table :data='platform_list' border fit highlight-current-row>
             <el-table-column label='商品'>
               <template slot-scope="scope">
                   {{ scope.row.platform_name }}
+              </template>
+          </el-table-column>
+          <el-table-column label='面额'>
+              <template slot-scope="scope">
+                  {{ scope.row.denomination }}
               </template>
           </el-table-column>
           <el-table-column label='进货折扣'>
@@ -70,10 +101,11 @@
 </template>
 
 <script>
-import { get_config_goodset, save_config, get_platform_list, save_platform_discount } from '@/api/configure'
+import { get_config_goodset, save_config, get_config_detail, get_discount_data, save_discount_data } from '@/api/configure'
 export default {
   data() {
     return {
+      addplat: {},
       form: {
         camilo_recharge: '',
         camilo_sell: '',
@@ -81,6 +113,8 @@ export default {
         sdirectly_discount_down: '',
         sdirectly_discount_up: ''
       },
+      platform: [],
+      platform_money: [],
       platform_list: []
     }
   },
@@ -93,8 +127,9 @@ export default {
         console.log(res)
         this.form = res.data
       })
-      get_platform_list(this.listQuery).then(response => {
-        this.platform_list = response
+      get_config_detail().then(response => {
+        this.platform = response.platform
+        this.platform_money = response.denomination
       })
     },
     savedata() {
@@ -113,7 +148,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        save_platform_discount(data).then(res => {
+        save_discount_data(data).then(res => {
           this.$message({
             type: 'success',
             message: '修改成功!'
@@ -142,6 +177,11 @@ export default {
       console.log(row)
       row.edit1 = false
       row.originalTitle = row.status
+    },
+    search() {
+      get_discount_data(this.addplat).then(res => {
+        this.platform_list = res.data
+      })
     }
   }
 }

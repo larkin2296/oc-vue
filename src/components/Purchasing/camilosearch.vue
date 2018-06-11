@@ -97,12 +97,14 @@
 
 <script>
 import { get_camilo_order } from '@/api/purchasing'
-import { get_config_detail } from '@/api/configure'
+import { get_config_detail, formatDate } from '@/api/configure'
 export default {
   name: 's_camilo',
   data() {
     return {
-      form: {},
+      form: {
+        time_end: formatDate((new Date().getTime()), 'yyyy-MM-dd')
+      },
       c_status: [{
         value: '1',
         label: '未完成'
@@ -135,7 +137,6 @@ export default {
     fetchData() {
       this.listLoading = true
       get_camilo_order(this.listQuery).then(response => {
-        console.log(response)
         this.list = response
         this.listLoading = false
       })

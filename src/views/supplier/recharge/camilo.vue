@@ -8,7 +8,7 @@
               </el-radio-group>
           </el-form-item>
           <el-form-item label='面额'>
-            <el-radio-group v-model="choose_price">
+            <el-radio-group v-model="choose_price" @change='changediscount'>
             <el-radio v-for="mtem in platform_money" :key="mtem.id" :label="mtem.denomination" border>￥{{mtem.denomination}}</el-radio>
             </el-radio-group>
           </el-form-item>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { get_config_detail, upload_file, get_config_goodset, get_permission_data } from '@/api/configure.js'
+import { get_config_detail, upload_file, get_config_goodset, get_permission_data, get_discount_data } from '@/api/configure.js'
 import { sub_camilo_data, get_camilo_upload } from '@/api/supplier.js'
 export default {
   data() {
@@ -144,11 +144,12 @@ export default {
       })
     },
     changediscount() {
-      let obj = {}
-      obj = this.platform.find((item) => {
-        return item.platform_name === this.choose_platform
+      var param = Object()
+      param.goods_type = this.choose_platform
+      param.card_price = this.choose_price
+      get_discount_data(param).then(res => {
+        this.discount = res.data[0].camilo_recharge
       })
-      this.discount = obj.camilo_recharge
     },
     handleClose(done) {
       this.$confirm('确认关闭？').then(_ => {
