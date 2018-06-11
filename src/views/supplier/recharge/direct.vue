@@ -145,10 +145,10 @@ export default {
           type: 'error',
           message: '请填写完整'
         })
-      } else if ((Date.parse(new Date(this.supplier_data.recharge_time)) / 1000) > (new Date().getTime() / 1000)) {
+      } else if ((Date.parse(new Date(this.supplier_data.recharge_time)) / 1000) < (new Date().getTime() / 1000)) {
         this.$message({
           type: 'error',
-          message: '日期不能超过当天'
+          message: '日期不能小于当天'
         })
       } else {
         this.$refs.upload.submit()
