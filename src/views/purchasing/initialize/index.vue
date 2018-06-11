@@ -112,10 +112,10 @@ export default {
       done()
     },
     check_send(index) {
-      if (this.initialize_data.money > this.initialize_list[index].save_money) {
+      if ((this.initialize_data.money + this.initialize_list[index].initialize_price) > this.initialize_list[index].save_money) {
         this.$message({
           type: 'error',
-          message: '上报金额大于当前余额'
+          message: '上报金额后圈存金额大于当前余额'
         })
       } else if (this.initialize_data.money < 0) {
         this.$message({
