@@ -43,7 +43,7 @@
       <el-date-picker
       v-model='supplier_data.recharge_time'
       type="datetime"
-      placeholder="选择日期时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
+      placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss">
       </el-date-picker>
     </el-form-item>
     <el-form-item label='上传凭证'>
@@ -54,7 +54,6 @@
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :on-change="changeUpload"
-          :on-success="handleSuccess"
           :before-upload="beforeUpload"
           :file-list="fileList"
           :auto-upload="false">
@@ -146,6 +145,11 @@ export default {
           type: 'error',
           message: '请填写完整'
         })
+      } else if ((Date.parse(new Date(this.supplier_data.recharge_time)) / 1000) > (new Date().getTime() / 1000)) {
+        this.$message({
+          type: 'error',
+          message: '日期不能超过当天'
+        })
       } else {
         this.$refs.upload.submit()
       }
@@ -205,7 +209,13 @@ export default {
         type: 'warning'
       }).then(() => {
         get_camilo_card().then(response => {
-          this.list = response.data
+          if (response.code === 200) {
+            this.list = response.data
+          }
+          this.$message({
+            type: 'success',
+            message: response.message
+          })
         })
       }).catch((error) => {
         console.log(error)

@@ -264,6 +264,27 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/deposit',
+    component: Layout,
+    redirect: '/deposit/index',
+    name: 'Deposit',
+    meta: { title: '提现管理', icon: 'example', role: ['2'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/supplier/deposit'),
+        meta: { title: '发起提现', icon: 'table', role: ['2'] }
+      },
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/supplier/deposit/list'),
+        meta: { title: '提现记录', icon: 'table', role: ['2'] }
+      }
+    ]
+  },
+  {
     path: '/msg',
     component: Layout,
     redirect: '/msg/users',
@@ -314,27 +335,6 @@ export const asyncRouterMap = [
         name: 'List',
         component: () => import('@/views/purchasing/reconciliation/list'),
         meta: { title: '对账单', icon: 'table', role: ['1'] }
-      }
-    ]
-  },
-  {
-    path: '/deposit',
-    component: Layout,
-    redirect: '/deposit/index',
-    name: 'Deposit',
-    meta: { title: '提现管理', icon: 'example', role: ['2'] },
-    children: [
-      {
-        path: 'index',
-        name: 'Index',
-        component: () => import('@/views/supplier/deposit'),
-        meta: { title: '发起提现', icon: 'table', role: ['2'] }
-      },
-      {
-        path: 'list',
-        name: 'List',
-        component: () => import('@/views/supplier/deposit/list'),
-        meta: { title: '提现记录', icon: 'table', role: ['2'] }
       }
     ]
   },

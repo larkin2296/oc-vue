@@ -47,7 +47,7 @@
         <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row height='400'>
             <el-table-column label='供货时间'>
                 <template slot-scope="scope">
-                <span>{{scope.row.supplier_time.date}}</span>
+                <span>{{scope.row.supplier_time}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='卡密字段一'>

@@ -14,13 +14,13 @@
             <el-form-item label="手机">
               {{ msg.mobile }}
             </el-form-item>
-            <el-form-item label="支付宝账号">
+            <el-form-item label="银行卡账号">
               {{ msg.alipay }}
             </el-form-item>
             <el-form-item label="qq号">
               {{ msg.qq_num }}
             </el-form-item>
-            <el-form-item label="city">
+            <el-form-item label="城市">
               {{ msg.city }}
             </el-form-item>
         </el-form>

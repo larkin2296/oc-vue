@@ -209,6 +209,11 @@ export default {
           type: 'error',
           message: '请选择平台和面额'
         })
+      } else if (this.camilo_list.cam_name === '') {
+        this.$message({
+          type: 'error',
+          message: '卡密字段一必填'
+        })
       } else {
         this.camilo_table.push({ plaform: this.choose_platform, price: this.choose_price, cam_name: this.camilo_list.cam_name, cam_other_name: this.camilo_list.cam_other_name })
       }
@@ -243,13 +248,18 @@ export default {
           if (response.code === '200') {
             this.camilo_table = []
             this.card_list = []
+            this.$message({
+              type: 'success',
+              message: '卡密提交成功!'
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: response.message + response.data
+            })
           }
         }).catch(error => {
           console.log(error)
-        })
-        this.$message({
-          type: 'success',
-          message: '卡密提交成功!'
         })
       }).catch(() => {
       })
