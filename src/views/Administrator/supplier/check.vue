@@ -25,7 +25,7 @@
         <el-table :data='list' border fit highlight-current-row>
             <el-table-column label='供应商'>
                 <template slot-scope="scope">
-                    {{ scope.row.name }}
+                    {{ scope.row.truename }}
                 </template>
             </el-table-column>
             <el-table-column label='账号'>
