@@ -28,28 +28,34 @@
             <template slot-scope="scope">
             <template v-if="scope.row.edit">
               <el-input class="edit-input" size="small" v-model="scope.row.camilo_recharge"></el-input>
-              <el-button class='cancel-btn' size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit(scope.row)">cancel</el-button>
+              <el-button class='cancel-btn' size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit(scope.row)">返回</el-button>
               </template>
             <span v-else>{{ scope.row.camilo_recharge }}</span>
-              <el-button v-if="scope.row.edit" type="success" @click="confirmEdit(scope.row)" size="small" icon="el-icon-circle-check-outline">Ok</el-button>
-              <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit' size="small" icon="el-icon-edit">Edit</el-button>
+              <el-button v-if="scope.row.edit" type="success" @click="confirmEdit(scope.row)" size="small" icon="el-icon-circle-check-outline">完成</el-button>
+              <el-button v-else type="primary" @click='scope.row.edit=!scope.row.edit' size="small" icon="el-icon-edit">编辑</el-button>
             </template>
           </el-table-column>
           <el-table-column label='销售折扣'>
             <template slot-scope="scope">
             <template v-if="scope.row.edit1">
               <el-input class="edit-input" size="small" v-model="scope.row.camilo_sell"></el-input>
-              <el-button class='cancel-btn' size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit1(scope.row)">cancel</el-button>
+              <el-button class='cancel-btn' size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit1(scope.row)">返回</el-button>
               </template>
             <span v-else>{{ scope.row.camilo_sell }}</span>
-            <el-button v-if="scope.row.edit1" type="success" @click="confirmEdit1(scope.row)" size="small" icon="el-icon-circle-check-outline">Ok</el-button>
-            <el-button v-else type="primary" @click='scope.row.edit1=!scope.row.edit1' size="small" icon="el-icon-edit">Edit</el-button>
+            <el-button v-if="scope.row.edit1" type="success" @click="confirmEdit1(scope.row)" size="small" icon="el-icon-circle-check-outline">完成</el-button>
+            <el-button v-else type="primary" @click='scope.row.edit1=!scope.row.edit1' size="small" icon="el-icon-edit">编辑</el-button>
             </template>
           </el-table-column>
-          <el-table-column label='操作'>
+          <el-table-column label='修改'>
             <template slot-scope="scope">
               <el-button type='danger' @click='save_discount(scope.$index)'>保存</el-button>
             </template>
+          </el-table-column>
+          <el-table-column label='操作'>
+                <template slot-scope="scope">
+                <el-button v-if='scope.row.status === 1' @click='changes_good_status(scope.row.id,0)' type='success'>停用</el-button>
+                <el-button v-else-if='scope.row.status === 0' @click='changes_good_status(scope.row.id,1)' type='danger'>启用</el-button>
+                </template>
           </el-table-column>
           </el-table>
       </div>
@@ -73,8 +79,8 @@
             </el-table-column>
             <el-table-column label='操作'>
                 <template slot-scope="scope">
-                <el-button v-if='scope.row.status === 1' type='success'>停用</el-button>
-                <el-button v-else-if='scope.row.status === 0' type='danger'>启用</el-button>
+                <el-button v-if='scope.row.status === 1' @click='changes_price_status(scope.row.id,0)' type='success'>停用</el-button>
+                <el-button v-else-if='scope.row.status === 0' @click='changes_price_status(scope.row.id,1)' type='danger'>启用</el-button>
                 </template>
             </el-table-column>
             </el-table>
@@ -148,7 +154,7 @@
 </template>
 
 <script>
-import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail, get_config_goodset, save_config, save_platform_discount } from '@/api/configure'
+import { get_platform_list, get_denomination_list, add_platform, add_denomination, get_config_detail, get_config_goodset, save_config, save_platform_discount, set_config_status } from '@/api/configure'
 export default {
   data() {
     return {
@@ -291,6 +297,36 @@ export default {
       console.log(row)
       row.edit1 = false
       row.originalTitle = row.status
+    },
+    changes_price_status(id, status) {
+      var param = Object()
+      param.id = id
+      param.type = 'price'
+      param.status = status
+      set_config_status(param).then(res => {
+        if (res.code === '200') {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          })
+          this.fetchData()
+        }
+      })
+    },
+    changes_good_status(id, status) {
+      var param = Object()
+      param.id = id
+      param.type = 'good'
+      param.status = status
+      set_config_status(param).then(res => {
+        if (res.code === '200') {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          })
+          this.fetchData()
+        }
+      })
     }
   }
 }

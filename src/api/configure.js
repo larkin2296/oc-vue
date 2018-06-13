@@ -88,6 +88,11 @@ export function get_file(data) {
   )
 }
 
+export function set_config_status(data) {
+  return request.post('api/configure/set_config_status', data
+  )
+}
+
 export function formatDate(time, fmt) {
   var date = new Date(time)
   if (/(y+)/.test(fmt)) {
