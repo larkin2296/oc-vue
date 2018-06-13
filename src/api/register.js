@@ -14,6 +14,30 @@ export function send_message_again(mobile) {
   )
 }
 
+export function resetpassMessage(mobile) {
+  return request.post('api/messages/resetpassMessage', {
+    mobile
+  }
+  )
+}
+
+export function resetpassMessage_again(mobile) {
+  return request.post('api/messages/resetpassMessage', {
+    mobile
+  }
+  )
+}
+
+export function again_check(param) {
+  return request.post('api/register/again_check', param
+  )
+}
+
+export function updatePasswd(param) {
+  return request.post('api/register/updatePasswd', param
+  )
+}
+
 export function register(msg, id) {
   return request.post('api/register/index/' + id, msg
   )
