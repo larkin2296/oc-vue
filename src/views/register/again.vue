@@ -38,7 +38,7 @@
         <el-input name='pass_again' type='password' placeholder="确认密码"  v-model='passwordForm.pass_again' auto-complete="on"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleModify">
+        <el-button type="primary" style="width:100%;" :disabled="already_check == 0" :loading="loading" @click.native.prevent="handleModify">
           确认
         </el-button>
       </el-form-item>
@@ -71,9 +71,11 @@ export default {
       }
     }
     const validatePagain = (rule, value, callback) => {
-      if (value !== this.registerForm.password) {
+      if (value !== this.passwordForm.password) {
+        this.already_check = 0
         callback(new Error('两次密码不一样'))
       } else {
+        this.already_check = 1
         callback()
       }
     }
@@ -99,7 +101,8 @@ export default {
       b_msg: '获取验证码',
       b_msg_state: '0',
       show: 0,
-      passwordForm: {}
+      passwordForm: {},
+      already_check: 0
     }
   },
   methods: {
@@ -118,23 +121,30 @@ export default {
       })
     },
     handleModify: function() {
-      var param = Object()
-      param.password = this.passwordForm.password
-      param.mobile = this.registerForm.mobile
-      updatePasswd(param).then(res => {
-        if (res.code === '200') {
-          this.$message({
-            type: 'success',
-            message: '修改成功'
-          })
-          this.$router.push({ path: '/login' })
-        } else {
-          this.$message({
-            type: 'error',
-            message: '修改失败'
-          })
-        }
-      })
+      if (this.passwordForm.password === '' || this.passwordForm.pass_again === '') {
+        this.$message({
+          type: 'error',
+          message: '填写完整'
+        })
+      } else {
+        var param = Object()
+        param.password = this.passwordForm.password
+        param.mobile = this.registerForm.mobile
+        updatePasswd(param).then(res => {
+          if (res.code === '200') {
+            this.$message({
+              type: 'success',
+              message: '修改成功'
+            })
+            this.$router.push({ path: '/login' })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '修改失败'
+            })
+          }
+        })
+      }
     },
     countdown: function() {
       if (!this.timer) {
