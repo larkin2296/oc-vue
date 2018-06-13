@@ -24,6 +24,7 @@
     </el-form>
     <el-form v-if='show == 1' :model="passwordForm" :rules="passwordRules" ref="passwordForm" label-width="0px"
       class="card-box login-form">
+        <h3 class="title">输入新密码</h3>
         <el-form-item prop='password'>
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="password" />
