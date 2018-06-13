@@ -53,11 +53,12 @@
                     <el-tag v-if='scope.row.status_examine == 1' type='success'>审核通过</el-tag>
                     <el-tag v-if='scope.row.status_examine == 2' type='warning'>审核中……</el-tag>
                     <el-tag v-if='scope.row.status_examine == 3' type='info'>审核不通过</el-tag>
+                    <el-tag v-if='scope.row.status_examine == 4' type='info'>未提交</el-tag>
                 </template>
             </el-table-column>
             <el-table-column label='身份证照片' width='100'>
                 <template slot-scope="scope">
-                    <el-button type='warning' @click='show(scope.$index)'>查看</el-button>
+                    <el-button type='warning' v-if='scope.row.status_examine != 4' @click='show(scope.$index)'>查看</el-button>
                 </template>
             </el-table-column>
             <el-table-column label='操作' width='200'>

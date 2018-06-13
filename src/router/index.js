@@ -174,12 +174,6 @@ export const asyncRouterMap = [
         name: 'Menager',
         component: () => import('@/views/Administrator/menager/menager'),
         meta: { role: ['4'], title: '管理员设置', icon: 'table' }
-      },
-      {
-        path: 'perrmision',
-        name: 'Perrmision',
-        component: () => import('@/views/Administrator/menager/perrmision'),
-        meta: { role: ['4'], title: '管理员权限', icon: 'table' }
       }
     ]
   },
