@@ -31,12 +31,6 @@
         </span>
         <el-input name='password' type='password' placeholder="输入密码"  v-model='passwordForm.password' auto-complete="on"/>
       </el-form-item>
-      <el-form-item prop='pass_again'>
-        <span class="svg-container svg-container_login">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input name='pass_again' type='password' placeholder="确认密码"  v-model='passwordForm.pass_again' auto-complete="on"/>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleModify">
           确认
