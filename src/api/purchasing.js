@@ -173,3 +173,8 @@ export function del_card_data(id) {
   return request.post('api/purchasing/del_card', { id }
   )
 }
+
+export function get_search_card(param) {
+  return request.post('api/purchasing/get_search_card', param
+  )
+}

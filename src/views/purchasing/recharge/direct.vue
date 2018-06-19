@@ -4,12 +4,9 @@
     <div class='title'>今日折扣范围 {{config.sdirectly_discount_down}} ~ {{config.sdirectly_discount_up}}</div>
     <div class='title'>短充时长限制 {{config.sdirectly_day}}天</div>
     <el-form ref="form" :model="form" label-width="120px" class='choose'>
-    <el-form-item label="选择油卡" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
-        <el-checkbox-group v-model="checkedCard" @change="handleCheckedCitiesChange">
-          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-          <el-checkbox v-for="card in oil_card_code" :label="card" :key="card">油卡{{card}}</el-checkbox>
-        </el-checkbox-group>
-    </el-form-item>
+      <el-form-item label="油卡">
+        <el-button type='warning' @click="show_select">选择油卡</el-button>已选择{{card_num}}张卡
+      </el-form-item>
 
       <el-form-item label="金额">
 
@@ -75,11 +72,65 @@
     </el-table>
     <el-button type="danger" plain @click='onsubmit'>生成</el-button>
   </div>
+  <el-dialog
+    title="充值记录"
+    :visible.sync="dialogVisible"
+    width="50%"
+    :before-close="handleClose">
+    <el-form :model='get_search' :inline="true">
+      <el-form-item label='油卡号'>
+        <el-input v-model='get_search.oil_card_code'></el-input>
+      </el-form-item>
+      <el-form-item label='编号'>
+        <el-input v-model='get_search.serial_number'></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type='danger' @click='search_card'>查询</el-button>
+      </el-form-item>
+    </el-form>
+    <el-table :data='card_list' border fit highlight-current-row height='200'>
+    <el-table-column label='选择'>
+        <template slot-scope="scope">
+        <el-checkbox v-model="scope.row.choose"></el-checkbox>
+        </template>
+    </el-table-column>
+    <el-table-column label='油卡编号'>
+      <template slot-scope="scope">
+        {{ scope.row.serial_number }}
+      </template>
+    </el-table-column>
+    <el-table-column label='油卡号'>
+        <template slot-scope="scope">
+        {{ scope.row.oil_card_code }}
+        </template>
+    </el-table-column>
+    </el-table>
+    <el-button type='danger' @click='add_card'>添加</el-button>
+    <h4>已添加</h4>
+    <el-table :data='ready_card' border fit highlight-current-row height='200'>
+      <el-table-column label='油卡编号'>
+      <template slot-scope="scope">
+        {{ scope.row.serial_number }}
+        </template>
+      </el-table-column>
+      <el-table-column label='油卡号'>
+          <template slot-scope="scope">
+          {{ scope.row.oil_card_code }}
+          </template>
+      </el-table-column>
+      <el-table-column label='操作'>
+        <template slot-scope="scope">
+          <el-button type='danger' @click='dele(scope.$index)'>删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-button type='danger' @click="dialogVisible = false">确定</el-button>
+    </el-dialog>
 </div> 
 </template>
 
 <script>
-import { get_short_card, set_sdirectly_order } from '@/api/purchasing'
+import { get_short_card, set_sdirectly_order, get_search_card } from '@/api/purchasing'
 import { get_config_goodset, get_permission_data } from '@/api/configure'
 import store from '@/store'
 export default {
@@ -99,7 +150,12 @@ export default {
       oil_card_code: [],
       isIndeterminate: true,
       discount: 0.98,
-      config: []
+      config: [],
+      dialogVisible: false,
+      get_search: {},
+      card_list: [],
+      ready_card: [],
+      card_num: 0
     }
   },
   created() {
@@ -119,6 +175,35 @@ export default {
         }
       })
     },
+    search_card() {
+      get_search_card(this.get_search).then(res => {
+        console.log(res)
+        this.card_list = res.data
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    show_select() {
+      this.dialogVisible = true
+    },
+    add_card() {
+      var that = this
+      console.log(this.card_list)
+      this.card_list.forEach(function(val) {
+        if (typeof val['choose'] === 'undefined' || val['choose'] === false) {
+          console.log(val)
+        } else {
+          that.ready_card.push({ serial_number: val['serial_number'], oil_card_code: val['oil_card_code'] })
+        }
+      })
+      this.card_num = this.ready_card.length
+    },
+    handleClose(done) {
+      done()
+    },
+    dele($index) {
+      this.ready_card.splice($index, 1)
+    },
     add_trolly() {
       if (this.form.price < this.config.sdirectly_price_down || this.form.price > this.config.sdirectly_price_up) {
         this.$message.error('金额超出额定范围!')
@@ -126,8 +211,14 @@ export default {
         this.$message.error('折扣超出额定范围!')
       } else if (this.dateDiff(this.form.cutoff_time) > this.config.sdirectly_day) {
         this.$message.error('时间超出额定范围!')
+      } else if (this.card_num === 0) {
+        this.$message.error('未选择油卡!')
       } else {
-        this.list.push({ oil_card_code: this.checkedCard, price: this.form.price, real_price: Number(this.form.price) * Number(this.form.discount), cutoff_time: this.form.cutoff_time, discount: this.form.discount, user_id: store.getters.id, order_type: 2 })
+        var card = []
+        this.ready_card.forEach(function(val) {
+          card.push(val['oil_card_code'])
+        })
+        this.list.push({ oil_card_code: card, price: this.form.price, real_price: Number(this.form.price) * Number(this.form.discount), cutoff_time: this.form.cutoff_time, discount: this.form.discount, user_id: store.getters.id, order_type: 2 })
       }
     },
     del($index) {

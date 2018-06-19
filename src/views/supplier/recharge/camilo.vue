@@ -14,41 +14,6 @@
           </el-form-item>
       </el-form>
       <el-tabs type='border-card'>
-        <el-tab-pane label="导入">
-                <el-upload class="upload-demo"
-                ref="upload"
-                :multiple="false"
-                action="123"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :on-change="handleChange"
-                :on-success="handleSuccess"
-                :before-upload="beforeUpload"
-                :file-list="fileList"
-                :auto-upload="false" accept=".xls,.xlsx">
-                  <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                  <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                  <a class='downbutton' v-bind:href='url' download @click='download'>下载模板</a>               
-                  </el-upload>
-                <el-table :data='card_list' border fit highlight-current-row>
-                  <el-table-column label='卡密字段一'>
-                    <template slot-scope="scope">
-                    {{ scope.row.cam_name }}
-                    </template>
-                  </el-table-column>
-                  <el-table-column label='卡密字段二'>
-                    <template slot-scope="scope">
-                    {{ scope.row.cam_other_name }}
-                    </template>
-                  </el-table-column>
-                  <el-table-column label='操作'>
-                    <template slot-scope="scope">
-                    <el-button type='danger' @click='del(scope.$index)'>删除</el-button>
-                    </template>
-                  </el-table-column>     
-                </el-table>
-                <el-button type='danger' @click='sub_camilo_list'>提交</el-button>               
-            </el-tab-pane>
         <el-tab-pane label="手动">
           <el-form :inline="true" v-model='camilo_list'>
             <el-form-item label='卡密字段一'>
@@ -92,6 +57,41 @@
           </div>
           <el-button type='danger' @click='sub_camilo'>提交</el-button>
         </el-tab-pane>
+        <el-tab-pane label="导入">
+          <el-upload class="upload-demo"
+          ref="upload"
+          :multiple="false"
+          action="123"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-change="handleChange"
+          :on-success="handleSuccess"
+          :before-upload="beforeUpload"
+          :file-list="fileList"
+          :auto-upload="false" accept=".xls,.xlsx">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            <a class='downbutton' v-bind:href='url' download @click='download'>下载模板</a>               
+            </el-upload>
+          <el-table :data='card_list' border fit highlight-current-row>
+            <el-table-column label='卡密字段一'>
+              <template slot-scope="scope">
+              {{ scope.row.cam_name }}
+              </template>
+            </el-table-column>
+            <el-table-column label='卡密字段二'>
+              <template slot-scope="scope">
+              {{ scope.row.cam_other_name }}
+              </template>
+            </el-table-column>
+            <el-table-column label='操作'>
+              <template slot-scope="scope">
+              <el-button type='danger' @click='del(scope.$index)'>删除</el-button>
+              </template>
+            </el-table-column>     
+          </el-table>
+          <el-button type='danger' @click='sub_camilo_list'>提交</el-button>               
+      </el-tab-pane>
       </el-tabs>
   </div>
 </template>

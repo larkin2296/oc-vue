@@ -227,6 +227,7 @@ export default {
     handleClose(done) {
       this.supplier_data.checkedCard = ''
       this.camilo_detail_list = []
+      this.supplier_data = {}
       done()
     },
     submitUpload() {

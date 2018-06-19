@@ -131,7 +131,7 @@ export const asyncRouterMap = [
         path: 'check',
         name: 'Check',
         component: () => import('@/views/Administrator/supplier/check'),
-        meta: { role: ['3', '4'], title: '资质审核管理', icon: 'table' }
+        meta: { role: ['3', '4'], title: '资质审核', icon: 'table' }
       }
     ]
   },
@@ -290,7 +290,7 @@ export const asyncRouterMap = [
         path: 'users',
         name: 'Users',
         component: () => import('@/views/message/msgmodify'),
-        meta: { role: ['1', '2', '10'], title: '信息上传', icon: 'table' }
+        meta: { role: ['10'], title: '信息上传', icon: 'table' }
       },
       {
         path: 'ushow',

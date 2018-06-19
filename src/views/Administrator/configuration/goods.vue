@@ -106,14 +106,7 @@
         </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple">
-            <el-select v-model="form.sdirectly_day">
-              <el-option
-              v-for="item in days"
-              :key="item.value"
-              :label="item.value"
-              :value="item.value">
-              </el-option>
-            </el-select>天
+            <el-input v-model="form.sdirectly_day"></el-input>天
           </div>
         </el-col>
       </el-row>

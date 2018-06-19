@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div class="app-container">
       <el-collapse-transition>
         <el-tabs type="border-card" v-show='show3'>
             <el-tab-pane label="填写">
-                <el-form id='add_card' autoComplete="on" :inline="true" ref="addform" :model="addform" :rules="CardRules" status-icon class="demo-ruleForm">
+                <el-form id='add_card' autoComplete="on" :inline="true" ref="addform" :model="addform" :rules="CardRules" status-icon class="demo-ruleForm" label-width="100px">
                     <el-form-item  label='编号' prop="serial_number">
-                        <el-input v-model='addform.serial_number'></el-input>
+                        <el-input v-model='addform.serial_number'></el-input><span class='must'>*</span>
                     </el-form-item>
                     <el-form-item  label='姓名' prop="ture_name">
-                        <el-input v-model='addform.ture_name' auto-complete="on" />
+                        <el-input v-model='addform.ture_name' auto-complete="on" /><span class='must'>*</span>
                     </el-form-item>
                     <el-form-item  label='油卡号' prop="oil_card_code">
-                        <el-input v-model='addform.oil_card_code'></el-input>
+                        <el-input v-model='addform.oil_card_code'></el-input><span class='must'>*</span>
                     </el-form-item>
                     <el-form-item  label='身份证' prop="identity_card">
                         <el-input v-model='addform.identity_card'></el-input>
@@ -43,11 +43,12 @@
                   <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                   <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                   <!-- <el-button type='danger' @click='download'>下载模板</el-button> -->
-                  <a class='downbutton' v-bind:href='url' download @click='download'>下载模板</a>
+                  <a class='downbutton' href='/oc/api/supply/commodity/export_card' download>下载模板</a>
                 </el-upload>    
             </el-tab-pane>
         </el-tabs>
     </el-collapse-transition>
+    <el-button type="danger" @click="show3 = !show3">展开添加</el-button>
     <el-form id='search_card' :inline="true" :model="form">
         <el-form-item label='编号'>
             <el-input v-model='form.serial_number'></el-input>
@@ -67,9 +68,6 @@
     <el-form-item>
         <el-button type="primary" @click="go_search">查询</el-button>
       </el-form-item>
-    <el-form-item>
-        <el-button type="danger" @click="show3 = !show3">添加</el-button>
-    </el-form-item>
     </el-form>
     <div class="app-container">
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
@@ -114,8 +112,7 @@
       <el-dialog
         title="充值记录"
         :visible.sync="dialogVisible"
-        width="50%"
-        :before-close="handleClose">
+        width="50%">
         <el-table :data='addcard_list' border fit highlight-current-row>
         <el-table-column label='编号'>
           <template slot-scope="scope">
@@ -176,6 +173,14 @@ export default {
         callback()
       }
     }
+    const validateSnumber = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('不能为空'))
+      } else {
+        console.log(value.length)
+        callback()
+      }
+    }
     // const validateIdentiy = (rule, value, callback) => {
     //   if (!validatorID(value)) {
     //     callback(new Error('请输入正确身份证'))
@@ -186,6 +191,8 @@ export default {
     const validateCard = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('不能为空'))
+      } else if (value.length !== 19) {
+        callback(new Error('请填写19位油卡'))
       } else {
         callback()
       }
@@ -205,7 +212,8 @@ export default {
       listLoading: true,
       CardRules: {
         ture_name: [{ trigger: 'blur', validator: validateTname }],
-        oil_card_code: [{ trigger: 'blur', validator: validateCard }]
+        oil_card_code: [{ trigger: 'blur', validator: validateCard }],
+        serial_number: [{ trigger: 'blur', validator: validateSnumber }]
       },
       form: {},
       value2: true,
@@ -236,7 +244,7 @@ export default {
       })
     },
     download() {
-      this.url = '/oc/common/attach/download/' + 79
+      this.url = '/oc/api/supply/commodity/export_card'
     },
     go_search() {
       this.listLoading = true
@@ -430,5 +438,11 @@ export default {
     padding: 9px 15px;
     font-size: 12px;
     border-radius: 3px;
+}
+.must{
+  color:red;
+}
+.el-input{
+  width: 190px;
 }
 </style>
