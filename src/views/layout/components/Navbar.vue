@@ -4,6 +4,7 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
+        欢迎用户<span style='font-weight:bold;font-size:17px;'>{{user_name}}</span>
         <img class="user-avatar" src="../../../user.png">
         <i class="el-icon-caret-bottom"></i>
       </div>
@@ -25,11 +26,17 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import store from '@/store'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger
+  },
+  data() {
+    return {
+      user_name: store.getters.name
+    }
   },
   computed: {
     ...mapGetters([
