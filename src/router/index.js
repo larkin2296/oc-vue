@@ -155,6 +155,12 @@ export const asyncRouterMap = [
         meta: { role: ['3', '4'], title: '价格管理', icon: 'table' }
       },
       {
+        path: 'inventory',
+        name: 'Inventory',
+        component: () => import('@/views/Administrator/configuration/inventory'),
+        meta: { role: ['3', '4'], title: '库存管理', icon: 'table' }
+      },
+      {
         path: 'index',
         name: 'Index',
         component: () => import('@/views/Administrator/configuration/index'),

@@ -73,7 +73,7 @@
             </el-table-column>
             <el-table-column label='时间'>
                 <template slot-scope="scope">
-                    {{ scope.row.created_at.date }}
+                    {{ scope.row.created_at }}
                 </template>
             </el-table-column>
             <el-table-column label='折扣'>

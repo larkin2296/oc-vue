@@ -1,6 +1,7 @@
 <template>
 <div v-if='is_permission == 1'>
     <div class='title'>{{form.goods_type}}今日折扣 {{discount}}</div>
+    <div class='title'>{{form.goods_type}}{{form.card_price}}  {{inventory}}</div>
 
     <el-form :inline="true" ref="form" :model="form" label-width="120px" class='choose'>
     <el-form-item label="商品类型" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
@@ -83,7 +84,7 @@
 
 <script>
 import { camilo_order } from '@/api/purchasing'
-import { get_config_detail, get_config_goodset, get_permission_data, get_discount_data } from '@/api/configure'
+import { get_config_detail, get_config_goodset, get_permission_data, get_discount_data, get_inventory_status } from '@/api/configure'
 import store from '@/store'
 export default {
   data() {
@@ -100,7 +101,8 @@ export default {
       platform_money: [],
       discount: '',
       order_type: 1,
-      config: []
+      config: [],
+      inventory: ''
     }
   },
   created() {
@@ -129,6 +131,11 @@ export default {
           message: '数量不小0!',
           type: 'error'
         })
+      } else if (this.inventory === '无库存') {
+        this.$message({
+          message: '无库存不能添加!',
+          type: 'error'
+        })
       } else {
         this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
         this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
@@ -148,26 +155,40 @@ export default {
       get_discount_data(this.form).then(res => {
         this.discount = res.data[0].camilo_sell
       })
+      get_inventory_status(this.form).then(res => {
+        if (res.data === true) {
+          this.inventory = '有库存'
+        } else {
+          this.inventory = '无库存'
+        }
+      })
     },
     onsubmit() {
-      this.$confirm('是否付款创建订单?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.loading = true
-        // let param = Object()
-        // param.
-        camilo_order(this.list).then(response => {
-        }).catch(error => {
-          console.log(error)
-        })
+      if (this.list.length === 0) {
         this.$message({
-          type: 'success',
-          message: '订单创建成功!'
+          message: '购物车为空',
+          type: 'error'
         })
-      }).catch(() => {
-      })
+      } else {
+        this.$confirm('是否付款创建订单?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.loading = true
+          // let param = Object()
+          // param.
+          camilo_order(this.list).then(response => {
+          }).catch(error => {
+            console.log(error)
+          })
+          this.$message({
+            type: 'success',
+            message: '订单创建成功!'
+          })
+        }).catch(() => {
+        })
+      }
     }
   }
 }

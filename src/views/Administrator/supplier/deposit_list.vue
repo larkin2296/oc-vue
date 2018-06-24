@@ -13,8 +13,9 @@
         </el-form-item>
         <el-form-item label='提现单状态'>
             <el-select v-model="form.status" placeholder="状态">
+            <el-option label="全部" value=""></el-option>
             <el-option label="已转账" value="1"></el-option>
-            <el-option label="未转账" value="2"></el-option>
+            <el-option label="未转账" value="3"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item>

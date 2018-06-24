@@ -80,7 +80,7 @@
                     </el-table-column>
                     <el-table-column label='供货时间'>
                         <template slot-scope="scope">
-                            {{ scope.row.created_at.date }}
+                            {{ scope.row.created_at }}
                         </template>
                     </el-table-column>
                     <el-table-column label='折扣'>
@@ -169,7 +169,7 @@
                     </el-table-column>
                     <el-table-column label='供货时间'>
                         <template slot-scope="scope">
-                            {{ scope.row.created_at.date }}
+                            {{ scope.row.created_at }}
                         </template>
                     </el-table-column>
                     <el-table-column label='预计到账时间'>

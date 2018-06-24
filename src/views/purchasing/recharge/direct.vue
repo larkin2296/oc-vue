@@ -73,7 +73,7 @@
     <el-button type="danger" plain @click='onsubmit'>生成</el-button>
   </div>
   <el-dialog
-    title="充值记录"
+    title="油卡选择"
     :visible.sync="dialogVisible"
     width="50%"
     :before-close="handleClose">
@@ -226,22 +226,29 @@ export default {
       this.list.splice($index, 1)
     },
     onsubmit() {
-      this.$confirm('是否付款创建订单?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        set_sdirectly_order(this.list).then(response => {
-          console.log(response)
-        }).catch(error => {
-          console.log(error)
-        })
+      if (this.list.length === 0) {
         this.$message({
-          type: 'success',
-          message: '订单创建成功!'
+          type: 'error',
+          message: '购物车为空!'
         })
-      }).catch(() => {
-      })
+      } else {
+        this.$confirm('是否付款创建订单?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          set_sdirectly_order(this.list).then(response => {
+            console.log(response)
+          }).catch(error => {
+            console.log(error)
+          })
+          this.$message({
+            type: 'success',
+            message: '订单创建成功!'
+          })
+        }).catch(() => {
+        })
+      }
     },
     onCancel() {
       this.$message({

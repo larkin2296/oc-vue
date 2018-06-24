@@ -93,6 +93,16 @@ export function set_config_status(data) {
   )
 }
 
+export function get_inventory_data(data) {
+  return request.post('api/configure/get_inventory', data
+  )
+}
+
+export function get_inventory_status(data) {
+  return request.post('api/configure/get_inventory_status', data
+  )
+}
+
 export function formatDate(time, fmt) {
   var date = new Date(time)
   if (/(y+)/.test(fmt)) {
