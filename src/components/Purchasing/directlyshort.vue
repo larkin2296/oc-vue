@@ -3,6 +3,7 @@
     <el-form :inline="true" ref="form" :model="form" label-width="120px">
       <el-form-item label='订单状态'>
         <el-select v-model="form.order_status" placeholder="请选择">
+          <el-option label="全部" value=""></el-option>
           <el-option
             v-for="item in c_status"
             :key="item.value"

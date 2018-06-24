@@ -33,6 +33,7 @@
               <el-form-item label="商品类型">
 
                   <el-select v-model="addplat.goods_type" value-key="label" placeholder="选择商品">
+                    <el-option label="全部" value=""></el-option>
 
                       <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
 

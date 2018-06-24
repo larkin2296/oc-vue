@@ -3,6 +3,7 @@
       <el-form :inline="true" ref="form" :model="form" label-width="120px">
       <el-form-item label='订单状态'>
         <el-select v-model="form.order_status" placeholder="请选择">
+          <el-option label="全部" value=""></el-option>
           <el-option
             v-for="item in c_status"
             :key="item.value"
@@ -13,6 +14,7 @@
       </el-form-item>
       <el-form-item label='商品'>
         <el-select v-model="form.goods_type" value-key="label" placeholder="选择商品">
+          <el-option label="全部" value=""></el-option>
 
             <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
 
@@ -25,6 +27,7 @@
       </el-form-item>
       <el-form-item label='面额'>
         <el-select v-model="form.card_price" placeholder="选择金额">
+          <el-option label="全部" value=""></el-option>
 
           <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
 

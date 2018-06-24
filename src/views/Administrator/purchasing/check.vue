@@ -12,6 +12,7 @@
         </el-form-item>
         <el-form-item label='审核结果'>
             <el-select v-model="form.status_examine" placeholder="状态">
+                <el-option label="全部" value=""></el-option>
             <el-option label="通过" value="1"></el-option>
             <el-option label="审核中" value="2"></el-option>
             <el-option label="未通过" value="3"></el-option>                

@@ -126,6 +126,7 @@
         <el-col :span="3">
           <div class="grid-content bg-purple">
             <el-select v-model="goods_platform" placeholder="请选择商品">
+              <el-option label="全部" value=""></el-option>
               <el-option
               v-for="item in platform"
               :key="item.id"

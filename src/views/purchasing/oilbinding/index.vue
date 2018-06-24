@@ -61,6 +61,7 @@
         </el-form-item>
         <el-form-item label="状态" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
         <el-select v-model='form.is_longtrem' placeholder="选择状态">
+          <el-option label="全部" value=""></el-option>
           <el-option label="长期" value="1"></el-option>
           <el-option label="短期" value="0"></el-option>
         </el-select>

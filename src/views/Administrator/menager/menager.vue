@@ -15,6 +15,7 @@
                     </el-form-item>
                     <el-form-item  label='性别' prop="sex">
                         <el-select v-model='addform.sex' placeholder="请选择">
+                          <el-option label="全部" value=""></el-option>
                             <el-option
                             v-for="item in sex"
                             :key="item.value"
@@ -28,6 +29,7 @@
                     </el-form-item>
                     <el-form-item  label='身份' prop="role_status">
                         <el-select v-model='addform.role_status' placeholder="请选择">
+                          <el-option label="全部" value=""></el-option>
                             <el-option
                             v-for="item in identity"
                             :key="item.value"

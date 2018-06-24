@@ -6,6 +6,7 @@
         </el-form-item>
         <el-form-item label='供货状态'>
             <el-select v-model='form.supply_status' placeholder="供货状态">
+              <el-option label="全部" value=""></el-option>
             <el-option label="未到账" value="2"></el-option>
             <el-option label="已到账" value="1"></el-option>
             </el-select>

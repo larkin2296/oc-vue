@@ -6,6 +6,7 @@
           </el-form-item>
           <el-form-item label='存款'>
               <el-select placeholder="请选择" v-model='form.save_money'>
+                  <el-option label="全部" value=""></el-option>
                   <el-option label='有存款' value='1' ></el-option>
                   <el-option label='无存款' value='0' ></el-option>
               </el-select>

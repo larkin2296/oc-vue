@@ -7,6 +7,7 @@
     <el-form-item label="商品类型" :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
 
         <el-select v-model="form.goods_type" @change='changediscount' value-key="label" placeholder="选择商品">
+          <el-option label="全部" value=""></el-option>
 
             <el-option v-for="item in platform" :label="item.platform_name" :key="item.id"  :value="item.platform_name">
 
@@ -18,6 +19,7 @@
     <el-form-item label="面额">
 
         <el-select v-model="form.card_price" @change='changediscount' placeholder="选择金额">
+          <el-option label="全部" value=""></el-option>
 
           <el-option v-for="item in platform_money" :label="item.denomination" :key="item.id"  :value="item.denomination">
 
