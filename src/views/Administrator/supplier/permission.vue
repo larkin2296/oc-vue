@@ -15,12 +15,18 @@
                     {{ scope.row.name }}
                 </template>
             </el-table-column>
-            <el-table-column label='供应权限' width='500'>
+            <el-table-column label='供应权限' width='470'>
                 <template slot-scope="scope">
                     <el-checkbox v-model="scope.row.cam_permission">卡密供货</el-checkbox>
                     <el-checkbox v-model="scope.row.long_term_permission">长充供货</el-checkbox>
                     <el-checkbox v-model="scope.row.put_forward_premission">提现权限</el-checkbox>
                     <el-checkbox v-model="scope.row.recommend_status">推荐权限</el-checkbox>
+                </template>
+            </el-table-column>
+            <el-table-column label='直充权限' width='230'>
+                <template slot-scope="scope">
+                    <el-radio v-model="scope.row.whether_status" label='0'>需审核</el-radio>
+                    <el-radio v-model="scope.row.whether_status" label='1'>无需审核</el-radio>
                 </template>
             </el-table-column>
             <el-table-column label='油卡获取数量'>

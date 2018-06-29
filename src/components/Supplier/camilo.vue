@@ -39,13 +39,14 @@
             <el-date-picker
                 v-model="form.time_end"
                 type="datetime"
-                placeholder="选择日期时间" size='small' format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss">
+                placeholder="选择日期时间" size='small' format="yyyy-MM-dd HH:mm:ss" default-time="23:59:59" value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
             </el-form-item>
         <el-form-item>
             <el-button type='danger' @click='go_search'>查询</el-button>
         </el-form-item>
         </el-form>
+        <div class='nodata' v-if='list == []'>暂无数据</div>
         <div class="app-container">
         <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row height='400'>
             <el-table-column label='供货时间'>
@@ -138,9 +139,21 @@ export default {
         console.log(response)
         this.list = response.data
         this.listLoading = false
+      }).catch(error => {
+        console.log(error)
       })
     }
   }
 }
 </script>
+
+<style scoped>
+.nodata{
+    position: absolute;
+    left:50%;
+    top:50%;
+    z-index:999;
+}
+</style>
+
 
