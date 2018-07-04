@@ -57,7 +57,7 @@
     <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
     <el-table-column label="序号" width="100">
       <template slot-scope="scope">
-        <el-checkbox v-model="scope.row.choose"></el-checkbox>
+        <el-checkbox v-model="scope.row.choose" v-if="scope.row.status_name == '未使用'"></el-checkbox>
         </template>
     </el-table-column>
     <el-table-column label="平台">
@@ -115,9 +115,6 @@ export default {
       problem_table: [
       ],
       mistake_type: [{
-        label: '卡密重复',
-        value: '卡密重复'
-      }, {
         label: '卡密错误',
         value: '卡密错误'
       }, {
@@ -205,6 +202,7 @@ export default {
             type: 'success',
             message: '上传成功'
           })
+          this.dialogVisible = false
           this.fetchData()
         })
       }).catch(() => {
