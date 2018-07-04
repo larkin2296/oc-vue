@@ -157,6 +157,7 @@ export default {
       })
     },
     del($index) {
+      this.inventory_num = this.inventory_num + Number(this.list[$index].num)
       this.totalprice -= this.list[$index].price
       this.list.splice($index, 1)
     },
