@@ -165,7 +165,7 @@ export default {
         this.discount = res.data[0].camilo_sell
       })
       get_inventory_status(this.form).then(res => {
-        if (res.data !== null) {
+        if (res.data !== []) {
           this.inventory = '有库存'
           this.inventory_num = res.data[0]
         } else {
