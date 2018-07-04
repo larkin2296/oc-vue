@@ -104,7 +104,8 @@ export default {
       discount: '',
       order_type: 1,
       config: [],
-      inventory: ''
+      inventory: '',
+      inventory_num: 0
     }
   },
   created() {
@@ -138,7 +139,13 @@ export default {
           message: '无库存不能添加!',
           type: 'error'
         })
+      } else if (this.form.card_num > this.inventory_num) {
+        this.$message({
+          message: '大于当前库存!',
+          type: 'error'
+        })
       } else {
+        this.inventory_num = this.inventory_num - this.form.card_num
         this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(this.form.card_price) * Number(this.discount), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
         this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
       }
@@ -158,10 +165,12 @@ export default {
         this.discount = res.data[0].camilo_sell
       })
       get_inventory_status(this.form).then(res => {
-        if (res.data === true) {
+        if (res.data !== null) {
           this.inventory = '有库存'
+          this.inventory_num = res.data[0]
         } else {
           this.inventory = '无库存'
+          this.inventory_num = 0
         }
       })
     },
@@ -181,12 +190,20 @@ export default {
           // let param = Object()
           // param.
           camilo_order(this.list).then(response => {
+            if (response.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '订单创建成功!'
+              })
+              this.$router.push({ path: '/search/camilo' })
+            } else {
+              this.$message({
+                type: 'error',
+                message: response.msg
+              })
+            }
           }).catch(error => {
             console.log(error)
-          })
-          this.$message({
-            type: 'success',
-            message: '订单创建成功!'
           })
         }).catch(() => {
         })

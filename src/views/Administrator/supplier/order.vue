@@ -50,12 +50,18 @@
                     <el-option label="销卡成功" value="4"></el-option>                    
                     </el-select>
                 </el-form-item>
+                <el-form-item label='卡密情况'>
+                    <el-select v-model="form.is_del" placeholder="状态">
+                    <el-option label="未删除" value=""></el-option>
+                    <el-option label="已删除" value="1"></el-option>                   
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type='danger' @click='go_search'>查询</el-button>
                 </el-form-item>
             </el-form>
             <div class='app-container'>
-                <el-table :data='camilo_list' border fit highlight-current-row height='400'>
+                <el-table :data='camilo_list' v-loading.body="listLoading" border fit highlight-current-row height='400'>
                     <el-table-column label='供货商'>
                         <template slot-scope="scope">
                             {{ scope.row.userName }}
@@ -98,8 +104,8 @@
                     </el-table-column>
                     <el-table-column label='操作' width='150'>
                         <template slot-scope="scope">
-                            <el-button size='mini' type='danger'>删除</el-button>
-                            <el-button size='mini' type='warning'>恢复</el-button>
+                            <el-button size='mini' type='danger' @click="go_del(scope.row.id)" v-if="scope.row.is_del == 0">删除</el-button>
+                            <el-button size='mini' type='warning' @click="go_recover(scope.row.id)" v-if="scope.row.is_del == 1">恢复</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -207,12 +213,13 @@
 </template>
 
 <script>
-import { get_dcamilo_list, get_ddirectly_list, set_account } from '@/api/system'
+import { get_dcamilo_list, get_ddirectly_list, set_account, del_camilo, recover_camilo } from '@/api/system'
 import { get_config_detail } from '@/api/configure'
 export default {
   data() {
     return {
       form: {},
+      listLoading: true,
       form1: {},
       camilo_list: [],
       directly_list: [],
@@ -229,6 +236,7 @@ export default {
     fetchData() {
       get_dcamilo_list().then(response => {
         this.camilo_list = response.data
+        this.listLoading = false
       })
       get_ddirectly_list().then(res => {
         this.directly_list = res.data
@@ -270,6 +278,24 @@ export default {
           })
           this.fetchData()
         }
+      })
+    },
+    go_del(id) {
+      del_camilo({ id }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        this.go_search()
+      })
+    },
+    go_recover(id) {
+      recover_camilo({ id }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '恢复成功!'
+        })
+        this.go_search()
       })
     }
   }

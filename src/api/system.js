@@ -70,3 +70,13 @@ export function modify_manger(list) {
   return request.post('api/system/admin/setAdmin', list
   )
 }
+
+export function del_camilo(list) {
+  return request.post('api/system/supply/order/destroy', list
+  )
+}
+
+export function recover_camilo(list) {
+  return request.post('api/system/supply/order/recover', list
+  )
+}
