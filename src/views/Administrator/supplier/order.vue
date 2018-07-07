@@ -104,8 +104,8 @@
                     </el-table-column>
                     <el-table-column label='操作' width='150'>
                         <template slot-scope="scope">
-                            <el-button size='mini' type='danger' @click="go_del(scope.row.id)" v-if="scope.row.is_del == 0">删除</el-button>
-                            <el-button size='mini' type='warning' @click="go_recover(scope.row.id)" v-if="scope.row.is_del == 1">恢复</el-button>
+                            <el-button size='mini' type='danger' @click="go_del(scope.row.id)" v-if="scope.row.deleted_at == null">删除</el-button>
+                            <el-button size='mini' type='warning' @click="go_recover(scope.row.id)" v-if="scope.row.deleted_at != null">恢复</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
