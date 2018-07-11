@@ -30,7 +30,7 @@
                 <el-option label="未使用" value="1"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label='最近充值时间'>
+            <el-form-item label='最近交易时间'>
                 <el-date-picker
                 v-model="form.time_start"
                 type="datetime"
@@ -46,7 +46,6 @@
             <el-button type='danger' @click='go_search'>查询</el-button>
         </el-form-item>
         </el-form>
-        <div class='nodata' v-if='list == []'>暂无数据</div>
         <div class="app-container">
         <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row height='400'>
             <el-table-column label='供货时间'>

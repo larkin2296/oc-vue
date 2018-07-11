@@ -145,9 +145,18 @@ export default {
           type: 'error'
         })
       } else {
-        this.inventory_num = this.inventory_num - this.form.card_num
-        this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(Number(this.form.card_price) * Number(this.discount)).toFixed(4), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
-        this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
+        var formatVal = /^\+?[1-9][0-9]*$/
+        var val = this.form.card_num
+        if (!formatVal.test(val)) {
+          this.$message({
+            message: '请填写整数!',
+            type: 'error'
+          })
+        } else {
+          this.inventory_num = this.inventory_num - this.form.card_num
+          this.list.push({ platform: this.form.goods_type, unit_price: this.form.card_price, num: this.form.card_num, real_unit_price: Number(Number(this.form.card_price) * Number(this.discount)).toFixed(4), price: Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num), discount: this.discount, user_id: store.getters.id, order_type: this.order_type })
+          this.totalprice += Number(Number(this.form.card_price) * Number(this.discount)) * Number(this.form.card_num)
+        }
       }
     },
     onCancel() {
