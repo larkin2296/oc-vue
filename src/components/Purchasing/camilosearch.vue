@@ -90,7 +90,7 @@
       </el-table-column>
       <el-table-column label="查看卡密" align="center">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.order_status == '已完成'" type="warning" @click="showdetail(scope.row.id, scope.row.created_at)">查看卡密</el-button>
+          <el-button v-if="scope.row.order_status == '已完成' || scope.row.order_status == '已发送'" type="warning" @click="showdetail(scope.row.id, scope.row.created_at)">查看卡密</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,7 +128,8 @@ export default {
       const statusMap = {
         '已完成': 'success',
         '问题订单': 'gray',
-        '未完成': 'danger'
+        '未完成': 'danger',
+        '已发送': 'success'
       }
       return statusMap[order_status]
     }
