@@ -14,7 +14,6 @@
         <el-form-item label='提现单状态'>
             <el-select v-model="form.status" placeholder="状态">
             <el-option label="全部" value=""></el-option>
-            <el-option label="全部" value=""></el-option>
             <el-option label="已转账" value="1"></el-option>
             <el-option label="未转账" value="3"></el-option>
             </el-select>
@@ -27,7 +26,7 @@
         <el-table :data='list' border fit highlight-current-row>
             <el-table-column label='序号'>
                 <template slot-scope="scope">
-                    {{ scope.$index }}
+                    {{ scope.$index+1 }}
                 </template>
             </el-table-column>
             <el-table-column label='供应商'>
@@ -57,7 +56,7 @@
             </el-table-column>
             <el-table-column label='操作'>
                 <template slot-scope="scope">
-                    <el-button v-if='scope.row.status != "已提现"' type='success'>已转账</el-button>
+                    <el-button v-if='scope.row.status != "已提现"' type='success' @click="set(scope.row.id)">置为已转账</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -66,7 +65,7 @@
 </template>
 
 <script>
-import { get_depositshow_list } from '@/api/system'
+import { get_depositshow_list, set_deposit } from '@/api/system'
 export default {
   data() {
     return {
@@ -88,6 +87,27 @@ export default {
       get_depositshow_list(this.form).then(res => {
         console.log(res)
         this.list = res.data
+      })
+    },
+    set(id) {
+      var param = Object()
+      param.id = id
+      param.status = 1
+      this.$confirm('是否确认已转账', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        set_deposit(param).then(res => {
+          console.log(res)
+          this.list.res.data
+        })
+        this.$message({
+          type: 'success',
+          message: '已转账!'
+        })
+        this.fetchData()
+      }).catch(() => {
       })
     }
   }

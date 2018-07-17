@@ -30,6 +30,11 @@ export function get_deposit_list(list) {
   )
 }
 
+export function set_deposit(id) {
+  return request.post('api/system/supply/presentShow/update', id
+  )
+}
+
 export function set_account(list) {
   return request.post('api/system/supply/order/set_account', {
     list

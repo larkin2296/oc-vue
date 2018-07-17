@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column label='面额'>
                 <template slot-scope="scope">
-                <span>{{scope.row.price}}</span>
+                <span>{{scope.row.denomination.denomination}}</span>
                 </template>
             </el-table-column>
             <el-table-column label='折后金额'>
@@ -87,7 +87,7 @@ export default {
       param.forward = this.directly_list
       console.log(param)
       send_deposit_data(param).then(res => {
-        if (res.code === '200') {
+        if (res.code === '200' && res.data !== 0) {
           this.$confirm('本次提现申请一共提现' + res.data + '元，是否提现', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -105,6 +105,11 @@ export default {
               message: '已提交提现申请!'
             })
           }).catch(() => {
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '无可提现金额'
           })
         }
       })
