@@ -128,7 +128,7 @@ export default {
       const statusMap = {
         '已完成': 'success',
         '问题订单': 'gray',
-        '未完成': 'danger',
+        '未发送': 'danger',
         '已发送': 'success'
       }
       return statusMap[order_status]

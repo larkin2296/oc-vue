@@ -54,11 +54,8 @@
   </el-header>
   <el-main>
     <div class="app-container">
-    <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row>
-    <el-table-column label="序号" width="100">
-      <template slot-scope="scope">
-        <el-checkbox v-model="scope.row.choose" v-if="scope.row.status_name == '未使用'"></el-checkbox>
-        </template>
+    <el-table :data="tableData" v-loading.body="listLoading" stripe style="width: 100%" border fit highlight-current-row @selection-change="handleSelectionChange">
+    <el-table-column label="序号"  type='selection' width="100" :selectable='selectable'>
     </el-table-column>
     <el-table-column label="平台">
       <template slot-scope="scope">
@@ -126,7 +123,8 @@ export default {
       }],
       dialogVisible: false,
       checkList: [],
-      listLoading: true
+      listLoading: true,
+      multipleSelection: []
     }
   },
   filters: {
@@ -161,7 +159,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        set_camilo_userd(this.tableData).then(response => {
+        set_camilo_userd(this.multipleSelection).then(response => {
           this.$message({
             type: 'success',
             message: '设置成功'
@@ -175,6 +173,16 @@ export default {
       this.$confirm('确认关闭？').then(_ => {
         done()
       }).catch(_ => {})
+    },
+    selectable() {
+      if (arguments[0]['status_name'] === '已使用') {
+        return false
+      } else {
+        return true
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
     },
     sub_problem() {
       var that = this
