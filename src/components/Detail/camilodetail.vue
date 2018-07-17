@@ -175,7 +175,7 @@ export default {
       }).catch(_ => {})
     },
     selectable() {
-      if (arguments[0]['status_name'] === '已使用') {
+      if (arguments[0]['status_name'] === '已使用' || arguments[0]['status_name'] === '问题卡密') {
         return false
       } else {
         return true
@@ -187,12 +187,8 @@ export default {
     sub_problem() {
       var that = this
       this.problem_table = []
-      this.tableData.forEach(function(val) {
-        if (typeof val['choose'] === 'undefined' || val['choose'] === false) {
-          console.log(val)
-        } else {
-          that.problem_table.push({ cam_name: val['cam_name'], id: val['id'], order_id: val['order_id'] })
-        }
+      this.multipleSelection.forEach(function(val) {
+        that.problem_table.push({ cam_name: val['cam_name'], id: val['id'], order_id: val['order_id'] })
       })
       this.dialogVisible = true
       // this.problem_table = this.checkList
