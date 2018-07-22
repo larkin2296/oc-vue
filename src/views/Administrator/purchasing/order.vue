@@ -52,9 +52,14 @@
             </el-form>
             <div class='app-container'>
                 <el-table :data='camilo_order' v-loading.body="listLoading" border fit highlight-current-row height='600'>
-                    <el-table-column label='订单号'>
+                    <el-table-column label='订单号' width='120'>
                         <template slot-scope="scope">
                             {{ scope.row.order_code }}
+                        </template>
+                    </el-table-column>
+		    <el-table-column label='采购商'>
+                        <template slot-scope="scope">
+                            {{ scope.row.user_name }}
                         </template>
                     </el-table-column>
                     <el-table-column label='商品'>
@@ -88,7 +93,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column label='提交时间'>
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" width='120'>
                             {{ scope.row.created_at }}
                         </template>
                     </el-table-column>
