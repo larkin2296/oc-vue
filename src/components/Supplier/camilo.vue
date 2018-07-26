@@ -26,7 +26,7 @@
                     <el-option label="全部" value=""></el-option>
                 <el-option label="销卡成功" value="4"></el-option>
                 <el-option label="问题卡密" value="3"></el-option>
-                <el-option label="发下采购商" value="2"></el-option>                
+                <el-option label="已发送" value="2"></el-option>                
                 <el-option label="未使用" value="1"></el-option>
                 </el-select>
             </el-form-item>
@@ -47,7 +47,7 @@
         </el-form-item>
         </el-form>
         <div class="app-container">
-        <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row height='400'>
+        <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row>
             <el-table-column label='供货时间'>
                 <template slot-scope="scope">
                 <span>{{scope.row.supplier_time}}</span>

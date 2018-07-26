@@ -131,7 +131,7 @@ export default {
     add_trolly() {
       if (this.form.card_num <= 0) {
         this.$message({
-          message: '数量不小0!',
+          message: '数量不小于0!',
           type: 'error'
         })
       } else if (this.inventory === '无库存') {

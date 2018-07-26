@@ -2,7 +2,7 @@
   <div>
     <el-steps :active="active">
       <el-step title="信息填写" icon="el-icon-edit"></el-step>
-      <el-step title="上传身份证" icon="el-icon-upload"></el-step>
+      <el-step title="上传工作证" icon="el-icon-upload"></el-step>
       <el-step title="上传银行卡" icon="el-icon-upload"></el-step>
       <el-step title="完成" icon="el-icon-picture"></el-step>
     </el-steps>
@@ -35,7 +35,7 @@
         </el-form>   
     </div>
     <div class='page' v-if='active == 2'>
-        <h3>上传身份证正反面照片</h3>
+        <h3>工作证正反面照片</h3>
         <div class="img-list">
           <div class="img-content" v-for="(item,key) in imagelist" :key="key">
             <img :src="item.url">

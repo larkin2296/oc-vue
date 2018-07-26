@@ -39,7 +39,7 @@
                     {{ scope.row.qq_num }}
                 </template>
             </el-table-column>
-            <el-table-column label='身份证号'>
+            <el-table-column label='工作证'>
                 <template slot-scope="scope">
                     {{ scope.row.id_card }}
                 </template>
@@ -57,7 +57,7 @@
                     <el-tag v-if='scope.row.status_examine == 4' type='info'>未提交</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label='身份证照片' width='100'>
+            <el-table-column label='工作证照片' width='100'>
                 <template slot-scope="scope">
                     <el-button type='warning' v-if='scope.row.status_examine != 4' @click='show(scope.$index)'>查看</el-button>
                 </template>

@@ -115,6 +115,10 @@ export default {
       {
         value: '2',
         label: '已完成'
+      },
+      {
+        value: '3',
+        label: '已发送'
       }],
       platform: [],
       platform_money: [],

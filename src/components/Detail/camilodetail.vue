@@ -159,13 +159,20 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        set_camilo_userd(this.multipleSelection).then(response => {
+        if (this.multipleSelection.length === 0) {
           this.$message({
-            type: 'success',
-            message: '设置成功'
+            type: 'error',
+            message: '请选择卡密'
           })
-          this.fetchData()
-        })
+        } else {
+          set_camilo_userd(this.multipleSelection).then(response => {
+            this.$message({
+              type: 'success',
+              message: '设置成功'
+            })
+            this.fetchData()
+          })
+        }
       }).catch(() => {
       })
     },
@@ -187,10 +194,17 @@ export default {
     sub_problem() {
       var that = this
       this.problem_table = []
-      this.multipleSelection.forEach(function(val) {
-        that.problem_table.push({ cam_name: val['cam_name'], id: val['id'], order_id: val['order_id'] })
-      })
-      this.dialogVisible = true
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请选择卡密'
+        })
+      } else {
+        this.multipleSelection.forEach(function(val) {
+          that.problem_table.push({ cam_name: val['cam_name'], id: val['id'], order_id: val['order_id'] })
+        })
+        this.dialogVisible = true
+      }
       // this.problem_table = this.checkList
       // console.log(this.problem_table)
     },
